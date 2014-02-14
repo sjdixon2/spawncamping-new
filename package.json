@@ -1,0 +1,24 @@
+{
+    "name": "application-name",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "supervisor node app.js"
+    },
+    "dependencies": {
+        "express": "3.4.4",
+        "jade": "*",
+        "with": "*",
+        "moment": "*",
+        "supervisor": "*",
+        "require-all": "*",
+        "pluralize": "*",
+        "mocha": "*",
+        "underscore": "*",
+        "q": "*",
+        "mysql": "*",
+        "extend": "*",
+        "sequelize": "*",
+        "lodash": "*"
+    }
+}
