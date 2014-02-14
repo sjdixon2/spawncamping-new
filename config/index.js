@@ -64,6 +64,9 @@ switch (settings.NODE_ENV) {
     case 'production':
         require('./production.js');
         break;
+    case 'test':
+        require('./test.js');
+        break;
 }
 require('./my_config'); //Load computer-specific configurations
 
