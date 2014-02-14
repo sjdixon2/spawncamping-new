@@ -42,10 +42,6 @@ global.system = {
     ext: requireAll(path.join(settings.ROOT_DIR, '/core/ext/'))
 };
 
-global.helpers = requireAll(system.pathTo('/core/helpers/'));
-global.classes = require(system.pathTo('/core/classes/'));
-global.db = require(system.pathTo('core/models/'));
-
 //Express configuration
 global.app = express();
 app.set('port', process.env.PORT || 3000);
@@ -69,3 +65,7 @@ switch (settings.NODE_ENV) {
         break;
 }
 require('./my_config'); //Load computer-specific configurations
+
+global.helpers = requireAll(system.pathTo('/core/helpers/'));
+global.classes = require(system.pathTo('/core/classes/'));
+global.db = require(system.pathTo('core/models/'));
