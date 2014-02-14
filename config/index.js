@@ -22,6 +22,7 @@ global.settings = {
      CREATE DATABASE seng_development;
      */
     db: {
+        //NOTE!!!!!! config.json will need to be changed to reflect these changes (to perform migrations)
         TABLE: 'seng_development',
         USERNAME: 'user',
         PASSWORD: 'user',
