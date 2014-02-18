@@ -8,7 +8,7 @@ require('./routes/config.js')
 
 db
     .sequelize
-    .sync({ force: true })
+    .sync()
     .complete(function (err) {
         if (err) {
             throw err
