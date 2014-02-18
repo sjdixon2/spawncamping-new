@@ -1,7 +1,9 @@
+var TABLE_NAME = 'users';
+
 module.exports = {
     up: function (migration, DataTypes, done) {
         migration.createTable(
-            'users',
+            TABLE_NAME,
             {
                 id: {
                     type: DataTypes.INTEGER,
@@ -23,7 +25,8 @@ module.exports = {
         done()
     },
     down: function (migration, DataTypes, done) {
+        migration.dropTable(TABLE_NAME);
         // add reverting commands here, calling 'done' when finished
         done()
     }
-}
+};

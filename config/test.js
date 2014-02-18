@@ -9,7 +9,8 @@ extend(global.settings, {
         PASSWORD: 'user',
         options: {
             host: 'localhost',
-            port: 3306
+            port: 3306,
+            logging: false //Don't log (clutters console output)
         }
     }
 });

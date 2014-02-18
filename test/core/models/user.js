@@ -8,7 +8,7 @@ describe('User', function () {
             var users = q.all([
                 UserFactory.basic(),
                 UserFactory.basic()
-            ])
+            ]);
 
             return users.spread(function (followee, follower) {
                 //Add follower
@@ -28,7 +28,7 @@ describe('User', function () {
             var users = q.all([
                 UserFactory.basic(),
                 UserFactory.basic()
-            ])
+            ]);
 
             return users.spread(function (followee, follower) {
                 //Add followee
@@ -45,16 +45,57 @@ describe('User', function () {
 
     describe('photos', function () {
         it('allows adding of followees', function () {
+            //Create test objects to use
             var users = q.all([
                 UserFactory.basic(),
                 PhotoFactory.basic()
-            ])
+            ]);
 
             return users.spread(function (user, photo) {
                 //Add photo to user
                 return user.addPhoto(photo).then(function () {
                     //Ensure the relationship was successful
                     return user.getPhotoes().then(function (photos) { //The 'e' is intentional; sequelize pluralizes 'photo' to 'photoes'
+                        photos.should.match(Array).and.have.length(1);
+                        photos[0].id.should.match(photo.id);
+                    });
+                });
+            });
+        });
+    });
+
+    describe('photoShares', function () {
+        it('allows sharing of photos', function () {
+            var users = q.all([
+                UserFactory.basic(),
+                PhotoFactory.basic()
+            ]);
+
+            return users.spread(function (user, photo) {
+                //Simulate user sharing of photo
+                return user.addPhotoShare(photo).then(function () {
+                    //Ensure the relationship was successful
+                    return user.getPhotoShares().then(function (photos) {
+                        photos.should.match(Array).and.have.length(1);
+                        photos[0].id.should.match(photo.id);
+                    });
+                });
+            });
+        });
+    });
+
+    describe('feedItems', function () {
+        it('allows creation of feed item', function () {
+            var users = q.all([
+                UserFactory.basic(),
+                PhotoFactory.basic()
+            ]);
+
+            return users.spread(function (user, photo) {
+                //Add photo to user's feed
+                return user.addFeedItem(photo).then(function () {
+                    //Ensure the relationship was successful
+                    return user.getFeedItems().then(function (photos) {
                         photos.should.match(Array).and.have.length(1);
                         photos[0].id.should.match(photo.id);
                     });

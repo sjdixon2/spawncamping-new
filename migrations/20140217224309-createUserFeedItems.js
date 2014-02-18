@@ -1,7 +1,7 @@
-var TABLE_NAME = 'userHasFollowers';
+var TABLE_NAME = 'userFeedItems';
 
 module.exports = {
-    up: function (migration, DataTypes, done) {
+    up: function(migration, DataTypes, done) {
         migration.createTable(
             TABLE_NAME,
             {
@@ -10,22 +10,17 @@ module.exports = {
                     primaryKey: true,
                     autoIncrement: true
                 },
-                createdAt: {
-                    type: DataTypes.DATE
-                },
-                updatedAt: {
-                    type: DataTypes.DATE
-                },
-                followersID: DataTypes.INTEGER,
-                followeesID: DataTypes.INTEGER
+                createdAt: DataTypes.DATE,
+                updatedAt: DataTypes.DATE,
+                userID: DataTypes.INTEGER,
+                photoID: DataTypes.INTEGER
             }
         );
-
         // add altering commands here, calling 'done' when finished
         done()
     },
-    down: function (migration, DataTypes, done) {
-        migration.dropTable(TABLE_NAME);
+    down: function(migration, DataTypes, done) {
+        migration.createTable(TABLE_NAME);
         // add reverting commands here, calling 'done' when finished
         done()
     }

@@ -6,10 +6,17 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                Photo.belongsTo(models.User)
+                //Photo ownership relationship
+                Photo.belongsTo(models.User);
+
+                //User photo share relationship
+                Photo.hasMany(models.User, {through: 'userPhotoShares', as: 'userShares'});
+
+                //User feed entry relationship
+                Photo.hasMany(models.User, {through: 'userFeedItems', as: 'feedItems'});
             }
         }
-    })
+    });
 
     return Photo;
-}
+};

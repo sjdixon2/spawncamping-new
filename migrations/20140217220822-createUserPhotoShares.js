@@ -1,4 +1,4 @@
-var TABLE_NAME = 'photoes'; //The 'e' is intentional; sequelize pluralizes 'photo' to 'photoes'
+var TABLE_NAME = 'userPhotoShares';
 
 module.exports = {
   up: function(migration, DataTypes, done) {
@@ -10,24 +10,17 @@ module.exports = {
                   primaryKey: true,
                   autoIncrement: true
               },
-              createdAt: {
-                  type: DataTypes.DATE
-              },
-              updatedAt: {
-                  type: DataTypes.DATE
-              },
-              imagePath: DataTypes.STRING,
-              thumbnailPath: DataTypes.STRING,
-              description: DataTypes.STRING,
-              userID: DataTypes.INTEGER
+              createdAt: DataTypes.DATE,
+              updatedAt: DataTypes.DATE,
+              userID: DataTypes.INTEGER,
+              photoID: DataTypes.INTEGER
           }
       );
-
     // add altering commands here, calling 'done' when finished
     done()
   },
   down: function(migration, DataTypes, done) {
-      migration.dropTable(TABLE_NAME);
+      migration.createTable(TABLE_NAME);
     // add reverting commands here, calling 'done' when finished
     done()
   }
