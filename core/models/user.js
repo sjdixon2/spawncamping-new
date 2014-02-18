@@ -1,11 +1,16 @@
 module.exports = function(sequelize, DataTypes) {
     var User = sequelize.define('User', {
-        username: DataTypes.STRING,
-        test: DataTypes.STRING
+        fullName: DataTypes.STRING,
+        email: DataTypes.STRING,
+        password: DataTypes.STRING
     }, {
         classMethods: {
             associate: function(models) {
-                User.hasMany(models.Task)
+                //Followers/followee relationship
+                User.hasMany(models.User, {through: 'userHasFollowers', as: 'Followers', foreignKey: 'followeesID'});
+                User.hasMany(models.User, {through: 'userHasFollowers', as: 'Followees', foreignKey: 'followersID'});
+
+                User.hasMany(models.Photo);
             }
         }
     })

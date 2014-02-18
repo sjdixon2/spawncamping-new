@@ -10,10 +10,10 @@
     "jade": "*",
     "with": "*",
     "moment": "*",
-    "supervisor": "*",
     "require-all": "*",
     "pluralize": "*",
     "mocha": "*",
+    "mocha-as-promised": "*",
     "underscore": "*",
     "q": "*",
     "mysql": "*",
@@ -22,7 +22,7 @@
     "lodash": "*"
   },
   "devDependencies": {
-    "should": "~3.1.2",
-    "factory-lady": "*"
+    "supervisor": "*",
+    "should": "~3.1.2"
   }
 }

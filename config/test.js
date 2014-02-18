@@ -1,9 +1,5 @@
 //------------------ Configurations specific to test mode ------------------
 
-global.mocha = require('mocha'); //Test framework
-global.should = require('should'); //For assertions
-global.Factory = require('factory-lady'); //For creating test objects by factory
-
 //Extended settings for test mode
 extend(global.settings, {
     db:{
@@ -17,3 +13,9 @@ extend(global.settings, {
         }
     }
 });
+
+global.mocha = require('mocha'); //Test framework
+global.should = require('should'); //For assertions
+require("mocha-as-promised")(); //For handling promises in tests
+
+global.Factories = requireAll(system.pathTo('test/factories')); //Load factories
