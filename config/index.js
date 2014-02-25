@@ -5,9 +5,7 @@ global.q = require('q');
 global.extend = require('extend');
 global.requireAll = require('require-all');
 global.express = require('express');
-global.orm = require('orm');
 global._ = require('underscore');
-
 
 //Global configuration settings
 global.settings = {
@@ -23,7 +21,8 @@ global.settings = {
 
      CREATE DATABASE seng_development;
      */
-    db:{
+    db: {
+        //NOTE!!!!!! config.json will need to be changed to reflect these changes (to perform migrations)
         TABLE: 'seng_development',
         USERNAME: 'user',
         PASSWORD: 'user',
@@ -32,7 +31,7 @@ global.settings = {
             port: 3306
         }
     }
-}
+};
 
 //System functions/required modules
 global.system = {
@@ -42,11 +41,7 @@ global.system = {
         return path.join.apply(null, args);
     },
     ext: requireAll(path.join(settings.ROOT_DIR, '/core/ext/'))
-}
-
-global.helpers = requireAll(system.pathTo('/core/helpers/'));
-global.classes = require(system.pathTo('/core/classes/'));
-global.db = require(system.pathTo('core/models/'));
+};
 
 //Express configuration
 global.app = express();
@@ -64,9 +59,17 @@ app.use(express.static(system.pathTo('public/')));
 // Load mode-specific configurations
 switch (settings.NODE_ENV) {
     case 'development':
-        require('./development.js')
+        require('./development.js');
         break;
     case 'production':
-        require('./production.js')
+        require('./production.js');
+        break;
+    case 'test':
+        require('./test.js');
         break;
 }
+require('./my_config'); //Load computer-specific configurations
+
+global.helpers = requireAll(system.pathTo('/core/helpers/'));
+global.classes = require(system.pathTo('/core/classes/'));
+global.db = require(system.pathTo('core/models/'));

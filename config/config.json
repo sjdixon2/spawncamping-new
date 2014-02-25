@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "user",
+    "password": "user",
+    "database": "seng_development",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "user",
+    "password": "user",
+    "database": "seng_test",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "user",
+    "password": "user",
+    "database": "seng_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
