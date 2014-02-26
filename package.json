@@ -1,29 +1,30 @@
 {
-  "name": "application-name",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "supervisor node app.js"
-  },
-  "dependencies": {
-    "express": "3.4.4",
-    "jade": "*",
-    "with": "*",
-    "moment": "*",
-    "require-all": "*",
-    "pluralize": "*",
-    "mocha": "*",
-    "mocha-as-promised": "*",
-    "underscore": "*",
-    "q": "*",
-    "mysql": "*",
-    "extend": "*",
-    "sequelize": "*",
-    "lodash": "*",
-    "mocha-jenkins-reporter": "*"
-  },
-  "devDependencies": {
-    "supervisor": "*",
-    "should": "~3.1.2"
-  }
+    "name": "application-name",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "supervisor node app.js"
+    },
+    "dependencies": {
+        "express": "3.4.4",
+        "jade": "*",
+        "with": "*",
+        "moment": "*",
+        "require-all": "*",
+        "pluralize": "*",
+        "mocha": "*",
+        "mocha-as-promised": "*",
+        "underscore": "*",
+        "q": "*",
+        "mysql": "*",
+        "extend": "*",
+        "sequelize": "*",
+        "lodash": "*",
+        "mocha-jenkins-reporter": "*",
+        "forever": "*"
+    },
+    "devDependencies": {
+        "supervisor": "*",
+        "should": "~3.1.2"
+    }
 }
