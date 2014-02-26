@@ -1,4 +1,13 @@
-jenkins:
-    @JUNIT_REPORT_PATH=report.xml ./node_modules/.bin/mocha --reporter mocha-jenkins-reporter || true
+REPORTER = dot
 
-.PHONY: jenkins
+test:
+  @NODE_ENV=test ./node_modules/.bin/mocha \
+    --reporter $(REPORTER) \
+
+test-w:
+  @NODE_ENV=test ./node_modules/.bin/mocha \
+    --reporter $(REPORTER) \
+    --growl \
+    --watch
+
+.PHONY: test test-w
