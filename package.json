@@ -1,30 +1,33 @@
 {
-    "name": "application-name",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "start": "supervisor node app.js"
-    },
-    "dependencies": {
-        "express": "3.4.4",
-        "jade": "*",
-        "with": "*",
-        "moment": "*",
-        "require-all": "*",
-        "pluralize": "*",
-        "mocha": "*",
-        "mocha-as-promised": "*",
-        "underscore": "*",
-        "q": "*",
-        "mysql": "*",
-        "extend": "*",
-        "sequelize": "*",
-        "lodash": "*",
-        "mocha-jenkins-reporter": "*",
-        "forever": "*"
-    },
-    "devDependencies": {
-        "supervisor": "*",
-        "should": "~3.1.2"
-    }
+  "name": "spawncamping",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "supervisor node app.js"
+  },
+  "dependencies": {
+    "express": "3.4.4",
+    "jade": "*",
+    "with": "*",
+    "moment": "*",
+    "require-all": "*",
+    "pluralize": "*",
+    "mocha": "*",
+    "mocha-as-promised": "*",
+    "underscore": "*",
+    "q": "*",
+    "mysql": "*",
+    "extend": "*",
+    "sequelize": "*",
+    "lodash": "*",
+    "forever": "*"
+  },
+  "devDependencies": {
+    "supervisor": "*",
+    "should": "~3.1.2",
+    "grunt": "~0.4.2",
+    "mocha-jenkins-reporter": "*",
+    "grunt-mocha-cov": "~0.2.1",
+    "grunt-cli": "*"
+  }
 }
