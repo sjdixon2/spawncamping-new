@@ -1,4 +1,4 @@
-var TABLE_NAME = 'users';
+var TABLE_NAME = 'Users';
 
 module.exports = {
     up: function (migration, DataTypes, done) {
