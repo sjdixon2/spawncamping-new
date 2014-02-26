@@ -19,7 +19,8 @@
     "mysql": "*",
     "extend": "*",
     "sequelize": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "mocha-jenkins-reporter": "*"
   },
   "devDependencies": {
     "supervisor": "*",
