@@ -45,7 +45,7 @@ global.system = {
 
 //Express configuration
 global.app = express();
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8800);
 app.set('views', system.pathTo('core/views/'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
