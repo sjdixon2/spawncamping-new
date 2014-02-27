@@ -1,4 +1,4 @@
-var TABLE_NAME = 'photoes'; //The 'e' is intentional; sequelize pluralizes 'photo' to 'photoes'
+var TABLE_NAME = 'Photoes'; //The 'e' is intentional; sequelize pluralizes 'photo' to 'photoes'
 
 module.exports = {
   up: function(migration, DataTypes, done) {

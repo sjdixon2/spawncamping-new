@@ -1,6 +1,11 @@
-//    Created by stephen on 27/02/14.
 extends layout
 
 block content
-    div LOGIN FORM
-        p HELLO
+    #error
+        if err
+            = err
+    form(name='login', method='post', action='/login')
+        input(type='text', name='username', placeholder='Email')
+        input(type='password', name='password', placeholder='Password')
+        input(type='hidden', name='redirect', value=redirect)
+        input(type='submit', value='Login')

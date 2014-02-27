@@ -1,4 +1,4 @@
-var TABLE_NAME = 'userFeedItems';
+var TABLE_NAME = 'UserFeedItems';
 
 module.exports = {
     up: function(migration, DataTypes, done) {

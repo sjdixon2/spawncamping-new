@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "spawncamping",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -19,10 +19,15 @@
     "mysql": "*",
     "extend": "*",
     "sequelize": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "forever": "*"
   },
   "devDependencies": {
     "supervisor": "*",
-    "should": "~3.1.2"
+    "should": "~3.1.2",
+    "grunt": "~0.4.2",
+    "mocha-jenkins-reporter": "*",
+    "grunt-mocha-cov": "~0.2.1",
+    "grunt-cli": "*"
   }
 }
