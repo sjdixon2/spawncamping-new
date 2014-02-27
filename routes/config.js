@@ -4,8 +4,8 @@ var main = require('./'),
     photo = require('./photo'),
     feed = require("./feed");
 
-app.get('/', main.index);
-//app.get("/", feed.index);
+//app.get('/', main.index);
+app.get("/", feed.index);
 app.get('/users', user.list);
 app.get("/users/new", user.signupForm);
 //app.get("/users/:id", user.stream);
