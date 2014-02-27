@@ -45,7 +45,7 @@ global.system = {
 
 //Express configuration
 global.app = express();
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8800);
 app.set('views', system.pathTo('core/views/'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -53,6 +53,12 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(express.bodyParser());
+
+// Session Management
+app.use(express.cookieParser());
+app.use(express.session({secret: 'spawncampingsupersecuresession'}));
+
 app.use(app.router);
 app.use(express.static(system.pathTo('public/')));
 
