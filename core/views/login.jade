@@ -4,7 +4,7 @@ block content
     #error
         if err
             = err
-    form(name='login', method='post', action='/login')
+    form(name='login', method='post', action='/sessions/create')
         input(type='text', name='username', placeholder='Email')
         input(type='password', name='password', placeholder='Password')
         input(type='hidden', name='redirect', value=redirect)
