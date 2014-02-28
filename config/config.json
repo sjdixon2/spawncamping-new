@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "user",
-    "password": "user",
-    "database": "seng_production",
-    "host": "127.0.0.1",
+    "username": "s513_jpnauta",
+    "password": "10054069",
+    "database": "s513_jpnauta",
+    "host": "web2.cpsc.ucalgary.ca",
     "dialect": "mysql"
   }
 }
