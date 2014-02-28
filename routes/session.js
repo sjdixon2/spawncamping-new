@@ -45,7 +45,7 @@ exports.attemptLogin = function (req, res) {
                 });
             } else if (!user || user.password != req.body.password) {
                 console.log("Login attempt: " + req.body.username);
-                res.statusCode = 403;
+                res.statusCode = 302;
                 res.render('login', {
                     title: 'Login',
                     redirect: redirect,
