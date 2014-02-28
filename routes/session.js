@@ -53,9 +53,7 @@ exports.attemptLogin = function (req, res) {
                 });
             } else {
                 req.session.login = user.id;
-                res.render('login-success', {
-                    redirect: redirect
-                });
+                res.redirect(redirect);
             }
 
         });
