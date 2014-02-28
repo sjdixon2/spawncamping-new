@@ -20,3 +20,6 @@ global.should = require('should'); //For assertions
 require("mocha-as-promised")(); //For handling promises in tests
 
 global.Factories = requireAll(system.pathTo('test/factories')); //Load factories
+
+require("mocha-as-promised")(); //For handling promises in tests
+global.server = require('supertest')(app); //Mock server for testing

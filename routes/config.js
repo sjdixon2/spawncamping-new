@@ -2,7 +2,8 @@ var main = require('./'),
     user = require('./user'),
     session = require("./session"),
     photo = require('./photo'),
-    feed = require("./feed");
+    feed = require("./feed"),
+    bulk = require("./bulk");
 
 //app.get('/', main.index);
 app.get("/", feed.index);
@@ -22,3 +23,7 @@ app.get("/feed", feed.index);
 app.get("/photos/new", photo.newPhotoForm);
 app.post("/photos/create", photo.upload);
 
+
+//Bulk upload routes
+app.get('/bulk/clear', bulk.clear);
+app.post('/bulk/users', bulk.users);

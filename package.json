@@ -20,7 +20,9 @@
     "extend": "*",
     "sequelize": "*",
     "lodash": "*",
-    "forever": "*"
+    "forever": "*",
+    "supertest": "*",
+    "methods": "*"
   },
   "devDependencies": {
     "supervisor": "*",

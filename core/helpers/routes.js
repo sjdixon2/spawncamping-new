@@ -19,3 +19,13 @@ exports.check_auth = function(req, res, next) {
     }
     next();
 };
+
+/**
+ * Renders basic success message indicating that the route
+ * was completed successfully
+ * @param res route's response
+ * @param body message in body (optional)
+ */
+exports.success = function (res, body) {
+    res.send(200, body);
+};

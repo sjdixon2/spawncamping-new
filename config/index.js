@@ -6,6 +6,7 @@ global.extend = require('extend');
 global.requireAll = require('require-all');
 global.express = require('express');
 global._ = require('underscore');
+global.http = require('http');
 
 //Global configuration settings
 global.settings = {
@@ -79,3 +80,6 @@ require('./my_config'); //Load computer-specific configurations
 global.helpers = requireAll(system.pathTo('/core/helpers/'));
 global.classes = require(system.pathTo('/core/classes/'));
 global.db = require(system.pathTo('core/models/'));
+
+//Load routes configurations
+require(system.pathTo('routes/config'));
