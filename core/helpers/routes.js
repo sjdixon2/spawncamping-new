@@ -9,12 +9,10 @@ Should be used on all routes that require authentication.
 exports.check_auth = function(req, res, next) {
 
     if(!req.session.login) {
-        res.statusCode = 403;
-        res.render('login', {
-            title: 'Login',
-            redirect: req.url,
-            err: 'Please login to access the requested page.'
-        });
+        var redirect = "";
+        if(req.url != '/') redirect = "?redirect=" + encodeURIComponent(req.url);
+        res.redirect("/sessions/new" + redirect);
+        res.end();
         return;
     }
     next();
