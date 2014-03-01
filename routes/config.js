@@ -27,3 +27,4 @@ app.post("/photos/create", photo.upload);
 //Bulk upload routes
 app.get('/bulk/clear', bulk.clear);
 app.post('/bulk/users', bulk.users);
+app.post('/bulk/streams', bulk.streams);

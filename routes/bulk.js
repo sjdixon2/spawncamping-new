@@ -19,12 +19,11 @@ exports.clear = function (req, res) {
  * Bulk uploads the given users, as specified in the project documentation
  */
 exports.users = function (req, res) {
-    //Create each user
-    var users = req.body;
+    var users = req.body; //Array of users given by caller
 
     //Change name of user hash to fullName for user object
     users.each(function (user) {
-        user.fullName = user.name;
+        user.fullName = user.name; //name = fullName in DB
     });
 
     //Create all users according to has
@@ -51,3 +50,26 @@ exports.users = function (req, res) {
         });
     });
 };
+
+/**
+ * Bulk uploads the given photos, as specified in the project documentation
+ */
+exports.streams = function (req, res) {
+    var photos = req.body;
+
+    //Convert attribute names to DB object names
+    photos.each(function (photo) {
+        photo.imagePath = photo.path; //path = imagePath in DB
+        photo.createdAt = new Date(photo.timestamp); //timestamp = createdAt in DB
+    });
+
+    //Create all photos
+    q.map(photos, function (photoHash) {
+        return db.Photo.build(photoHash).save();
+    })
+        //Return success message after all photos are created
+        .then(function () {
+            helpers.routes.success(res);
+        });
+};
+

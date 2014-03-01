@@ -13,6 +13,36 @@ describe('bulk routes', function () {
         });
     }
 
+    /**
+     * Calls bulk upload route to add users to DB, then calls callback function
+     * @param users the users to create (see project documentation)
+     * @param cb callback function
+     */
+    function createUsers(users, cb) {
+        //Perform bulk upload request
+        server.post('/bulk/users').send(users)
+            .expect(200)
+            .end(function (err) {
+                if (err) throw err;
+                cb();
+            });
+    }
+
+    /**
+     * Calls bulk upload route to add photo to DB, then calls callback function
+     * @param photos the photos to create (see project documentation)
+     * @param cb callback function
+     */
+    function createPhotos(photos, cb) {
+        //Perform bulk upload request
+        server.post('/bulk/streams').send(photos)
+            .expect(200)
+            .end(function (err) {
+                if (err) throw err;
+                cb();
+            });
+    }
+
     describe('clear', function () {
         it('It deletes all data in the table', function (done) {
             //Create dummy items in DB
@@ -30,8 +60,6 @@ describe('bulk routes', function () {
                             userCount.should.equal(0);
                             photoCount.should.equal(0);
 
-                            //TODO: link all followers together
-
                             done();
                         });
                     });
@@ -43,35 +71,70 @@ describe('bulk routes', function () {
 
     describe('users', function () {
         it('Creates users given in JSON', function (done) {
-            var body = [
+            var users = [
                 {id: 1, name: 'jill', follows: [2, 3], password: 'test1'},
-                {id: 2, name: 'alice', follows: [3], password: 'test2'},
-                {id: 3, name: 'tim', follows: [1, 2], password: 'test3'}
+                {id: 3, name: 'tim', follows: [1, 2], password: 'test3'},
+                {id: 2, name: 'alice', follows: [3], password: 'test2'}
             ];
 
             //Clear DB (required for bulk upload)
             clearAll(function () {
-                //Perform bulk upload request
-                server.post('/bulk/users').send(body)
-                    .expect(200)
-                    .end(function (err, res) {
-                        if (err) throw err;
+                //Create given users
+                createUsers(users, function () {
 
-                        //Ensure test data was created in database
-                        db.User.findAll().then(function (users) {
-                            users.length.should.equal(3);
+                    //Ensure test data was created in database
+                    db.User.findAll().then(function (users) {
+                        users.length.should.equal(3);
 
-                            users[2].password.should.equal('test3');
-                            users[2].fullName.should.equal('tim');
+                        users[2].password.should.equal('test3');
+                        users[2].fullName.should.equal('tim');
+                        users[2].id.should.equal(3);
 
-                            //Ensure each user has to proper amount of followers
-                            users[2].getFollowers().then(function (followers) {
-                                followers.length.should.equal(2);
-                                done();
-                            });
+                        //Ensure each user has to proper amount of followers
+                        users[2].getFollowers().then(function (followers) {
+                            followers.length.should.equal(2);
+                            done();
                         });
                     });
-            })
+                });
+            });
+        });
+    });
+
+    describe('streams', function () {
+        it('Creates photos given in JSON', function (done) {
+            var users = [
+                {id: 1, name: 'jill', follows: [2, 3], password: 'test1'},
+                {id: 3, name: 'tim', follows: [1, 2], password: 'test3'},
+                {id: 2, name: 'alice', follows: [3], password: 'test2'}
+            ];
+
+            var photos = [
+                {id: 1, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
+                {id: 2, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
+                {id: 4, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
+                {id: 5, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
+                {id: 3, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782}
+            ];
+
+            //Simulate pre-requisite clear & user creation
+            clearAll(function () {
+                createUsers(users, function () {
+                    //Create test photos
+                    createPhotos(photos, function () {
+                        //Ensure test data was created in database
+                        db.Photo.findAll().then(function (photos) {
+                            photos.length.should.equal(5);
+
+                            photos[4].id.should.equal(5);
+                            photos[4].imagePath.should.equal('/shared/1.png');
+                            photos[4].createdAt.should.be.approximately(1392405505782, 1000); //Had to approximate, as the milliseconds are different
+
+                            done();
+                        });
+                    });
+                });
+            });
         });
     });
 });
