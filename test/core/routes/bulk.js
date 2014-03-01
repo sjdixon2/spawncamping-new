@@ -110,11 +110,11 @@ describe('bulk routes', function () {
             ];
 
             var photos = [
-                {id: 1, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
+                {id: 1, user_id: 3, path: '/shared/1.png', timestamp: 1392405505782},
                 {id: 2, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
                 {id: 4, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
                 {id: 5, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
-                {id: 3, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782}
+                {id: 3, user_id: 1, path: '/shared/1.png', timestamp: 1392405505782}
             ];
 
             //Simulate pre-requisite clear & user creation
@@ -130,7 +130,13 @@ describe('bulk routes', function () {
                             photos[4].imagePath.should.equal('/shared/1.png');
                             photos[4].createdAt.should.be.approximately(1392405505782, 1000); //Had to approximate, as the milliseconds are different
 
-                            done();
+                            //Ensure photos were added to users
+                            db.User.find(2).then(function (user) {
+                                user.getPhotoes().then(function (photos) {
+                                    photos.length.should.equal(3);
+                                    done();
+                                });
+                            })
                         });
                     });
                 });

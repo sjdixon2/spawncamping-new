@@ -6,7 +6,8 @@ module.exports = function(sequelize, DataTypes) {
         createdAt: { //Manual version of createdAt (see 'timestamps' below)
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW
-        }
+        },
+        userID: DataTypes.INTEGER //Shouldn't be used unless needed (use setUser instead) - used by image bulk upload
     }, {
         timestamps: false, //Photos cannot have true timestamps (otherwise createdAt can't be set, as required by bulk photo upload)
         classMethods: {
