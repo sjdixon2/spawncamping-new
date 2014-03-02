@@ -1,20 +1,24 @@
-/*
- * GET users listing.
- */
-
-exports.list = function (req, res) {
-    // demo
-    res.render('login');
-};
 
 exports.signupForm = function (req, res) {
-    // send new user form
-	res.send("User signup form");
+    res.render('signup', {
+        title: 'Signup',
+        err: req.session.err
+    });
 };
 
 exports.register = function (req, res) {
     // register new user in database
-    res.send("User registered.");
+    req.session.err = null;
+    req.session.login = null;
+    helpers.login.validateAndCreate(req.body)
+        .then(function(new_user){
+            req.session.login = new_user.id;
+            res.redirect("/feed");
+
+        }, function(code, message){
+            req.session.err = message;
+            res.redirect(code, "/users/new");
+        });
 };
 
 exports.stream = function(req, res) {

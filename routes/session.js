@@ -5,11 +5,11 @@ exports.loginForm = function (req, res) {
     if(req.session.login) {
         res.redirect('/');
     } else {
-        var redirect = "/";
-        if(req.param('redirect')) redirect = req.param('redirect');
+        if(!req.session.redirect) req.session.redirect = "/";
         res.render('login', {
             title: 'Login',
-            redirect: redirect
+            redirect: req.session.redirect,
+            err: req.session.err
         })
     }
 };
@@ -27,35 +27,16 @@ exports.logout = function (req, res) {
  */
 exports.attemptLogin = function (req, res) {
 
-    db.User.find({
-        where: { email: req.body.username }
-    }).complete(function (err, user) {
+    if(!req.session.redirect) req.session.redirect = '/';
+    req.session.err = null;
 
-            var redirect = req.body.redirect;
-            if(!redirect) redirect = '/';
+    helpers.login.validate(req.body).then(function(user){
+            req.session.login = user.id;
+            res.redirect("/feed");
 
-            if(err) {
-                // TODO change to 500 error function
-                console.log(err);
-                res.statusCode = 500;
-                res.render('login', {
-                    title: 'Login',
-                    redirect: redirect,
-                    err: '500 - Error accessing database!'
-                });
-            } else if (!user || user.password != req.body.password) {
-                console.log("Login attempt: " + req.body.username);
-                res.statusCode = 302;
-                res.render('login', {
-                    title: 'Login',
-                    redirect: redirect,
-                    err: 'Email and/or Password  is incorrect.'
-                });
-            } else {
-                req.session.login = user.id;
-                res.redirect(redirect);
-            }
-
+        }, function(code, message){
+            req.session.err = message;
+            res.redirect(code, "/sessions/new");
         });
 
 };

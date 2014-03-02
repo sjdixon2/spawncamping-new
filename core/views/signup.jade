@@ -1,0 +1,16 @@
+//
+   Created by hhrosvick on 01/03/14.
+
+extends layout
+block content
+    #error
+        if err
+            = err
+    form(name='signup', method='post', action='/users/create')
+        input(type='text', name='username', placeholder='Email')
+        input(type="text", name='fullname', placeholder='Full Name')
+        input(type='password', name='password', placeholder='Password')
+        input(type='submit', value='Register')
+    #register
+        p Already a User?&nbsp;
+            a(href="/sessions/new") Login Now!

@@ -8,7 +8,7 @@ describe('Helpers/Routes', function () {
     var http = require('http');
     var server;
 
-    var options = {
+    var test_options = {
         hostname: "localhost",
         port: app.get('port')
     };
@@ -30,8 +30,12 @@ describe('Helpers/Routes', function () {
 
         it("redirects when no session present", function (done) {
 
+            var options = test_options;
             options.path = "/feed";
             options.method = "GET";
+            options.headers = {
+                cookie: null
+            }
 
             http.request(options, function(res){
                 res.statusCode.should.equal(302);
@@ -46,7 +50,8 @@ describe('Helpers/Routes', function () {
                 password: "123456"
             };
 
-            var options2 = options;
+            var options = test_options;
+            var options2 = test_options;
 
             options.path = "/sessions/create";
             options.method = "POST";
