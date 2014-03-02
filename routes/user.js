@@ -1,14 +1,12 @@
 
 exports.signupForm = function (req, res) {
     res.render('signup', {
-        title: 'Signup',
-        err: req.session.err
+        title: 'Signup'
     });
 };
 
 exports.register = function (req, res) {
     // register new user in database
-    req.session.err = null;
     req.session.login = null;
     helpers.login.validateAndCreate(req.body)
         .then(function(new_user){
@@ -16,7 +14,7 @@ exports.register = function (req, res) {
             res.redirect("/feed");
 
         }, function(code, message){
-            req.session.err = message;
+            req.flash = ('error', message);
             res.redirect(code, "/users/new");
         });
 };

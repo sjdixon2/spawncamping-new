@@ -9,7 +9,6 @@ Should be used on all routes that require authentication.
 exports.check_auth = function(req, res, next) {
 
     if(!req.session.login) {
-        req.session.redirect = req.url;
         res.redirect("/sessions/new");
         return;
     }
