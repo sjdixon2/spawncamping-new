@@ -7,7 +7,7 @@ describe('bulk routes', function () {
      * @param cb callback function
      */
     function clearAll(cb) {
-        server.get('/bulk/clear').expect(200, 'DB cleared').end(function (err) {
+        server.get(url.format({pathname: '/bulk/clear', query: {password: settings.ADMIN_PASSWORD}})).expect(200, 'DB cleared').end(function (err) {
             if (err) throw err;
             return cb();
         });
@@ -20,7 +20,7 @@ describe('bulk routes', function () {
      */
     function createUsers(users, cb) {
         //Perform bulk upload request
-        server.post('/bulk/users').send(users)
+        server.post(url.format({pathname: '/bulk/users', query: {password: settings.ADMIN_PASSWORD}})).send(users)
             .expect(200)
             .end(function (err) {
                 if (err) throw err;
@@ -35,7 +35,7 @@ describe('bulk routes', function () {
      */
     function createPhotos(photos, cb) {
         //Perform bulk upload request
-        server.post('/bulk/streams').send(photos)
+        server.post(url.format({pathname: '/bulk/streams', query: {password: settings.ADMIN_PASSWORD}})).send(photos)
             .expect(200)
             .end(function (err) {
                 if (err) throw err;
@@ -43,8 +43,13 @@ describe('bulk routes', function () {
             });
     }
 
-    describe('clear', function () {
-        it('It deletes all data in the table', function (done) {
+    describe('clear', function (done) {
+        it('refuses request without admin password', function () {
+            server.post(url.format({pathname: '/bulk/clear', query: {password: 'notrealpassword'}}))
+                .expect(401, done);
+        });
+
+        it('deletes all data in the table', function (done) {
             //Create dummy items in DB
             var promise = q.all(
                 UserFactory.basic(),
@@ -69,7 +74,12 @@ describe('bulk routes', function () {
         });
     });
 
-    describe('users', function () {
+    describe('users', function (done) {
+        it('refuses request without admin password', function () {
+            server.post(url.format({pathname: '/bulk/users', query: {password: 'notrealpassword'}}))
+                .expect(401, done);
+        });
+
         it('Creates users given in JSON', function (done) {
             var users = [
                 {id: 1, name: 'jill', follows: [2, 3], password: 'test1'},
@@ -102,6 +112,11 @@ describe('bulk routes', function () {
     });
 
     describe('streams', function () {
+        it('refuses request without admin password', function (done) {
+            server.post(url.format({pathname: '/bulk/streams', query: {password: 'notrealpassword'}}))
+                .expect(401, done);
+        });
+
         it('Creates photos given in JSON', function (done) {
             var users = [
                 {id: 1, name: 'jill', follows: [2, 3], password: 'test1'},
