@@ -109,13 +109,14 @@ describe('bulk routes', function () {
                 {id: 2, name: 'alice', follows: [3], password: 'test2'}
             ];
 
-            var photos = [
-                {id: 1, user_id: 3, path: '/shared/1.png', timestamp: 1392405505782},
-                {id: 2, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
-                {id: 4, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
-                {id: 5, user_id: 2, path: '/shared/1.png', timestamp: 1392405505782},
-                {id: 3, user_id: 1, path: '/shared/1.png', timestamp: 1392405505782}
-            ];
+            var imagePath = system.pathTo('test/fixtures/routes/bulk/image.png'),
+                photos = [
+                    {id: 1, user_id: 3, path: imagePath, timestamp: 1392403505782},
+                    {id: 2, user_id: 2, path: imagePath, timestamp: 1392305505782},
+                    {id: 4, user_id: 2, path: imagePath, timestamp: 1392405505781},
+                    {id: 5, user_id: 2, path: imagePath, timestamp: 1392405505782},
+                    {id: 3, user_id: 1, path: imagePath, timestamp: 1392404505782}
+                ];
 
             //Simulate pre-requisite clear & user creation
             clearAll(function () {
@@ -127,7 +128,7 @@ describe('bulk routes', function () {
                             photos.length.should.equal(5);
 
                             photos[4].id.should.equal(5);
-                            photos[4].imagePath.should.equal('/shared/1.png');
+                            photos[4].imagePath.should.equal(system.pathTo(settings.UPLOADS_PATH, '5.png'));
                             photos[4].createdAt.should.be.approximately(1392405505782, 1000); //Had to approximate, as the milliseconds are different
 
                             //Ensure photos were added to users

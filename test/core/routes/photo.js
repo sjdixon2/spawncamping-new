@@ -37,7 +37,7 @@ describe('photo routes', function () {
 
         it('accepts jpg images', function (done) {
             var uploadFileDirectory = system.pathTo(settings.UPLOADS_PATH),
-                photoUploadCount = fs.readdirSync(uploadFileDirectory);
+                photoUploadCount = fs.readdirSync(uploadFileDirectory).length;
 
             server.post('/photos/create')
                 .expect(302)
@@ -46,7 +46,7 @@ describe('photo routes', function () {
                 .end(function (err) {
                     if (err) throw err;
 
-                    var newPhotoUploadCount = fs.readdirSync(uploadFileDirectory);
+                    var newPhotoUploadCount = fs.readdirSync(uploadFileDirectory).length;
 
                     //Ensure that 'a file' was added to uploads directory
                     //TODO test actual file and ensure that it's correct

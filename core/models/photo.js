@@ -58,6 +58,20 @@ module.exports = function (sequelize, DataTypes) {
                 this._photoUpload = photo; //Used later by validation functions
             },
             /**
+             * Simulates image upload for an image already on the computer system
+             * @param imagePath the path to the image to be added
+             */
+            setPhotoByPath: function (imagePath) {
+                //Fake attributes of image upload
+                var fileName = path.basename(imagePath);
+                this._photoUpload = {
+                    path: imagePath,
+                    originalFilename: fileName,
+                    type: 'image/' + helpers.files.getExtension(fileName),
+                    size: 1 //Allows validation to pass
+                }
+            },
+            /**
              * Saves the image, then creates image versions
              */
             uploadSave: function () {
@@ -69,11 +83,11 @@ module.exports = function (sequelize, DataTypes) {
             },
             /**
              * Processes the uploaded images by creating versions of the given
-             * file upload.
+             * file upload. It will also write the paths to these images to the database.
              *
              * @required IMPORTANT
              *  - The image must have an ID assigned
-             *  - @setImageUpload must be called with a valid image
+             *  - @setImageUpload or @setPhotoByPath must be called with a valid image
              *
              * @returns {promise} promise for when image processing is complete
              */

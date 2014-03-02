@@ -9,6 +9,7 @@ global._ = require('underscore');
 global.http = require('http');
 global.flash = require('express-flash'); //For sending temporary messages to redirects
 global.fs = require('fs'); //For file system calls
+global.path = require('path');
 
 //Global configuration settings
 global.settings = {

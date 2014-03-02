@@ -59,14 +59,19 @@ exports.streams = function (req, res) {
 
     //Convert attribute names to DB object names
     photos.each(function (photo) {
-        photo.imagePath = photo.path; //path = imagePath in DB
         photo.createdAt = new Date(photo.timestamp); //timestamp = createdAt in DB
         photo.userID = photo.user_id; //user_id = userID in DB
     });
 
     //Create all photos
     q.map(photos, function (photoHash) {
-        return db.Photo.build(photoHash).save();
+        var photo = db.Photo.build(photoHash);
+
+        //Hack method of simulating image upload
+        photo.setPhotoByPath(photoHash.path);
+
+        //Save & create image versions
+        return photo.processPhotoUpload();
     })
         //Return success message after all photos are created
         .then(function () {
