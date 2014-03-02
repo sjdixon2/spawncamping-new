@@ -7,7 +7,7 @@ var main = require('./'),
 
 //app.get('/', main.index);
 app.get("/", feed.index);
-app.get('/users', user.list);
+//app.get('/users', user.list);
 app.get("/users/new", user.signupForm);
 //app.get("/users/:id", user.stream);
 //app.get("/users/:id/follow", user.follow)
