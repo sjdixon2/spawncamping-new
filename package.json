@@ -22,7 +22,8 @@
     "lodash": "*",
     "forever": "*",
     "supertest": "*",
-    "methods": "*"
+    "methods": "*",
+    "express-flash": "*"
   },
   "devDependencies": {
     "supervisor": "*",

@@ -20,8 +20,8 @@ app.post("/sessions/create", session.attemptLogin);
 
 app.get("/feed", feed.index);
 
-app.get("/photos/new", photo.newPhotoForm);
-app.post("/photos/create", photo.upload);
+app.get("/photos/new", photo.new);
+app.post("/photos/create", photo.create);
 
 
 //Bulk upload routes

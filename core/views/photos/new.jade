@@ -1,0 +1,12 @@
+form(action="/photos/create", method="post", enctype="multipart/form-data")
+    -//Show errors, if any
+    - if (messages.errors)
+        .message.errors
+            - for errorSet in messages.errors
+                - each error in errorSet
+                    span= error
+
+    div
+        input(type="file", name="image")
+    div
+        input(type="submit", value="Upload image")

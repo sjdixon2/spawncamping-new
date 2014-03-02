@@ -7,11 +7,14 @@ global.requireAll = require('require-all');
 global.express = require('express');
 global._ = require('underscore');
 global.http = require('http');
+global.flash = require('express-flash'); //For sending temporary messages to redirects
+global.fs = require('fs'); //For file system calls
 
 //Global configuration settings
 global.settings = {
     ROOT_DIR: process.cwd(),
     NODE_ENV: process.env.NODE_ENV,
+    UPLOADS_PATH: 'public/uploads',
 
     /*
      To use this connection string, run the following commands in your localhost mysql
@@ -59,6 +62,9 @@ app.use(express.bodyParser());
 // Session Management
 app.use(express.cookieParser());
 app.use(express.session({secret: 'spawncampingsupersecuresession'}));
+
+//Configure flash messages
+app.use(flash());
 
 app.use(app.router);
 app.use(express.static(system.pathTo('public/')));
