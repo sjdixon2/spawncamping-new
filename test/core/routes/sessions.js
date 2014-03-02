@@ -23,7 +23,7 @@ describe('sessions routes', function () {
                 username: "user"+(UserFactory.counter() - 1)+"@email.com",
                 password: "123456"
             };
-            console.log(UserFactory.counter());
+
             server.post("/sessions/create")
                 .type("application/json")
                 .send(data)
