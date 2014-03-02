@@ -7,7 +7,6 @@ var main = require('./'),
 
 //app.get('/', main.index);
 app.get("/", feed.index);
-//app.get('/users', user.list);
 app.get("/users/new", user.signupForm);
 //app.get("/users/:id", user.stream);
 //app.get("/users/:id/follow", user.follow)
@@ -18,7 +17,7 @@ app.get("/sessions/new", session.loginForm);
 app.post("/sessions/create", session.attemptLogin);
 
 
-app.get("/feed", feed.index);
+app.get("/feed", helpers.routes.check_auth, feed.index);
 
 app.get("/photos/new", photo.new);
 app.post("/photos/create", photo.create);
