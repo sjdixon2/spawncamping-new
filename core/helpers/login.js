@@ -21,9 +21,9 @@ exports.validate = function(body){
 
             if(err) {
                 console.log(err);
-                deferred.reject(500, '500 - Database Error!');
+                deferred.reject({code:500, message:'500 - Database Error!'});
             } else if(!user || user.password != password) {
-                deferred.reject(302, 'Email and/or Password is incorrect.');
+                deferred.reject({code:302, message:'Email and/or Password is incorrect.'});
             } else {
                 deferred.resolve(user);
             }
@@ -39,26 +39,30 @@ exports.validateAndCreate = function(body){
         password = exports.encrypt(body.password),
         deferred = q.defer();
 
-    db.User.find({
-        where: { email: email }
-    }).complete(function (err, user) {
+    if(!name || !email || !password) {
+        deferred.promise.reject(302, 'You must fill out all fields!');
+    } else {
+        db.User.find({
+            where: { email: email }
+        }).complete(function (err, user) {
 
-        if(err) {
-            console.log(err);
-            deferred.reject(500, '500 - Database Error!');
-        } else if(user) {
-            deferred.reject(302, 'User already exists!');
-        } else {
+            if(err) {
+                console.log(err);
+                deferred.reject({code:500, message:'500 - Database Error!'});
+            } else if(user) {
+                deferred.reject({code:302, message:'User already exists!'});
+            } else {
 
-            db.User.create({
-                email: email,
-                password: password,
-                fullname: name
-            }).done(function(user){
-                deferred.resolve(user);
-            });
-        }
-    });
+                db.User.create({
+                    email: email,
+                    password: password,
+                    fullname: name
+                }).then(function(user){
+                    deferred.resolve(user);
+                });
+            }
+        });
+    }
 
     return deferred.promise;
 };

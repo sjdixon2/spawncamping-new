@@ -28,9 +28,9 @@ exports.attemptLogin = function (req, res) {
             req.session.login = user.id;
             res.redirect("/feed");
 
-        }, function(code, message){
-            req.flash = ('error', message);
-            res.redirect(code, "/sessions/new");
+        }, function(error){
+            req.flash('errors', error.message);
+            res.redirect(error.code, "/sessions/new");
         });
 
 };

@@ -13,9 +13,9 @@ exports.register = function (req, res) {
             req.session.login = new_user.id;
             res.redirect("/feed");
 
-        }, function(code, message){
-            req.flash = ('error', message);
-            res.redirect(code, "/users/new");
+        }, function(error){
+            req.flash('errors', error.message);
+            res.redirect(error.code, "/users/new");
         });
 };
 

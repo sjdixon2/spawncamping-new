@@ -1,9 +1,9 @@
 extends layout
 block content
     -//Show errors, if any
-    - if (messages.error)
+    - if (messages.errors)
         .message.errors
-            span= messages.error
+            span= messages.errors
     form(name='login', method='post', action='/sessions/create')
         input(type='text', name='username', placeholder='Email')
         input(type='password', name='password', placeholder='Password')
