@@ -1,12 +1,36 @@
+/*
+ GET login page
+ */
+exports.loginForm = function (req, res) {
+    if(req.session.login) {
+        res.redirect('/');
+    } else {
+        res.render('login', {
+            title: 'Login'
+        })
+    }
+};
 
+/*
+ logout (destroy session)
+ */
+exports.logout = function (req, res) {
+    req.session.login = null;
+    res.redirect('/');
+};
 
-exports.loginForm = function(req, res){
-    // send login form
-    res.send("HTML for the login form.")
-}
+/*
+ POST login page (for user authentication)
+ */
+exports.attemptLogin = function (req, res) {
 
-exports.attemptLogin = function(req, res){
-    // if login is valid, create new header
+    helpers.login.validate(req.body).then(function(user){
+            req.session.login = user.id;
+            res.redirect("/feed");
 
-    // otherwise, redorect to login form
-}
+        }, function(error){
+            req.flash('errors', error.message);
+            res.redirect(error.code, "/sessions/new");
+        });
+
+};

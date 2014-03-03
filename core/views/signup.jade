@@ -4,11 +4,11 @@ block content
     - if (messages.errors)
         .message.errors
             span= messages.errors
-    form(name='login', method='post', action='/sessions/create')
+    form(name='signup', method='post', action='/users/create')
         input(type='text', name='username', placeholder='Email')
+        input(type="text", name='fullname', placeholder='Full Name')
         input(type='password', name='password', placeholder='Password')
-        input(type='hidden', name='redirect', value=redirect)
-        input(type='submit', value='Login')
+        input(type='submit', value='Register')
     #register
-        p Not a User?&nbsp;
-            a(href="/users/new") Register Now!
+        p Already a User?&nbsp;
+            a(href="/sessions/new") Login Now!

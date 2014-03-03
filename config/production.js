@@ -4,11 +4,11 @@
 extend(global.settings, {
     db:{
         //NOTE!!!!!! config.json will need to be changed to reflect these changes (to perform migrations)
-        TABLE: 'seng_production',
-        USERNAME: 'user',
-        PASSWORD: 'user',
+        TABLE: 's513_jpnauta',
+        USERNAME: 's513_jpnauta',
+        PASSWORD: '10054069',
         options: {
-            host: 'localhost',
+            host: 'web2.cpsc.ucalgary.ca',
             port: 3306
         }
     }

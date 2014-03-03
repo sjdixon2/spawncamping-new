@@ -20,7 +20,10 @@
     "extend": "*",
     "sequelize": "*",
     "lodash": "*",
-    "forever": "*"
+    "forever": "*",
+    "supertest": "*",
+    "methods": "*",
+    "express-flash": "*"
   },
   "devDependencies": {
     "supervisor": "*",
@@ -28,6 +31,7 @@
     "grunt": "~0.4.2",
     "mocha-jenkins-reporter": "*",
     "grunt-mocha-cov": "~0.2.1",
-    "grunt-cli": "*"
+    "grunt-cli": "*",
+    "xunit-file": "*"
   }
 }

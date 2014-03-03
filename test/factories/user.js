@@ -7,3 +7,7 @@ exports.basic = function () {
         fullname: 'Test User'
     });
 }
+
+exports.counter = function(){
+    return counter;
+}

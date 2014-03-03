@@ -6,11 +6,19 @@ global.extend = require('extend');
 global.requireAll = require('require-all');
 global.express = require('express');
 global._ = require('underscore');
+global.http = require('http');
+global.flash = require('express-flash'); //For sending temporary messages to redirects
+global.fs = require('fs'); //For file system calls
+global.path = require('path');
+global.url = require('url');
 
 //Global configuration settings
 global.settings = {
     ROOT_DIR: process.cwd(),
     NODE_ENV: process.env.NODE_ENV,
+    UPLOADS_PATH: 'public/uploads',
+    //TODO change to password given by TA
+    ADMIN_PASSWORD: 'temp_password', //Password given by TA for bulk upload security
 
     /*
      To use this connection string, run the following commands in your localhost mysql
@@ -59,6 +67,9 @@ app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({secret: 'spawncampingsupersecuresession'}));
 
+//Configure flash messages
+app.use(flash());
+
 app.use(app.router);
 app.use(express.static(system.pathTo('public/')));
 
@@ -79,3 +90,6 @@ require('./my_config'); //Load computer-specific configurations
 global.helpers = requireAll(system.pathTo('/core/helpers/'));
 global.classes = require(system.pathTo('/core/classes/'));
 global.db = require(system.pathTo('core/models/'));
+
+//Load routes configurations
+require(system.pathTo('routes/config'));
