@@ -40,7 +40,7 @@ exports.validateAndCreate = function(body){
         deferred = q.defer();
 
     if(!name || !email || !password) {
-        deferred.promise.reject(302, 'You must fill out all fields!');
+        deferred.reject(302, 'You must fill out all fields!');
     } else {
         db.User.find({
             where: { email: email }
