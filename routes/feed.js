@@ -1,5 +1,5 @@
 exports.index = function(req, res){
-    res.send("/feed: feed.index")
+    res.status(200).render("feed");
 }
 
 exports.userFeed = function(req, res){

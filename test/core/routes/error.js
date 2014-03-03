@@ -6,12 +6,16 @@ describe('server routing behavior', function(){
     var session;
 
 
+    after(function () {
+        session.destroy();
+    });
+
     describe('404 Handling', function(done){
         it('should redirect you to 404 only if you are logged in', function(){
             // expect a redirection to /sessions/new
             var request = {};
             var pathWhichDoesNotExist = "/path/does/not/exist";
-            var session = new Session();
+            session = new Session();
             session.get(path)
                 .expect(302)
                 .expect('location', '/sessions/new');
@@ -25,7 +29,7 @@ describe('server routing behavior', function(){
 
         it('when logged in, return 404 error', function(){
             var pathWhichDoesNotExist = "/path/does/not/exist";
-            var session = new Session();
+            session = new Session();
             testHelpers.users.login(session);
             session.get(pathWhichDoesNotExist)
                 .expect(404)
