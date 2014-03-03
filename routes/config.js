@@ -19,12 +19,13 @@ app.post("/users/create", user.register);
 //app.get("/users/:id/unfollow", check_auth, user.unfollow)
 
 // Session Routes
-app.get("/sessions/new", check_auth, session.loginForm);
-app.post("/sessions/create", check_auth, session.attemptLogin);
+app.get("/sessions/new", session.loginForm);
+app.post("/sessions/create", session.attemptLogin);
+app.get("/logout", check_auth, session.logout);
 
 // Photo Upload Routes
-app.get("/photos/new", check_auth, photo.newPhotoForm);
-app.post("/photos/create", check_auth, photo.upload);
+app.get("/photos/new", check_auth, photo.new);
+app.post("/photos/create", check_auth, photo.create);
 
 //Bulk upload routes
 app.get('/bulk/clear', bulk.clear);
