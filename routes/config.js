@@ -32,6 +32,11 @@ app.get('/bulk/clear', bulk.clear);
 app.post('/bulk/users', bulk.users);
 app.post('/bulk/streams', bulk.streams);
 
-app.use(function(req, res, next){
-    res.status(404).render("404_error_template");
+app.use(check_auth, function(req, res, next){
+    res.status(404).render('errors/404', {url: req.url})
+});
+
+app.use(function(err, req, res, next){
+    res.status(err.status || 500);
+    res.render('errors/500', { error: err });
 });
