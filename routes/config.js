@@ -4,21 +4,24 @@ var main = require('./'),
     photo = require('./photo'),
     feed = require("./feed");
 
-//app.get('/', main.index);
-app.get("/", feed.index);
-app.get('/users', user.list);
+var check_auth = helpers.routes.check_auth;
+
+// User Login & Registration Methods
 app.get("/users/new", user.signupForm);
-//app.get("/users/:id", user.stream);
-//app.get("/users/:id/follow", user.follow)
-//app.get("/users/:id/unfollow", user.unfollow)
-app.post("/users/create", user.register);
+app.post("/users/create",  user.register);
 
-app.get("/sessions/new", session.loginForm);
-app.post("/sessions/create", session.attemptLogin);
+app.get("/", check_auth, feed.index);
 
+//app.get("/users/:id", check_auth, user.stream);
+//app.get("/users/:id/follow", check_auth, user.follow)
+//app.get("/users/:id/unfollow", check_auth, user.unfollow)
 
-app.get("/feed", feed.index);
+app.get("/sessions/new", check_auth, session.loginForm);
+app.post("/sessions/create", check_auth, session.attemptLogin);
+app.get("/feed", check_auth, feed.index);
+app.get("/photos/new", check_auth, photo.newPhotoForm);
+app.post("/photos/create", check_auth, photo.upload);
 
-app.get("/photos/new", photo.newPhotoForm);
-app.post("/photos/create", photo.upload);
-
+app.use(function(req, res, next){
+    res.status(404).render("404_error_template");
+});
