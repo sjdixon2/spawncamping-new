@@ -16,7 +16,7 @@ exports.loginForm = function (req, res) {
 /*
  logout (destroy session)
  */
-exports.logout = function (req, res) {
+exports.destroy = function (req, res) {
     req.session.login = null;
     res.redirect('/');
 };

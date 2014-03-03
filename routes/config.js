@@ -21,7 +21,7 @@ app.post("/users/create", user.register);
 // Session Routes
 app.get("/sessions/new", session.loginForm);
 app.post("/sessions/create", session.attemptLogin);
-app.get("/logout", check_auth, session.logout);
+app.get("/sessions/destroy", check_auth, session.destroy);
 
 // Photo Upload Routes
 app.get("/photos/new", check_auth, photo.new);
