@@ -1,6 +1,21 @@
 //
    Created by stephen on 03/03/14.
 
-extends layout
-block content
-    div HELLO WORLD
+h1 Photos
+p Found some photos.
+div(id="photos")
+    table(class="summary")
+        thead
+            tr
+                th ID
+                th
+                th City, State
+                th Zip
+                th Action
+        tbody
+            each photo in photos
+                tr
+                    td= photo.id
+                    td= photo.createdAt
+                    td= photo.imagePath
+                    td= photo.userID
