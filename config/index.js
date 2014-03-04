@@ -31,7 +31,7 @@ global.settings = {
      */
     db: {
         //NOTE!!!!!! config.json will need to be changed to reflect these changes (to perform migrations)
-        TABLE: 'seng_development',
+        TABLE: 'seng_test',
         USERNAME: 'user',
         PASSWORD: 'user',
         options: {
