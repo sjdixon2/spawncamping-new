@@ -1,12 +1,15 @@
 exports.index = function(req, res){
     db.Photo.findAll({
+        //limit: '30',
+        //offset: '0',
         where: {
             'feedItems.id' : req.session.login
         },
         include: [
             {model: db.User, as: 'feedItems'}
         ],
-        order: '`createdAt`ASC'
+        order: 'createdAt ASC'
+
     }).success(function (photos){
             res.render("feed", {
                 title: 'Feed',
