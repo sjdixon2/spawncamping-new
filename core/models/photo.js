@@ -81,6 +81,26 @@ module.exports = function (sequelize, DataTypes) {
                     return photo.processPhotoUpload();
                 });
             },
+
+
+            /*
+             Adds the photo to the feeds of everyone subscribing to the user who uploaded the photo
+
+             */
+            notifyFollowers: function(){
+                // For each follower following the uploader
+                db.User.findAll({
+                    where : {
+                        'followers.id' : this.userID
+                    },
+                    include : [
+                        {model: db.User, as: 'Followers'}
+                    ]
+                }).success(function (followers){
+                    // Add this photo to their feed items
+                });
+            },
+
             /**
              * Processes the uploaded images by creating versions of the given
              * file upload. It will also write the paths to these images to the database.
