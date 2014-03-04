@@ -14,9 +14,13 @@ describe('feeds', function(){
     describe('show photos', function(){
         it('shows 30 photos on first page', function(done){
             session.get('/feed')
-                .expect(302, done);
-            session.get('/')
-                .expect(302, done);
+                .expect(302)
+                .end(function (err) {
+                    if (err) throw err;
+
+                    session.get('/')
+                        .expect(302, done);
+                });
         });
     })
 
