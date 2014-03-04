@@ -165,8 +165,8 @@ function test_prototypes(){
 }
 
 
-test_date_calculator();
-test_time_calculator();
-test_prototypes();
+//test_date_calculator();
+//test_time_calculator();
+//test_prototypes();
 
 console.log("Woot!");
