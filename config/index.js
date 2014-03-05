@@ -70,6 +70,22 @@ app.use(express.session({secret: 'spawncampingsupersecuresession'}));
 //Configure flash messages
 app.use(flash());
 
+//Helper functions for user login in Jade templates
+app.use(function(req,res,next){
+    /**
+     * Indicates if the user is logged in
+     * @returns {boolean}
+     */
+    res.locals.userLoggedIn = function () {
+        return req.session.login;
+    }
+
+    //Direct access to logged in user object
+    res.locals.user = req.session.login;
+
+    next();
+});
+
 app.use(app.router);
 app.use(express.static(system.pathTo('public/')));
 
