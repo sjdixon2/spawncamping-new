@@ -3,7 +3,7 @@
  */
 exports.new = function (req, res) {
     // html displaying upload form
-    res.render('photos/new');
+    res.render('photos/new', {title: 'Upload Photo'});
 }
 
 /**
@@ -14,7 +14,8 @@ exports.create = function (req, res) {
         image = req.files.image;
 
     var photo = db.Photo.build(attrs);
-    photo.setImageUpload(image);
+    photo.userID = req.session.user_id; //Attach current user to uploaded photo
+    photo.setImageUpload(image); //Attach uploaded file to photo
 
     var errors = photo.validate();
     if (!errors) { //If no errors, then save

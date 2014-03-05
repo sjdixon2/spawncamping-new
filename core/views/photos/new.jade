@@ -1,12 +1,19 @@
-form(action="/photos/create", method="post", enctype="multipart/form-data")
-    -//Show errors, if any
-    - if (messages.errors)
-        .message.errors
-            - for errorSet in messages.errors
-                - each error in errorSet
-                    span= error
+extends ../layout
 
-    div
-        input(type="file", name="image")
-    div
-        input(type="submit", value="Upload image")
+block content
+    .small.container
+        -//Show errors, if any
+        - if (messages.errors)
+            .ui.error.message
+                - for errorSet in messages.errors
+                    - each error in errorSet
+                        span= error
+
+        form.ui.form.segment(action="/photos/create", method="post", enctype="multipart/form-data")
+            .field
+                label Image to Upload
+                .ui.left.labeled.icon.input
+                    input(type="file", name="image")
+                    i.photo.icon
+                .p.vert-15
+                    input.ui.blue.submit.button(type="submit", value="Upload image")

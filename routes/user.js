@@ -1,7 +1,7 @@
 
 exports.signupForm = function (req, res) {
     res.render('signup', {
-        title: 'Signup'
+        title: 'Sign Up'
     });
 };
 
