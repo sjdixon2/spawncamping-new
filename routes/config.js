@@ -36,7 +36,7 @@ app.use(function(req, res) {
     // curl https://localhost:4000/notfound -vk
     // curl https://localhost:4000/notfound -vkH "Accept: application/json"
     res.status(404);
-    res.render('error/404', { title:'404: Page not found', error: '404: Page not found', url: req.url });
+    res.render('errors/404', { title:'404: Page not found', error: '404: Page not found', url: req.url });
     return;
 });
 
@@ -59,6 +59,9 @@ app.use(function(err, req, res, next){
         case 403:
             statusText = 'Forbidden';
             break;
+//        case 404:
+//            statusText = '404: Page not found';
+//            break;
         case 500:
             statusText = 'Internal Server Error';
             break;
