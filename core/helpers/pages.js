@@ -3,7 +3,7 @@
  */
 
 exports.getPageSize = function(){
-    return 30;
+    return 1;
 }
 
 exports.getPageNumber = function(query){
@@ -15,4 +15,8 @@ exports.getPageNumber = function(query){
         console.log('offset=' + offset);
         return offset;
     }
+}
+
+exports.getItemOffset = function(req){
+    return exports.getPageNumber(url.parse(req.url).query) * exports.getPageSize();
 }

@@ -37,6 +37,10 @@ describe('users routes', function(){
                     server.get("/feed")
                         .set("cookie", res.header["set-cookie"])
                         .expect(200, done);
+
+                    // NOTE: this test method does not set a user_id on the session.
+                    // Because of this, in feed.js there is a (||-1).
+                    // Not sure how to add user_id to this.
                 });
         });
 
