@@ -1,9 +1,9 @@
 exports.index = function(req, res){
     db.Photo.findAll({
-        //limit: '30',
-        //offset: '0',
+        //limit: 30,
+        //offset: 0,
         where: {
-            'feedItems.id' : req.session.login
+            'feedItems.id' : req.session.user_id
         },
         include: [
             {model: db.User, as: 'feedItems'}

@@ -32,11 +32,46 @@ app.get('/bulk/clear', bulk.clear);
 app.post('/bulk/users', bulk.users);
 app.post('/bulk/streams', bulk.streams);
 
-app.use(check_auth, function(req, res, next){
-    res.status(404).render('errors/404', {url: req.url})
+app.use(function(req, res) {
+    // curl https://localhost:4000/notfound -vk
+    // curl https://localhost:4000/notfound -vkH "Accept: application/json"
+    res.status(404);
+    res.render('errors/404', { title:'404: Page not found', error: '404: Page not found', url: req.url });
+    return;
 });
 
 app.use(function(err, req, res, next){
-    res.status(err.status || 500);
-    res.render('errors/500', { error: err });
+    var statusCode = err.status || 500;
+    var statusText = '';
+    var errorPage = '';
+    var errorDetail = (process.env.NODE_ENV === 'production') ?
+        'Sorry about this error'
+        : err.stack;
+
+
+    switch (statusCode) {
+        case 400:
+            statusText = 'Bad Request';
+            break;
+        case 401:
+            statusText = 'Unauthorized';
+            break;
+        case 403:
+            statusText = 'Forbidden';
+            break;
+//        case 404:
+//            statusText = '404: Page not found';
+//            break;
+        case 500:
+            statusText = 'Internal Server Error';
+            break;
+    }
+    res.status(statusCode);
+    if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
+        console.log(errorDetail);
+    }
+    var errorPage = 'errors/' + statusCode;
+    console.log("error found");
+    res.render(errorPage, { title: statusCode + ': ' + statusText, error: errorDetail, url: req.url });
+
 });
