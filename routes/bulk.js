@@ -18,15 +18,7 @@ var authenticateAdmin = function (req, res, cb) {
  */
 exports.clear = function (req, res) {
     authenticateAdmin(req, res, function () { //Authenticate admin user
-        //Delete all entries in all tables
-        var promise = q.map(db, function (model) {
-            if (model.destroy) {
-                return model.destroy();
-            }
-        });
-
-        //After each DB is cleared, indicate success
-        promise.then(function () {
+        helpers.system.reset().then(function () {
             helpers.routes.success(res, 'DB cleared');
         });
     });

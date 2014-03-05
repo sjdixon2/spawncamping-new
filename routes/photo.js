@@ -14,7 +14,7 @@ exports.create = function (req, res) {
         image = req.files.image;
 
     var photo = db.Photo.build(attrs);
-    photo.userID = req.session.user_id; //Attach current user to uploaded photo
+    photo.userID = req.session.login.id; //Attach current user to uploaded photo
     photo.setImageUpload(image); //Attach uploaded file to photo
 
     var errors = photo.validate();
