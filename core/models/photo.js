@@ -27,7 +27,12 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW
         },
-        userID: DataTypes.INTEGER //Shouldn't be used unless needed (use setUser instead) - used by image bulk upload
+        userID: { //Shouldn't be used unless needed (use setUser instead) - used by image bulk upload
+            type: DataTypes.INTEGER,
+            validate: {
+                notNull: true //Photo must have a user
+            }
+        }
     }, {
         timestamps: false, //Photos cannot have true timestamps (otherwise createdAt can't be set, as required by bulk photo upload)
         classMethods: {
