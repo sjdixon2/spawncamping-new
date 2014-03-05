@@ -3,8 +3,9 @@ var fs = require('fs'),
     Sequelize = require('sequelize'),
     lodash = require('lodash'),
     dbConf = settings.db,
-    sequelize = new Sequelize(dbConf.TABLE, dbConf.USERNAME, dbConf.PASSWORD, dbConf.options),
-    db = {}
+    db = {};
+
+global.sequelize = new Sequelize(dbConf.TABLE, dbConf.USERNAME, dbConf.PASSWORD, dbConf.options);
 
 fs
     .readdirSync(__dirname)
