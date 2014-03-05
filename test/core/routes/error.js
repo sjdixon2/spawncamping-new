@@ -14,6 +14,7 @@ describe('server routing behavior', function(){
             session.get(path)
                 .expect(404)
                 .expect('location', path);
+                //.expect(session.title=='404: Page not found');
         });
 
         it('direct authenticated users to 404', function(){
