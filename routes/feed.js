@@ -3,7 +3,7 @@ exports.index = function(req, res){
         //limit: 30,
         //offset: 0,
         where: {
-            'feedItems.id' : req.session.user_id
+            //'feedItems.id' : req.session.user_id
         },
         include: [
             {model: db.User, as: 'feedItems'}

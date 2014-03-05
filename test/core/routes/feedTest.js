@@ -12,7 +12,7 @@ describe('feeds', function(){
         session.destroy();
     });
     describe('show photos', function(){
-        it('shows 30 photos on first page', function(done){
+        it('routes are correct', function(done){
             session.get('/feed')
                 .expect(302)
                 .end(function (err) {
@@ -21,6 +21,10 @@ describe('feeds', function(){
                     session.get('/')
                         .expect(302, done);
                 });
+        });
+
+        it('shows 30 photos on first page', function(){
+
         });
     })
 

@@ -1,22 +1,23 @@
 //
    Created by stephen on 03/03/14.
-
-h1 Photos
-p Found some photos.
-div(id="photos")
-    table(class="summary")
-        thead
-            tr
-                th ID
-                th Created
-                th Path
-                th UserID
-                th thumbnail
-        tbody
-            each photo in photos
+extends layout
+block content
+    h1 Feed
+    p Found some photos.
+    div(id="feedItems")
+        table(class="summary")
+            thead
                 tr
-                    td= photo.id
-                    td= photo.createdAt
-                    td= photo.imagePath
-                    td= photo.userID
-                    td Blocked by lack of thumbnail access function
+                    th ID
+                    th Created
+                    th Path
+                    th UserID
+                    th thumbnail
+            tbody
+                each photo in photos
+                    tr
+                        td= photo.id
+                        td= photo.createdAt
+                        td= photo.imagePath
+                        td= photo.userID
+                        td= photo.thumbnailPath
