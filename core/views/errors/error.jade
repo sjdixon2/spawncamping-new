@@ -1,9 +1,13 @@
 //
    Created by stephen on 03/03/14.
 //{ title: statusCode + ': ' + statusText, error: errorDetail, url: req.url }
-html
-    body
-        block content
-            h1 #{title}
-            p Occurred while trying to access #{url}
-            p #{error}
+
+extends ../layout
+
+block content
+    .small.container
+        .ui.icon.message
+            i.warning.icon
+            .content
+                .header An error occurred while trying to access #{url}
+                p= error
