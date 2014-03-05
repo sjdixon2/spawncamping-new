@@ -3,7 +3,7 @@
  */
 exports.new = function (req, res) {
     // html displaying upload form
-    res.render('photos/new');
+    res.render('photos/new', {title: 'Upload Photo'});
 }
 
 /**

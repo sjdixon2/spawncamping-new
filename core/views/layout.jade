@@ -1,7 +1,10 @@
+- var tabTitle = title ? title + ' - Snapgram' : 'Snapgram'
+- var mainTitle = title;
+
 doctype html
 html
     head
-        title= title || 'Snapgram'
+        title= tabTitle
         link(href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600', rel='stylesheet', type='text/css')
         link(rel='stylesheet', href='/stylesheets/style.css')
         link(rel='stylesheet', href='/stylesheets/semantic.min.css')
@@ -21,7 +24,9 @@ html
                     .ui.button Login
                 a.item(href="/users/new")
                     .ui.teal.button Sign Up
-
+        - if (mainTitle)
+            h2.text.align.center
+                = mainTitle
         block content
 
 
