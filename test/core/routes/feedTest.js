@@ -23,8 +23,16 @@ describe('feeds', function(){
                 });
         });
 
-        it('shows 30 photos on first page', function(){
-
+        function testOffset(query, expectedOffset){
+            helpers.pages.getPageNumber(query).should.be.exactly(expectedOffset);
+        }
+        it('calculates offset correctly', function(){
+            var query0 = '';
+            var query1 = 'page=2';
+            var query2 = 'page=3';
+            testOffset(query0, 0);
+            testOffset(query1, 1);
+            testOffset(query2, 2);
         });
     })
 
