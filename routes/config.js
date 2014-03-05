@@ -6,7 +6,7 @@ var main = require('./'),
     bulk = require("./bulk");
 
 var check_auth = helpers.routes.check_auth;
-app.get("/", check_auth, feed.index);
+app.get("/", check_auth, main.index);
 app.get("/feed", check_auth, feed.index);
 
 // User Creation Routes
