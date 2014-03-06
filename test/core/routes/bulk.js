@@ -96,7 +96,7 @@ describe('bulk routes', function () {
                     db.User.findAll().then(function (users) {
                         users.length.should.equal(3);
 
-                        users[2].password.should.equal('test3');
+                        bcrypt.compareSync('test3', users[2].password).should.equal(true);
                         users[2].fullName.should.equal('tim');
                         users[2].id.should.equal(3);
 

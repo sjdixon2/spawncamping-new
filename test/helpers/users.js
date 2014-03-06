@@ -8,7 +8,7 @@ exports.login = function (session) {
 
     Factories.user.basic().then(function (user) {
         session.post('/sessions/create')
-            .send({username: user.email, password: user.password})
+            .send({username: user.email, password: Factories.user.password})
             .expect(302)
             .expect('location', '/feed', defer.makeNodeResolver());
     });
