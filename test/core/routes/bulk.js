@@ -143,7 +143,7 @@ describe('bulk routes', function () {
                             photos.length.should.equal(5);
 
                             photos[4].id.should.equal(5);
-                            photos[4].imagePath.should.equal(system.pathTo(settings.UPLOADS_PATH, '5.png'));
+                            photos[4].imagePath.should.equal(settings.UPLOADS_URL_PATH + '5.png');
                             photos[4].createdAt.should.be.approximately(1392405505782, 1000); //Had to approximate, as the milliseconds are different
 
                             //Ensure photos were added to users
