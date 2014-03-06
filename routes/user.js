@@ -77,32 +77,30 @@ exports.stream = function(req, res) {
     });
 };
 
-exports.follow = function(req, res){
-    // follow user stream with :id
+exports.follow = function (req, res) {
+    var followeeID = req.params.id;
+    var user = helpers.routes.getUser(req);
 
-    // follower id
-    var user1 = req.session.login;
-    // followee id
-    var user2 = req.params.id;
-    console.log('follower: '+user1);
-    console.log('followee: '+user2);
-
-    user1.addFollower(user2);
-
-    //redirect
-    res.send("following user "+user1+"'s stream");
+    //Get followee
+    db.User.find(followeeID).then(function (followee) {
+        //Create relationship
+        user.addFollowee(followee).then(function () {
+            res.redirect('/users/' + followeeID);
+        });
+    });
 };
 
 exports.unfollow = function(req, res){
-    res.send("unfollowing :id stream");
+    var followeeID = req.params.id;
+    var user = helpers.routes.getUser(req);
 
-    var user1 = req.session.login;
-    // followee id
-    var user2 = req.params.id;
-    console.log('follower: '+user1);
-    console.log('followee: '+user2);
-
-    user1.removeFollower(user2);
+    //Get followee
+    db.User.find(followeeID).then(function (followee) {
+        //Create relationship
+        user.removeFollowee(followee).then(function () {
+            res.redirect('/users/' + followeeID);
+        });
+    });
 };
 
 exports.share = function(req, res) {

@@ -15,8 +15,8 @@ app.post("/users/create", user.register);
 
 // User Profile Routes
 app.get("/users/:id", check_auth, user.stream);
-//app.get("/users/:id/follow", check_auth, user.follow)
-//app.get("/users/:id/unfollow", check_auth, user.unfollow)
+app.get("/users/:id/follow", check_auth, user.follow);
+app.get("/users/:id/unfollow", check_auth, user.unfollow);
 
 // Session Routes
 app.get("/sessions/new", session.loginForm);
@@ -35,7 +35,6 @@ app.post('/bulk/streams', bulk.streams);
 app.use(function(req, res) {
     res.status(404);
     res.render('errors/404', { title:'404: Page not found', error: '404: Page not found', url: req.url });
-    return;
 });
 
 app.use(function(err, req, res, next){

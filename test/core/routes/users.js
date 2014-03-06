@@ -3,6 +3,17 @@
  */
 var UserFactory = Factories.user;
 describe('users routes', function(){
+    var session;
+
+    before(function () {
+        //Simulate a user login session
+        session = new Session();
+        return testHelpers.users.login(session);
+    });
+
+    after(function () {
+        session.destroy();
+    });
 
     describe('new', function(){
         it("renders correctly", function(done) {
@@ -10,10 +21,6 @@ describe('users routes', function(){
                 .expect(200, done);
         });
     });
-
-    before(function(done){
-        UserFactory.basic().done(done);
-    })
 
     describe('create', function(){
         it("creates a user", function(done) {
@@ -59,6 +66,27 @@ describe('users routes', function(){
                         .set("cookie", res.header["set-cookie"])
                         .expect(302, done);
                 });
+        });
+    });
+
+    describe('follow', function(){
+        it("makes the current user follow the specified user", function(done) {
+            //Create test followee
+            UserFactory.basic().then(function (followee) {
+                session.get('/users/' + followee.id + '/follow')
+                    .send({id: followee.id})
+                    .expect(302)
+                    .end(function(err, res){
+                        if (err) throw err;
+
+                        //Ensure the relationship was created
+                        followee.getFollowers().then(function (followers) {
+                            followers.length.should.equal(1);
+
+                            done();
+                        });
+                    });
+            });
         });
     });
 });

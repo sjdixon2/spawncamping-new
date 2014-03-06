@@ -34,3 +34,12 @@ exports.success = function (res, body) {
 exports.unauthorized = function (res, body) {
     res.send(401, body);
 }
+
+/**
+ * Retrieves the current user from the route's session
+ * @param req the request given in route
+ * @returns {user} the user currently logged in
+ */
+exports.getUser = function (req) {
+    return db.User.build(req.session.login);
+}
