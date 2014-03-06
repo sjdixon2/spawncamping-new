@@ -9,6 +9,8 @@ var check_auth = helpers.routes.check_auth;
 app.get("/", check_auth, main.index);
 app.get("/feed", check_auth, feed.index);
 
+app.locals.moment = require('moment');
+
 // User Creation Routes
 app.get("/users/new", user.signupForm);
 app.post("/users/create", user.register);

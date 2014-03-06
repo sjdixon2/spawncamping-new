@@ -32,9 +32,11 @@ exports.register = function (req, res) {
                 req.flash('errors', {duplicate: ['Email is already in use.']});
                 res.redirect("/users/new");
             } else {
-                user.save().then(function (){
-                    req.session.login = user;
-                    res.redirect("/feed");
+                user.save().then(function(){
+                    user.setFollowers([user]).then(function (){
+                        req.session.login = user;
+                        res.redirect("/feed");
+                    });
                 });
             }
         });
@@ -60,7 +62,13 @@ exports.stream = function(req, res) {
             id: req.params.id
         }
     }).then(function (user){
-        db.Photo.findAll(options).then(function(photos){
+        user.getPhotoShares({
+            offset: (page - 1) * helpers.pages.PAGE_SIZE,
+            limit: helpers.pages.PAGE_SIZE,
+            order: 'createdAt ASC'
+        }).then(function(photos){
+
+            console.log(photos);
             res.render("stream", {
                 title: user.fullName + "'s Stream",
                 photos: photos,
