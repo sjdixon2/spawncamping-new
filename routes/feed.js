@@ -25,6 +25,6 @@ exports.index = function(req, res){
                 title: 'Feed',
                 photos: photos
             });
-            console.log('\n' + JSON.stringify(photos));
+            console.log('\nCurrent Feed:' + JSON.stringify(photos));
     });
 }

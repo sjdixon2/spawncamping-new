@@ -92,9 +92,25 @@ module.exports = function (sequelize, DataTypes) {
              Adds the photo to the feeds of everyone subscribing to the user who uploaded the photo
 
              */
-            notifyFollowers: function(){
+            notifyFollowers: function(userId, photoId){
+                console.log(userId + ' ' + photoId);
+                if (!userId) {
+                    throw new Error('Invalid call - ID must be set');
+                }
+                if (!photoId) {
+                    throw new Error('Invalid call - setImageUpload() must be called');
+                }
                 // For each follower following the uploader
                 console.log("notifying followers");
+                var query = "insert into userFeedItems (createdAt, updatedAt, PhotoId, UserId) ";
+                query += "select now(), now(), " + photoId + ", " +
+                    "FollowersId from userHasFollowers where followeesID=" + userId;
+                console.log(query);
+                sequelize.query(query).complete(function (err){
+                    if(err){
+                        console.log("error: " + err);
+                    }
+                });
             },
 
             /**
@@ -133,7 +149,7 @@ module.exports = function (sequelize, DataTypes) {
                         q.nfcall(fs.writeFile, originalPhotoPath, buffer) //Write original file to uploads location
                         //TODO create thumbnails, etc. here (set cached path above as well)
                     ]);
-                }).then(this.notifyFollowers);
+                }).then(this.notifyFollowers(this.userID, this.id));
                 //return q.all(uploadPhotoPromise, updateFollowerPromise);
                 //Read contents of temp file
                 //TODO avoid redundant file writing (Express writes temp file, then it's read here, then it's written to a different location)
