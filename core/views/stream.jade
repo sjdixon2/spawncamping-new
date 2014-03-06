@@ -11,8 +11,8 @@ block content
                     - for photo in photos
                         .p.both-5.photo
                             .ui.form.segment
-                                .overlayed
-                                    img(src=photo.imagePath)
+                                a.overlayed(href=photo.imagePath)
+                                    img(src=photo.thumbnailPath)
                                     .overlay.t.opacity.fade.hide.unless.hovered
                                         .float.right
                                             .ui.mini.green.button
