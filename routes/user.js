@@ -28,9 +28,16 @@ exports.register = function (req, res) {
     }
 
     if(!errors) {
-        user.save().then(function (){
-            req.session.login = user;
-            res.redirect("/feed");
+        db.User.find({where:{email: user.email}}).success(function(duplicate){
+            if(duplicate){
+                req.flash('errors', {duplicate: ['Email is already in use.']});
+                res.redirect("/users/new");
+            } else {
+                user.save().then(function (){
+                    req.session.login = user;
+                    res.redirect("/feed");
+                });
+            }
         });
     } else {
         req.flash('errors', errors);
