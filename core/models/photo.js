@@ -127,7 +127,6 @@ module.exports = function (sequelize, DataTypes) {
                     return self.createImageVersions(photo.path, photo.originalFilename) //Create image versions
                         .then(user.addPhotoShare(self)) //Create entry for upload in userSharesPhoto
                         .then(self.$notifyFollowers(user)) //Create entries in userFeedItems
-                        .then(self.save()); //Update any changed attributes
                 });
             },
             createImageVersions: function (path, originalFilename) {
@@ -147,6 +146,7 @@ module.exports = function (sequelize, DataTypes) {
 
                     //Write uploaded file to desired location(s) on disk
                     return q.all([
+                        self.save(),
                         q.nfcall(fs.writeFile, system.pathTo(uploadsPath, fileName), buffer), //Write original file to uploads location
                         q.nfcall(fs.writeFile, system.pathTo(uploadsPath, 'thumbnail/', fileName), thumbnailBuffer) //Write thumbnail image
                     ]);
