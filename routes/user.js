@@ -47,7 +47,34 @@ exports.register = function (req, res) {
 
 exports.stream = function(req, res) {
     // get user stream
-    res.send("sent photo stream for user :id");
+
+    var page = (req.query.page ? req.query.page : 1);
+    var options = {
+            where: {userID: req.params.id},
+            offset: (page - 1) * helpers.pages.PAGE_SIZE,
+            limit: helpers.pages.PAGE_SIZE,
+            order: 'createdAt ASC'
+        };
+
+    db.User.find({
+        where: {
+            id: req.params.id
+        }
+    }).then(function (user){
+        db.Photo.findAll(options).then(function(photos){
+
+            photos.forEach(function(photo){
+                photo.fromNow = moment(photo.createdAt).fromNow();
+            })
+
+            res.render("stream", {
+                photos: photos,
+                nextPage: (photos.length >= helpers.pages.PAGE_SIZE) ? page + 1 : 0,
+                prevPage: page - 1,
+                streamuser: user
+            });
+        });
+    });
 };
 
 exports.follow = function(req, res){

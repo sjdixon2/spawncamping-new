@@ -1,0 +1,21 @@
+//
+   Created by stephen on 03/03/14.
+extends layout
+block content
+    h1= streamuser.fullName + "'s Stream"
+    -if (photos.length == 0)
+        #nophotos There seems to be nothing here...
+    -else
+        #streamList
+            each photo in photos
+              .streamItem
+                    .thumbnail. Eventually will load up photo ##{photo.id}
+                    | Added #{photo.fromNow} --&nbsp;
+                    a(href="/users/#{streamuser.id}") #{streamuser.fullName}
+        -if (prevPage >= 1)
+            #prevPage
+                a(href="/feed?page=#{prevPage}") Previous Page
+        -if (nextPage >= 1)
+            #nextPage
+                | "  "
+                a(href="/feed?page=#{nextPage}") Next Page

@@ -12,6 +12,7 @@ global.fs = require('fs'); //For file system calls
 global.path = require('path');
 global.url = require('url');
 global.bcrypt = require('bcryptjs');
+global.moment = require('moment');
 
 //Global configuration settings
 global.settings = {

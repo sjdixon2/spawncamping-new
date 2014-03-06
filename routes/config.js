@@ -14,7 +14,7 @@ app.get("/users/new", user.signupForm);
 app.post("/users/create", user.register);
 
 // User Profile Routes
-//app.get("/users/:id", check_auth, user.stream);
+app.get("/users/:id", check_auth, user.stream);
 //app.get("/users/:id/follow", check_auth, user.follow)
 //app.get("/users/:id/unfollow", check_auth, user.unfollow)
 

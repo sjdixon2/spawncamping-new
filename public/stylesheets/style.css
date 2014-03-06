@@ -23,3 +23,17 @@ body {
 .text.align.center {
     text-align: center;
 }
+
+.thumbnail{
+    width: 400px;
+    height: 400px;
+}
+
+#streamList{
+    width: 100%;
+}
+
+.streamItem{
+    display: table;
+    margin: auto;
+}
