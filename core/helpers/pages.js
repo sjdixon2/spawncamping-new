@@ -4,17 +4,17 @@
 
 exports.PAGE_SIZE = 30;
 
-exports.getPageNumber = function(query){
+exports.extractPageNumber = function(query){
     if (!query){
-        return 0;
+        return 1;
     }
     else {
-        var offset = parseInt(query.split('=')[1])-1;
+        var offset = parseInt(query.split('=')[1]);
         console.log('offset=' + offset);
         return offset;
     }
 }
 
-exports.getItemOffset = function(req){
-    return exports.getPageNumber(url.parse(req.url).query) * exports.PAGE_SIZE;
+exports.getPageNumber = function(req){
+    return exports.extractPageNumber(url.parse(req.url).query);
 }

@@ -21,3 +21,7 @@ block content
                         td= photo.imagePath
                         td= photo.userID
                         td= photo.thumbnailPath
+    div(id="getNextItemsDiv")
+        a(href="/feed?page=#{prevPage}") Previous Page
+        p ..
+        a(href="/feed?page=#{nextPage}") Next Page
