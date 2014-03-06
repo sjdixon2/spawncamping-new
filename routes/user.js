@@ -33,7 +33,7 @@ exports.register = function (req, res) {
                 res.redirect("/users/new");
             } else {
                 user.save().then(function(){
-                    user.setFollowers([user]).then(function (){
+                    user.addFollowee(user).then(function (){
                         req.session.login = user;
                         res.redirect("/feed");
                     });
@@ -62,20 +62,23 @@ exports.stream = function(req, res) {
             id: req.params.id
         }
     }).then(function (user){
-        user.getPhotoShares({
-            offset: (page - 1) * helpers.pages.PAGE_SIZE,
-            limit: helpers.pages.PAGE_SIZE,
-            order: 'createdAt ASC'
-        }).then(function(photos){
 
-            console.log(photos);
-            res.render("stream", {
-                title: user.fullName + "'s Stream",
-                photos: photos,
-                nextPage: (photos.length >= helpers.pages.PAGE_SIZE) ? page + 1 : 0,
-                prevPage: page - 1,
-                streamuser: user
-            });
+        user.getFollowers(helpers.routes.getUser(req)).then(function(follows){
+            var followed = (follows.length > 0);
+            user.getPhotoShares({
+                offset: (page - 1) * helpers.pages.PAGE_SIZE,
+                limit: helpers.pages.PAGE_SIZE,
+                order: 'createdAt ASC'
+            }).then(function(photos){
+                    res.render("stream", {
+                        title: user.fullName + "'s Stream",
+                        photos: photos,
+                        nextPage: (photos.length >= helpers.pages.PAGE_SIZE) ? page + 1 : 0,
+                        prevPage: page - 1,
+                        streamuser: user,
+                        followed: followed
+                    });
+                });
         });
     });
 };

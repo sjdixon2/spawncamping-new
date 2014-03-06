@@ -1,7 +1,18 @@
 //
-   Created by stephen on 03/03/14.
+   Created by stephen on 03/03/14.t
 extends layout
 block content
+    div.userinfo
+        -if (followed)
+            a.item(href="/users/#{streamuser.id}/unfollow")
+                .ui.mini.blue.button
+                    i.minus.icon
+                    | Unfollow
+        -else
+            a.item(href="/users/#{streamuser.id}/follow")
+                .ui.mini.blue.button
+                    i.plus.icon
+                    | Follow
     div.container
         -if (photos.length == 0)
             #nophotos There seems to be nothing here...
