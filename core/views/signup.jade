@@ -1,10 +1,14 @@
 extends layout
 block content
     .small.container
-        //Show errors, if any
+        -//Show errors, if any
         - if (messages.errors)
             .ui.error.message
-                span= messages.errors
+                - for errorSet in messages.errors
+                    - each error in errorSet
+                        -each e in error
+                            span= e
+                            br
 
         form.ui.form.segment(name='signup', method='post', action='/users/create')
             .field

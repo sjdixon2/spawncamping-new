@@ -25,14 +25,18 @@ exports.destroy = function (req, res) {
  POST login page (for user authentication)
  */
 exports.attemptLogin = function (req, res) {
-    helpers.login.validate(req.body).then(function(user){
-            req.session.login = user;
-            req.session.user_id = user.id;
-            res.redirect("/feed");
 
-        }, function(error){
-            req.flash('errors', error.message);
-            res.redirect(error.code, "/sessions/new");
+    db.User.login(req.body.username, req.body.password)
+        .then(function(user){
+                req.session.login = user;
+                res.redirect("/feed");
+            }, function(reason) {
+                req.flash('errors', {login: [reason.message]});
+                res.redirect('/sessions/new');
+            })
+        .catch(function (err) {
+            console.log(err);
+            req.flash('errors', {serverError: ['Server Error! Please contact an administrator.']});
+            res.redirect(500, '/sessions/new');
         });
-
 };

@@ -1,8 +1,27 @@
+var SALT_LENGTH = 10; //Changing this will invalidate any stored passwords.
+
 module.exports = function(sequelize, DataTypes) {
     var User = sequelize.define('User', {
-        fullName: DataTypes.STRING,
-        email: DataTypes.STRING,
-        password: DataTypes.STRING
+        fullName: {
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {msg: "Name cannot be blank."}
+            }
+        },
+        email: {
+            type: DataTypes.STRING,
+            validate: {
+                isEmail: {msg: "Email must be a valid address (e.g. user@example.com)."}
+            }
+        },
+        password: {
+            type: DataTypes.STRING,
+            set: function(plaintext) {
+                if(plaintext.length == 0) throw new Error("Password cannot be blank.");
+                var hash = bcrypt.hashSync(plaintext, SALT_LENGTH);
+                this.setDataValue('password', hash);
+            }
+        }
     }, {
         classMethods: {
             associate: function(models) {
@@ -18,6 +37,24 @@ module.exports = function(sequelize, DataTypes) {
 
                 //User feed entry relationship
                 User.hasMany(models.Photo, {through: 'userFeedItems', as: 'feedItems'});
+            },
+
+            /*
+                Checks an email and password for a matching user
+                Returns a promise.
+             */
+            login: function(email, plaintext) {
+
+                return this.find({
+                    where: {
+                        email: email
+                    }
+                }).then(function(user) {
+                    if(!user || !bcrypt.compareSync(plaintext, user.password)){
+                        throw new Error('Email and/or Password are incorrect.');
+                    }
+                    return user;
+                });
             }
         }
     });

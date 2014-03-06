@@ -8,15 +8,34 @@ exports.signupForm = function (req, res) {
 exports.register = function (req, res) {
     // register new user in database
     req.session.login = null;
-    helpers.login.validateAndCreate(req.body)
-        .then(function(new_user){
-            req.session.login = new_user.id;
-            res.redirect("/feed");
+    var attrs = {
+            email: req.body.username,
+            password: req.body.password,
+            fullName: req.body.fullname
+        },
+        errors,
+        user;
 
-        }, function(error){
-            req.flash('errors', error.message);
-            res.redirect(error.code, "/users/new");
+    // This section may need additional refactoring.
+    try{
+        user = db.User.build(attrs);
+        errors = user.validate();
+    }catch(err) {// Catches the error in User -> password -> set
+        errors = { password: [err.message] };
+        attrs.password = "notblank";
+        // Run validations for other fields.
+        extend(errors, db.User.build(attrs).validate());
+    }
+
+    if(!errors) {
+        user.save().then(function (){
+            req.session.login = user;
+            res.redirect("/feed");
         });
+    } else {
+        req.flash('errors', errors);
+        res.redirect("/users/new");
+    }
 };
 
 exports.stream = function(req, res) {

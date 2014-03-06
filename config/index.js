@@ -11,6 +11,7 @@ global.flash = require('express-flash'); //For sending temporary messages to red
 global.fs = require('fs'); //For file system calls
 global.path = require('path');
 global.url = require('url');
+global.bcrypt = require('bcryptjs');
 
 //Global configuration settings
 global.settings = {
