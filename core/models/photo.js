@@ -94,16 +94,7 @@ module.exports = function (sequelize, DataTypes) {
              */
             notifyFollowers: function(){
                 // For each follower following the uploader
-                db.User.findAll({
-                    where : {
-                        'followers.id' : this.userID
-                    },
-                    include : [
-                        {model: db.User, as: 'Followers'}
-                    ]
-                }).success(function (followers){
-                    // Add this photo to their feed items
-                });
+                console.log("notifying followers");
             },
 
             /**
@@ -128,8 +119,6 @@ module.exports = function (sequelize, DataTypes) {
                     throw new Error('Invalid call - setImageUpload() must be called');
                 }
 
-                //Read contents of temp file
-                //TODO avoid redundant file writing (Express writes temp file, then it's read here, then it's written to a different location)
                 return q.nfcall(fs.readFile, photo.path).then(function (buffer) {
                     var fileName = id + '.' + helpers.files.getExtension(photo.originalFilename), //The name of the file to be written
                         uploadsPath = settings.UPLOADS_PATH, //The relative directory to where uploads are stored
@@ -144,8 +133,10 @@ module.exports = function (sequelize, DataTypes) {
                         q.nfcall(fs.writeFile, originalPhotoPath, buffer) //Write original file to uploads location
                         //TODO create thumbnails, etc. here (set cached path above as well)
                     ]);
-                });
-
+                }).then(this.notifyFollowers);
+                //return q.all(uploadPhotoPromise, updateFollowerPromise);
+                //Read contents of temp file
+                //TODO avoid redundant file writing (Express writes temp file, then it's read here, then it's written to a different location)
             }
         }
     });

@@ -2,9 +2,7 @@
  * Created by stephen on 05/03/14.
  */
 
-exports.getPageSize = function(){
-    return 1;
-}
+exports.PAGE_SIZE = 30;
 
 exports.getPageNumber = function(query){
     if (!query){
@@ -18,5 +16,5 @@ exports.getPageNumber = function(query){
 }
 
 exports.getItemOffset = function(req){
-    return exports.getPageNumber(url.parse(req.url).query) * exports.getPageSize();
+    return exports.getPageNumber(url.parse(req.url).query) * exports.PAGE_SIZE;
 }
