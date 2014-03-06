@@ -22,6 +22,7 @@ block content
                         td= photo.userID
                         td= photo.thumbnailPath
     div(id="getNextItemsDiv")
-        a(href="/feed?page=#{prevPage}") Previous Page
-        p ..
-        a(href="/feed?page=#{nextPage}") Next Page
+        h2 Links
+        a.item(href="/feed?page=#{prevPage}") Previous
+        - if (!isDone)
+            a.item(href="/feed?page=#{nextPage}") Next
