@@ -18,7 +18,11 @@ extend(global.settings, {
 global.mocha = require('mocha'); //Test framework
 global.should = require('should'); //For assertions
 require("mocha-as-promised")(); //For handling promises in tests
+global.testHelpers = requireAll(system.pathTo('/test/helpers/')); //Collection of helper functions for testing
 
 global.Factories = requireAll(system.pathTo('test/factories')); //Load factories
 
 global.server = require('supertest')(app); //Mock server for testing
+global.Session = require('supertest-session')({ //Mock sessions for testing - used with Supertest to simulate login
+    app: app
+});

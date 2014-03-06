@@ -27,7 +27,12 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW
         },
-        userID: DataTypes.INTEGER //Shouldn't be used unless needed (use setUser instead) - used by image bulk upload
+        userID: { //Shouldn't be used unless needed (use setUser instead) - used by image bulk upload
+            type: DataTypes.INTEGER,
+            validate: {
+                notNull: true //Photo must have a user
+            }
+        }
     }, {
         timestamps: false, //Photos cannot have true timestamps (otherwise createdAt can't be set, as required by bulk photo upload)
         classMethods: {
@@ -81,6 +86,26 @@ module.exports = function (sequelize, DataTypes) {
                     return photo.processPhotoUpload();
                 });
             },
+
+
+            /*
+             Adds the photo to the feeds of everyone subscribing to the user who uploaded the photo
+
+             */
+            notifyFollowers: function(){
+                // For each follower following the uploader
+                db.User.findAll({
+                    where : {
+                        'followers.id' : this.userID
+                    },
+                    include : [
+                        {model: db.User, as: 'Followers'}
+                    ]
+                }).success(function (followers){
+                    // Add this photo to their feed items
+                });
+            },
+
             /**
              * Processes the uploaded images by creating versions of the given
              * file upload. It will also write the paths to these images to the database.

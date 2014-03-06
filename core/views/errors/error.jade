@@ -1,0 +1,13 @@
+//
+   Created by stephen on 03/03/14.
+//{ title: statusCode + ': ' + statusText, error: errorDetail, url: req.url }
+
+extends ../layout
+
+block content
+    .small.container
+        .ui.icon.small.message
+            i.warning.icon
+            .content
+                .header An error occurred while accessing #{url}:
+                p= error

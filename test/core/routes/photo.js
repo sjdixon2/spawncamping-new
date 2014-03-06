@@ -1,35 +1,47 @@
 describe('photo routes', function () {
+    var session;
+
+    before(function () {
+        //Simulate a user login session
+        session = new Session();
+        return testHelpers.users.login(session);
+    });
+
+    after(function () {
+        session.destroy();
+    });
+
     describe('new', function () {
         it('renders successfully', function (done) {
-            server.get('/photos/new')
+            session.get('/photos/new')
                 .expect(200, done);
         });
     });
 
     describe('create', function () {
         it('redirects with errors when file is not image', function (done) {
-            server.post('/photos/create')
+            session.post('/photos/create')
                 .attach('image', system.pathTo('test/fixtures/routes/photos/not_image.txt'))
                 .expect(302)
                 .expect('location', '/photos/new', done);
         });
 
         it('accepts png images', function (done) {
-            server.post('/photos/create')
+            session.post('/photos/create')
                 .expect(302)
                 .attach('image', system.pathTo('test/fixtures/routes/photos/valid.png'))
                 .expect('location', '/feed', done);
         });
 
         it('accepts gif images', function (done) {
-            server.post('/photos/create')
+            session.post('/photos/create')
                 .expect(302)
                 .attach('image', system.pathTo('test/fixtures/routes/photos/valid.gif'))
                 .expect('location', '/feed', done);
         });
 
         it('accepts jpeg images', function (done) {
-            server.post('/photos/create')
+            session.post('/photos/create')
                 .expect(302)
                 .attach('image', system.pathTo('test/fixtures/routes/photos/valid.jpeg'))
                 .expect('location', '/feed', done);
@@ -39,7 +51,7 @@ describe('photo routes', function () {
             var uploadFileDirectory = system.pathTo(settings.UPLOADS_PATH),
                 photoUploadCount = fs.readdirSync(uploadFileDirectory).length;
 
-            server.post('/photos/create')
+            session.post('/photos/create')
                 .expect(302)
                 .attach('image', system.pathTo('test/fixtures/routes/photos/valid.jpg'))
                 .expect('location', '/feed')

@@ -1,14 +1,32 @@
 extends layout
 block content
-    -//Show errors, if any
-    - if (messages.errors)
-        .message.errors
-            span= messages.errors
-    form(name='signup', method='post', action='/users/create')
-        input(type='text', name='username', placeholder='Email')
-        input(type="text", name='fullname', placeholder='Full Name')
-        input(type='password', name='password', placeholder='Password')
-        input(type='submit', value='Register')
-    #register
-        p Already a User?&nbsp;
-            a(href="/sessions/new") Login Now!
+    .small.container
+        //Show errors, if any
+        - if (messages.errors)
+            .ui.error.message
+                span= messages.errors
+
+        form.ui.form.segment(name='signup', method='post', action='/users/create')
+            .field
+                label Email
+                .ui.left.labeled.icon.input
+                    input(type='text', name='username')
+                    i.mail.icon
+                    .ui.corner.label
+                        i.icon.asterisk
+                .field
+                    label Full Name
+                    .ui.left.labeled.icon.input
+                        input(type="text", name='fullname')
+                        i.user.icon
+                        .ui.corner.label
+                            i.icon.asterisk
+                .field
+                    label Password
+                    .ui.left.labeled.icon.input
+                        input(type='password', name='password')
+                        i.lock.icon
+                        .ui.corner.label
+                            i.icon.asterisk
+                input.ui.blue.submit.button(type='submit', value='Register')
+

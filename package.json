@@ -21,7 +21,6 @@
     "sequelize": "*",
     "lodash": "*",
     "forever": "*",
-    "supertest": "*",
     "methods": "*",
     "express-flash": "*"
   },
@@ -32,6 +31,8 @@
     "mocha-jenkins-reporter": "*",
     "grunt-mocha-cov": "~0.2.1",
     "grunt-cli": "*",
-    "xunit-file": "*"
+    "xunit-file": "*",
+    "supertest": "*",
+    "supertest-session": "*"
   }
 }

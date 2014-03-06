@@ -46,4 +46,10 @@ describe('Photo', function () {
             });
         });
     });
+
+    describe('uploading a photo', function(){
+        it('updates all followers', function(){
+            // something goes here.
+        });
+    });
 });

@@ -1,7 +1,48 @@
+- var tabTitle = title ? title + ' - Snapgram' : 'Snapgram'
+- var mainTitle = title;
+
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+    head
+        title= tabTitle
+        link(href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600', rel='stylesheet', type='text/css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel='stylesheet', href='/stylesheets/semantic.min.css')
+
+        script(src='/javascripts/jquery.min.js')
+        script(src='/javascripts/semantic.min.js')
+        script(src='/javascripts/app.js')
+    body
+        .ui.large.inverted.main.menu
+            a.item(href="/")
+                i.blue.camera.icon
+                strong.blue Snapgram
+            .right.menu
+                    a.item(href="/")
+                        i.home.icon
+                        | Home
+                    - if (!userLoggedIn())
+                        a.item(href="/sessions/new/")
+                            .ui.button Login
+                        a.item(href="/users/new")
+                            .ui.teal.button Sign Up
+                    - else
+                        a.item(href="/users/" + user.id)
+                            i.user.icon
+                            = user.fullName
+                        a.item(href="/photos/new")
+                            i.photo.icon
+                            | Share
+                        .ui.dropdown.item
+                            i.setting.icon
+                            i.dropdown.icon
+                            .menu
+                                a.item(href="/sessions/destroy/")
+                                    | Logout
+
+        - if (mainTitle)
+            h2.text.align.center
+                = mainTitle
+        block content
+
+
