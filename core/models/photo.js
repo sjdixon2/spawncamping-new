@@ -155,9 +155,22 @@ module.exports = function (sequelize, DataTypes) {
                     ]);
                 }).then(this.notifyFollowers(this.userID, this.id));
             },
+            /**
+             * Creates a thumbnail buffer from the given image buffer
+             * @param buffer the buffer of the image to convert
+             * @returns {buffer} a buffer of the thumbnail image
+             */
             createThumbnail: function (buffer) {
                 //TODO create thumbnail buffer with gm
                 return buffer;
+            },
+            /**
+             * Returns the time ago from the current time
+             * @example '1 hour ago', 'a moment ago'
+             * @returns {string}
+             */
+            fromNow: function () {
+                return moment(this.createdAt).fromNow();
             }
         }
     });

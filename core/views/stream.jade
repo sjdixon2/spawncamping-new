@@ -2,20 +2,37 @@
    Created by stephen on 03/03/14.
 extends layout
 block content
-    h1= streamuser.fullName + "'s Stream"
-    -if (photos.length == 0)
-        #nophotos There seems to be nothing here...
-    -else
-        #streamList
-            each photo in photos
-              .streamItem
-                    .thumbnail. Eventually will load up photo ##{photo.id}
-                    | Added #{photo.fromNow} --&nbsp;
-                    a(href="/users/#{streamuser.id}") #{streamuser.fullName}
-        -if (prevPage >= 1)
-            #prevPage
-                a(href="/feed?page=#{prevPage}") Previous Page
-        -if (nextPage >= 1)
-            #nextPage
-                | "  "
-                a(href="/feed?page=#{nextPage}") Next Page
+    div.container
+        -if (photos.length == 0)
+            #nophotos There seems to be nothing here...
+        -else
+            #streamList
+                div.feed.photos
+                    - for photo in photos
+                        .p.both-5.photo
+                            .ui.form.segment
+                                .overlayed
+                                    img(src=photo.imagePath)
+                                    .overlay.t.opacity.fade.hide.unless.hovered
+                                        .float.right
+                                            .ui.mini.green.button
+                                                i.share.icon
+                                                | share
+                                .text.muted.ui.two.column.grid
+                                    .column
+                                        .text.small.align.left
+                                            a(href="/users/#{streamuser.id}")
+                                                i.user.icon
+                                                = streamuser.fullName
+                                    .column
+                                        .text.small.align.right
+                                            = photo.fromNow()
+                                    .text.small.align.center
+                                        = photo.description || '(no description)'
+            -if (prevPage >= 1)
+                #prevPage
+                    a(href="/feed?page=#{prevPage}") Previous Page
+            -if (nextPage >= 1)
+                #nextPage
+                    | "  "
+                    a(href="/feed?page=#{nextPage}") Next Page

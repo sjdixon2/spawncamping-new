@@ -20,6 +20,10 @@ body {
     padding: 0 15px;
 }
 
+.p.both-5 {
+    padding: 5px 5px;
+}
+
 .text.align.center {
     text-align: center;
 }
@@ -36,4 +40,68 @@ body {
 .streamItem{
     display: table;
     margin: auto;
+}
+
+.text.align.left {
+    text-align: left;
+}
+
+.text.align.right {
+    text-align: right;
+}
+
+.float.left {
+    float: left;
+}
+
+.float.right {
+    float: right;
+}
+
+.text.small {
+    font-size: 0.75rem;
+}
+
+.text.muted {
+    color: #666;
+}
+
+.hide:not(.when) {
+    opacity: 0;
+}
+
+.hide.unless.hovered:hover {
+    opacity: 1;
+}
+
+.t.opacity.fade {
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -ms-transition: opacity 0.5s ease-in-out;
+    -o-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.overlayed {
+    position: relative;
+}
+
+.overlayed .overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.feed.photos {
+    text-align: center;
+}
+
+.feed.photos .photo {
+    display: inline-block;
+}
+
+.feed.photos .photo img {
+    width: 400px;
 }
