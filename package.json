@@ -22,7 +22,8 @@
     "lodash": "*",
     "forever": "*",
     "methods": "*",
-    "express-flash": "*"
+    "express-flash": "*",
+    "bcryptjs": "*"
   },
   "devDependencies": {
     "supervisor": "*",
