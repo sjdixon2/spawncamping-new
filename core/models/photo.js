@@ -135,10 +135,29 @@ module.exports = function (sequelize, DataTypes) {
                     throw new Error('Invalid call - setImageUpload() must be called');
                 }
 
+                return this.createImageVersions(photo.path, photo.originalFilename) //Create image versions
+                    .then(function () {
+                        //Create entry for upload in userSharesPhoto
+                        return db.User.find(self.userID).then(function (user) {
+                            return user.addPhotoShare(self);
+                        });
+                    })
+                    .then(function () {
+                        //Create entries in userFeedItems
+                        return self.notifyFollowers(self.userID, self.id);
+                    })
+                    .then(function () {
+                        //Save updated changes
+                        return self.save();
+                    });
+            },
+            createImageVersions: function (path, originalFilename) {
                 //Read contents of temp file
                 //TODO avoid redundant file writing (Express writes temp file, then it's read here, then it's written to a different location)
-                return q.nfcall(fs.readFile, photo.path).then(function (buffer) {
-                    var fileName = id + '.' + helpers.files.getExtension(photo.originalFilename), //The name of the file to be written
+                var self = this;
+
+                return q.nfcall(fs.readFile, path).then(function (buffer) {
+                    var fileName = self.id + '.' + helpers.files.getExtension(originalFilename), //The name of the file to be written
                         uploadsPath = settings.UPLOADS_PATH, //The relative directory to where uploads are stored
                         uploadsURL = settings.UPLOADS_URL_PATH,
                         thumbnailBuffer = self.createThumbnail(buffer);
@@ -149,11 +168,10 @@ module.exports = function (sequelize, DataTypes) {
 
                     //Write uploaded file to desired location(s) on disk
                     return q.all([
-                        self.save(), //Save updated paths to DB
                         q.nfcall(fs.writeFile, system.pathTo(uploadsPath, fileName), buffer), //Write original file to uploads location
                         q.nfcall(fs.writeFile, system.pathTo(uploadsPath, 'thumbnail/', fileName), thumbnailBuffer) //Write thumbnail image
                     ]);
-                }).then(this.notifyFollowers(this.userID, this.id));
+                });
             },
             /**
              * Creates a thumbnail buffer from the given image buffer
