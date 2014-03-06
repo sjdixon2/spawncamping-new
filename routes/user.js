@@ -26,10 +26,34 @@ exports.stream = function(req, res) {
 
 exports.follow = function(req, res){
     // follow user stream with :id
-    res.send("following :id stream");
+
+    // follower id
+    var user1 = req.session.login;
+    // followee id
+    var user2 = req.params.id;
+    console.log('follower: '+user1);
+    console.log('followee: '+user2);
+
+    user1.addFollower(user2);
+
+    //redirect
+    res.send("following user "+user1+"'s stream");
 };
 
 exports.unfollow = function(req, res){
     res.send("unfollowing :id stream");
+
+    var user1 = req.session.login;
+    // followee id
+    var user2 = req.params.id;
+    console.log('follower: '+user1);
+    console.log('followee: '+user2);
+
+    user1.removeFollower(user2);
+};
+
+exports.share = function(req, res) {
+
+
 };
 
