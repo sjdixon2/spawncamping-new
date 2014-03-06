@@ -10,7 +10,6 @@ exports.extractPageNumber = function(query){
     }
     else {
         var offset = parseInt(query.split('=')[1]);
-        console.log('offset=' + offset);
         return offset;
     }
 }
