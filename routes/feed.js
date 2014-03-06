@@ -1,7 +1,8 @@
 var url = require('url');
 
 exports.index = function(req, res){
-    var offset = helpers.pages.getItemOffset(req);
+    var page = helpers.pages.getPageNumber(req);
+    var offset = page!=0? page-1: 0;
     var pageSize = helpers.pages.PAGE_SIZE;
     var testQuery = "select * from Photoes";
     var query = 'select * from Photoes as P inner join userFeedItems as F on P.id=F.PhotoId where F.UserId=';
@@ -11,6 +12,7 @@ exports.index = function(req, res){
     console.log(query);
     sequelize.query(query)
     .complete(function (err, photos){
+            console.log(offset+ " " + page);
             if(err){
                 console.log("error: " + err);
                 return;
@@ -20,11 +22,13 @@ exports.index = function(req, res){
                 console.log("Empty list");
                 return;
             }
-
-            res.render("feed", {
+            var options = {
                 title: 'Feed',
-                photos: photos
-            });
+                photos: photos,
+                prevPage: page!=1? page-1: 1,
+                nextPage: page+1
+            };
+            res.render("feed", options);
             console.log('\nCurrent Feed:' + JSON.stringify(photos));
     });
 }

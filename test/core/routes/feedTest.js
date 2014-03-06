@@ -24,15 +24,17 @@ describe('feeds', function(){
         });
 
         function testOffset(query, expectedOffset){
-            helpers.pages.getPageNumber(query).should.be.exactly(expectedOffset);
+            helpers.pages.extractPageNumber(query).should.be.exactly(expectedOffset);
         }
         it('parses page from query string correctly', function(){
             var query0 = '';
-            var query1 = 'page=2';
-            var query2 = 'page=3';
-            testOffset(query0, 0);
+            var query1 = 'page=1';
+            var query2 = 'page=2';
+            var query3 = 'page=3';
+            testOffset(query0, 1);
             testOffset(query1, 1);
             testOffset(query2, 2);
+            testOffset(query3, 3);
         });
 
         it("calculates offset from request correctly", function(){
