@@ -1,15 +1,19 @@
 var UserFactory = require('./user');
 
-exports.basic = function () {
+/**
+ * Creates a standard photo
+ * @param options custom attributes of the created photo
+ * @returns {promise} promise returning the created photo
+ */
+exports.basic = function (options) {
     return UserFactory.basic().then(function (user) {
-        return db.Photo.create({
+        options = extend({
             description: 'test description',
             imagePath: 'TODO',
             thumbnailPath: 'TODO',
             userID: user.id
-        })
-            .fail(function (err) {
-                console.log(err);
-            });
+        }, options);
+
+        return db.Photo.create(options);
     });
 }

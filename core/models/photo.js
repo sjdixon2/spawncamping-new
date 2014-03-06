@@ -88,28 +88,15 @@ module.exports = function (sequelize, DataTypes) {
             },
 
 
-            /*
-             Adds the photo to the feeds of everyone subscribing to the user who uploaded the photo
-
+            /**
+             * Adds the photo to the feeds of everyone subscribing to the user who uploaded the photo
+             * @param user the user whose followers should be notified
+             * @returns {promise} indicates when the adding of followers is complete
              */
-            notifyFollowers: function(userId, photoId){
-                console.log(userId + ' ' + photoId);
-                if (!userId) {
-                    throw new Error('Invalid call - ID must be set');
-                }
-                if (!photoId) {
-                    throw new Error('Invalid call - setImageUpload() must be called');
-                }
-                // For each follower following the uploader
-                console.log("notifying followers");
-                var query = "insert into userFeedItems (createdAt, updatedAt, PhotoId, UserId) ";
-                query += "select now(), now(), " + photoId + ", " +
-                    "FollowersId from userHasFollowers where followeesID=" + userId;
-                console.log(query);
-                sequelize.query(query).complete(function (err){
-                    if(err){
-                        console.log("error: " + err);
-                    }
+            $notifyFollowers: function(user){
+                var self = this;
+                return user.getFollowers().then(function (followers) {
+                    return self.setFeedItems(followers);
                 });
             },
 
@@ -135,21 +122,13 @@ module.exports = function (sequelize, DataTypes) {
                     throw new Error('Invalid call - setImageUpload() must be called');
                 }
 
-                return this.createImageVersions(photo.path, photo.originalFilename) //Create image versions
-                    .then(function () {
-                        //Create entry for upload in userSharesPhoto
-                        return db.User.find(self.userID).then(function (user) {
-                            return user.addPhotoShare(self);
-                        });
-                    })
-                    .then(function () {
-                        //Create entries in userFeedItems
-                        return self.notifyFollowers(self.userID, self.id);
-                    })
-                    .then(function () {
-                        //Save updated changes
-                        return self.save();
-                    });
+                //Get user to upload for
+                return db.User.find(self.userID).then(function (user) {
+                    return self.createImageVersions(photo.path, photo.originalFilename) //Create image versions
+                        .then(user.addPhotoShare(self)) //Create entry for upload in userSharesPhoto
+                        .then(self.$notifyFollowers(user)) //Create entries in userFeedItems
+                        .then(self.save()); //Update any changed attributes
+                });
             },
             createImageVersions: function (path, originalFilename) {
                 //Read contents of temp file

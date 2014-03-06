@@ -47,14 +47,8 @@ describe('Photo', function () {
         });
     });
 
-    describe('uploading a photo', function(){
-        it('updates all followers', function(){
-            // something goes here.
-        });
-    });
-
     describe('uploadSave', function () {
-        it('creates a thumbnail version of the file', function(){
+        it('creates a thumbnail version of the file', function () {
             return PhotoFactory.basic().then(function (photo) {
                 photo.setPhotoByPath(system.pathTo('test/fixtures/models/photo/image.png'));
 
@@ -66,6 +60,32 @@ describe('Photo', function () {
                     photo.thumbnailPath.should.equal('/photos/thumbnail/' + photo.id + '.png');
                 });
             });
+        });
+
+        it('notifies followers of the photo upload', function (done) {
+            q.all([
+                    //Create test users
+                    UserFactory.basic(),
+                    UserFactory.basic()
+                ])
+                .spread(function (user, follower) {
+                    //Simulate following of followee
+                    user.addFollower(follower).then(function (follower) {
+                        //Create test photo
+                        PhotoFactory.basic({userID: user.id}).then(function (photo) {
+                            photo.setPhotoByPath(system.pathTo('test/fixtures/models/photo/image.png'));
+
+                            //Perform image upload
+                            photo.uploadSave().then(function () {
+                                //Get followee's feed
+                                follower.getFeedItems().then(function (feedPhotos) {
+                                    feedPhotos.length.should.equal(1);
+                                    done();
+                                });
+                            })
+                        });
+                    });
+                });
         });
     })
 });
