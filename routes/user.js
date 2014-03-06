@@ -1,4 +1,3 @@
-
 exports.signupForm = function (req, res) {
     res.render('signup', {
         title: 'Sign Up'
@@ -33,9 +32,11 @@ exports.register = function (req, res) {
                 req.flash('errors', {duplicate: ['Email is already in use.']});
                 res.redirect("/users/new");
             } else {
-                user.save().then(function (){
-                    req.session.login = user;
-                    res.redirect("/feed");
+                user.save().then(function(){
+                    user.setFollowers([user]).then(function (){
+                        req.session.login = user;
+                        res.redirect("/feed");
+                    });
                 });
             }
         });
@@ -61,7 +62,13 @@ exports.stream = function(req, res) {
             id: req.params.id
         }
     }).then(function (user){
-        db.Photo.findAll(options).then(function(photos){
+        user.getPhotoShares({
+            offset: (page - 1) * helpers.pages.PAGE_SIZE,
+            limit: helpers.pages.PAGE_SIZE,
+            order: 'createdAt ASC'
+        }).then(function(photos){
+
+            console.log(photos);
             res.render("stream", {
                 title: user.fullName + "'s Stream",
                 photos: photos,
@@ -100,7 +107,23 @@ exports.unfollow = function(req, res){
 };
 
 exports.share = function(req, res) {
+    var picture = req.params.photo;
+    var user = helpers.routes.getUser(req);
 
+    db.Photo.find(picture).then(function(photo){
+        user.addPhotoShare(photo).then(function () {
+            res.redirect('/user/' + user);
 
+            var query = "insert into userFeedItems (createdAt, updatedAt, PhotoId, UserId) ";
+            query += "select now(), now(), " + photo.id + ", " +
+                "FollowersId from userHasFollowers where followeesID=" + user.id;
+            console.log(query);
+            sequelize.query(query).complete(function (err){
+                if(err){
+                    console.log("error: " + err);
+                }
+            });
+        });
+    });
 };
 
