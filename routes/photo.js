@@ -30,9 +30,9 @@ exports.create = function (req, res) {
 }
 
 exports.thumbnail = function(req, res){
-    res.send("sent thumbnail :id with ext :ext");
+    app.use(express.static(settings.UPLOADS_PATH+'/thumbnails'));
 }
 
 exports.photo = function(req, res){
-    res.send("sent photo :id with ext :ext");
+    app.use(express.static(settings.UPLOADS_PATH));
 }
