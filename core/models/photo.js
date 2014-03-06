@@ -135,24 +135,29 @@ module.exports = function (sequelize, DataTypes) {
                     throw new Error('Invalid call - setImageUpload() must be called');
                 }
 
+                //Read contents of temp file
+                //TODO avoid redundant file writing (Express writes temp file, then it's read here, then it's written to a different location)
                 return q.nfcall(fs.readFile, photo.path).then(function (buffer) {
                     var fileName = id + '.' + helpers.files.getExtension(photo.originalFilename), //The name of the file to be written
                         uploadsPath = settings.UPLOADS_PATH, //The relative directory to where uploads are stored
-                        originalPhotoPath = system.pathTo(uploadsPath, fileName); //Location to save original photo to
+                        uploadsURL = settings.UPLOADS_URL_PATH,
+                        thumbnailBuffer = self.createThumbnail(buffer);
 
                     //Set cached paths to photos
-                    self.imagePath = originalPhotoPath;
+                    self.imagePath = uploadsURL + fileName;
+                    self.thumbnailPath = uploadsURL + 'thumbnail/' + fileName;
 
                     //Write uploaded file to desired location(s) on disk
                     return q.all([
                         self.save(), //Save updated paths to DB
-                        q.nfcall(fs.writeFile, originalPhotoPath, buffer) //Write original file to uploads location
-                        //TODO create thumbnails, etc. here (set cached path above as well)
+                        q.nfcall(fs.writeFile, system.pathTo(uploadsPath, fileName), buffer), //Write original file to uploads location
+                        q.nfcall(fs.writeFile, system.pathTo(uploadsPath, 'thumbnail/', fileName), thumbnailBuffer) //Write thumbnail image
                     ]);
                 }).then(this.notifyFollowers(this.userID, this.id));
-                //return q.all(uploadPhotoPromise, updateFollowerPromise);
-                //Read contents of temp file
-                //TODO avoid redundant file writing (Express writes temp file, then it's read here, then it's written to a different location)
+            },
+            createThumbnail: function (buffer) {
+                //TODO create thumbnail buffer with gm
+                return buffer;
             }
         }
     });

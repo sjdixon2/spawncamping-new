@@ -19,6 +19,7 @@ global.settings = {
     ROOT_DIR: process.cwd(),
     NODE_ENV: process.env.NODE_ENV,
     UPLOADS_PATH: 'public/uploads',
+    UPLOADS_URL_PATH: '/photos/',
     //TODO change to password given by TA
     ADMIN_PASSWORD: 'temp_password', //Password given by TA for bulk upload security
 
@@ -90,6 +91,7 @@ app.use(function(req,res,next){
 
 app.use(app.router);
 app.use(express.static(system.pathTo('public/')));
+app.use(settings.UPLOADS_URL_PATH, express.static(system.pathTo(settings.UPLOADS_PATH))); //Direct photo requests to uploads folder
 
 // Load mode-specific configurations
 switch (settings.NODE_ENV) {

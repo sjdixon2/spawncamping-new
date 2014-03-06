@@ -52,4 +52,20 @@ describe('Photo', function () {
             // something goes here.
         });
     });
+
+    describe('uploadSave', function () {
+        it('creates a thumbnail version of the file', function(){
+            return PhotoFactory.basic().then(function (photo) {
+                photo.setPhotoByPath(system.pathTo('test/fixtures/models/photo/image.png'));
+
+                //Perform image upload
+                return photo.uploadSave().then(function () {
+                    //Ensure thumbnail was added
+                    photo.id.should.be.a.Number;
+                    photo.imagePath.should.equal('/photos/' + photo.id + '.png');
+                    photo.thumbnailPath.should.equal('/photos/thumbnail/' + photo.id + '.png');
+                });
+            });
+        });
+    })
 });
