@@ -116,6 +116,7 @@ a:hover {
 
 .feed.photos .photo {
     display: inline-block;
+    vertical-align: top;
 }
 
 .feed.photos .photo img {
