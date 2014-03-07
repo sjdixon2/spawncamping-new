@@ -68,7 +68,7 @@ exports.stream = function(req, res) {
             user.getPhotoShares({
                 offset: (page - 1) * helpers.pages.PAGE_SIZE,
                 limit: helpers.pages.PAGE_SIZE,
-                order: 'createdAt ASC'
+                order: 'createdAt DESC'
             }).then(function(photos){
                     res.render("stream", {
                         headTitle: user.fullName + "'s Stream",

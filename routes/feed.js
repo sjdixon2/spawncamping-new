@@ -9,7 +9,7 @@ exports.index = function(req, res){
     query += 'inner join Users as U on P.userID=U.id '
     query += 'where F.UserId=';
     query += req.session.login.id || -1;
-    query += ' order by P.createdAt ASC';
+    query += ' order by P.createdAt DESC';
     query += ' limit ' + pageSize + ' offset ' + offset * pageSize;
     console.log(query);
     sequelize.query(query)
