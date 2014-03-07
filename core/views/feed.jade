@@ -4,7 +4,9 @@ extends layout
 block content
     div.container
         -if (photos.length == 0)
-            #nophotos Nothing new in your feed... maybe you should find some streams to follow!
+            .ui.message
+                .text.align.center
+                    | Nothing new in your feed... Try following another user or uploading a photo!
         -else
             #feedList
                 div.feed.photos
@@ -12,16 +14,16 @@ block content
                         .p.both-5.photo
                             .ui.form.segment
                                 .overlayed
-                                    img(src=photo.imagePath)
+                                    img(src=photo.thumbnailPath)
                                     .overlay.t.opacity.fade.hide.unless.hovered
                                         .float.right
-                                            .ui.mini.green.button
+                                            a.ui.mini.green.button(href="/users/#{photo.userID}/share")
                                                 i.share.icon
                                                 | share
                                 .text.muted.ui.two.column.grid
                                     .column
-                                        .text.small.align.left
-                                            a(href="/users/#{photo.userID}")
+                                        .text.small.align.left.no.underline
+                                            a.ui.label(href="/users/#{photo.userID}")
                                                 i.user.icon
                                                 = photo.fullName
                                     .column
@@ -29,10 +31,13 @@ block content
                                             = moment(photo.createdAt).fromNow()
                                     .text.small.align.center
                                         = photo.description || '(no description)'
-            -if (prevPage >= 1)
-                #prevPage
-                    a(href="/feed?page=#{prevPage}") Previous Page
-            -if (nextPage >= 1)
-                #nextPage
-                    | "  "
-                    a(href="/feed?page=#{nextPage}") Next Page
+            div.p.vert-15
+                div.text.align.center
+                    -if (prevPage >= 1)
+                        a.ui.left.labeled.icon.button(href="/feed?page=#{prevPage}")
+                            i.left.arrow.icon
+                            | Previous
+                    -if (nextPage >= 1)
+                        a.ui.right.labeled.icon.button(href="/feed?page=#{nextPage}")
+                            i.right.arrow.icon
+                            | Next

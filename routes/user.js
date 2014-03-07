@@ -71,7 +71,7 @@ exports.stream = function(req, res) {
                 order: 'createdAt ASC'
             }).then(function(photos){
                     res.render("stream", {
-                        title: user.fullName + "'s Stream",
+                        headTitle: user.fullName + "'s Stream",
                         photos: photos,
                         nextPage: (photos.length >= helpers.pages.PAGE_SIZE) ? page + 1 : 0,
                         prevPage: page - 1,

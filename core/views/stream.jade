@@ -1,49 +1,56 @@
-//
-   Created by stephen on 03/03/14.t
 extends layout
 block content
-    div.userinfo
-        -if (followed)
-            a.item(href="/users/#{streamuser.id}/unfollow")
-                .ui.mini.blue.button
-                    i.minus.icon
-                    | Unfollow
-        -else
-            a.item(href="/users/#{streamuser.id}/follow")
-                .ui.mini.blue.button
-                    i.plus.icon
-                    | Follow
-    div.container
-        -if (photos.length == 0)
-            #nophotos There seems to be nothing here...
-        -else
-            #streamList
-                div.feed.photos
-                    - for photo in photos
-                        .p.both-5.photo
-                            .ui.form.segment
-                                a.overlayed(href=photo.imagePath)
-                                    img(src=photo.thumbnailPath)
-                                    .overlay.t.opacity.fade.hide.unless.hovered
-                                        .float.right
-                                            .ui.mini.green.button
-                                                i.share.icon
-                                                | share
-                                .text.muted.ui.two.column.grid
-                                    .column
-                                        .text.small.align.left
-                                            a(href="/users/#{streamuser.id}")
-                                                i.user.icon
-                                                = streamuser.fullName
-                                    .column
-                                        .text.small.align.right
-                                            = photo.fromNow()
-                                    .text.small.align.center
-                                        = photo.description || '(no description)'
-            -if (prevPage >= 1)
-                #prevPage
-                    a(href="/feed?page=#{prevPage}") Previous Page
-            -if (nextPage >= 1)
-                #nextPage
-                    | "  "
-                    a(href="/feed?page=#{nextPage}") Next Page
+    .ui.grid
+        .four.wide.column
+            div.small.container
+                p
+                    h2= streamuser.fullName
+                p.text.details= streamuser.email
+                .userinfo
+                    -if (followed)
+                        a.ui.tiny.left.labeled.icon.button(href="/users/#{streamuser.id}/unfollow")
+                            i.minus.icon
+                            | Unfollow
+                    -else
+                        a.ui.blue.tiny.left.labeled.icon.button(href="/users/#{streamuser.id}/follow")
+                            i.plus.icon
+                            | Follow
+        .twelve.wide.column
+            div.container
+                -if (photos.length == 0)
+                    .ui.message
+                        .text.align.center
+                            | There seems to be nothing here...
+                -else
+                    #streamList
+                        div.feed.photos
+                            - for photo in photos
+                                .p.both-5.photo
+                                    .ui.form.segment
+                                        .overlayed
+                                            img(src=photo.thumbnailPath)
+                                            .overlay.t.opacity.fade.hide.unless.hovered
+                                                .float.right
+                                                    a.ui.mini.green.button(href="/users/#{photo.userID}/share")
+                                                        i.share.icon
+                                                        | share
+                                        .text.muted.ui.two.column.grid
+                                            .column
+                                                .text.small.align.left
+                                                    a.ui.label(href="/users/#{streamuser.id}")
+                                                        i.user.icon
+                                                        = streamuser.fullName
+                                            .column
+                                                .text.small.align.right
+                                                    = photo.fromNow()
+                                            .text.small.align.center
+                                                = photo.description || '(no description)'
+                    div.text.align.center
+                        -if (prevPage >= 1)
+                            a.ui.left.labeled.icon.button(href="/users/#{streamuser.id}?page=#{prevPage}")
+                                i.left.arrow.icon
+                                | Previous
+                        -if (nextPage >= 1)
+                            a.ui.right.labeled.icon.button(href="/users/#{streamuser.id}?page=#{nextPage}")
+                                i.right.arrow.icon
+                                | Next
