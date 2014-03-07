@@ -93,7 +93,7 @@ module.exports = function (sequelize, DataTypes) {
              * @param user the user whose followers should be notified
              * @returns {promise} indicates when the adding of followers is complete
              */
-            $notifyFollowers: function(user){
+            notifyFollowers: function(user){
                 var self = this;
                 return user.getFollowers().then(function (followers) {
                     return self.setFeedItems(followers);
@@ -124,9 +124,10 @@ module.exports = function (sequelize, DataTypes) {
 
                 //Get user to upload for
                 return db.User.find(self.userID).then(function (user) {
-                    return self.createImageVersions(photo.path, photo.originalFilename) //Create image versions
-                        .then(user.addPhotoShare(self)) //Create entry for upload in userSharesPhoto
-                        .then(self.$notifyFollowers(user)) //Create entries in userFeedItems
+                    return q.all(
+                        self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
+                        user.sharePhoto(self) //Share photo to user's followers
+                    );
                 });
             },
             createImageVersions: function (path, originalFilename) {

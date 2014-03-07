@@ -19,6 +19,7 @@ app.post("/users/create", user.register);
 app.get("/users/:id", check_auth, user.stream);
 app.get("/users/:id/follow", check_auth, user.follow);
 app.get("/users/:id/unfollow", check_auth, user.unfollow);
+app.get("/users/:id/share", check_auth, user.share);
 
 // Session Routes
 app.get("/sessions/new", session.loginForm);

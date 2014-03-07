@@ -116,3 +116,6 @@ require(system.pathTo('routes/config'));
 
 //Create image upload directories, if they don't exist already
 helpers.system.createImageUploadDirectories();
+
+//Allow access to globals in Jade files
+app.locals.db = db;

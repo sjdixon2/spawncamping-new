@@ -55,6 +55,28 @@ module.exports = function(sequelize, DataTypes) {
                     }
                     return user;
                 });
+            },
+            /**
+             * Checks if the given 2 users are the same
+             * @param user1 the first user
+             * @param user2 the second user
+             */
+            same: function (user1, user2) {
+                //Note: does not check if users are user objects
+                return user1.id == user2.id && user1.id != null;
+            }
+        },
+        instanceMethods: {
+            /**
+             * Shares the given photo with all followers of a user
+             * @param photo the photo to share
+             * @returns {promise} promise indicate when sharing is complete
+             */
+            sharePhoto: function (photo) {
+                var self = this;
+                return self.addPhotoShare(photo).then(function () {
+                    return photo.notifyFollowers(self);
+                });
             }
         }
     });
