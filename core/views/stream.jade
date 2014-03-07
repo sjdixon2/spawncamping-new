@@ -4,17 +4,18 @@ block content
         .four.wide.column
             div.small.container
                 p
-                    h2= streamuser.fullName
-                p.text.details= streamuser.email
+                    h2= streamUser.fullName
+                p.text.details= streamUser.email
                 .userinfo
-                    -if (followed)
-                        a.ui.tiny.left.labeled.icon.button(href="/users/#{streamuser.id}/unfollow")
-                            i.minus.icon
-                            | Unfollow
-                    -else
-                        a.ui.blue.tiny.left.labeled.icon.button(href="/users/#{streamuser.id}/follow")
-                            i.plus.icon
-                            | Follow
+                    -if(!sameUser)
+                        -if (followed)
+                            a.ui.tiny.left.labeled.icon.button(href="/users/#{streamUser.id}/unfollow")
+                                i.minus.icon
+                                | Unfollow
+                        -else
+                            a.ui.blue.tiny.left.labeled.icon.button(href="/users/#{streamUser.id}/follow")
+                                i.plus.icon
+                                | Follow
         .twelve.wide.column
             div.container
                 -if (photos.length == 0)
@@ -37,9 +38,9 @@ block content
                                         .text.muted.ui.two.column.grid
                                             .column
                                                 .text.small.align.left
-                                                    a.ui.label(href="/users/#{streamuser.id}")
+                                                    a.ui.label(href="/users/#{streamUser.id}")
                                                         i.user.icon
-                                                        = streamuser.fullName
+                                                        = streamUser.fullName
                                             .column
                                                 .text.small.align.right
                                                     = photo.fromNow()
@@ -47,10 +48,10 @@ block content
                                                 = photo.description || '(no description)'
                     div.text.align.center
                         -if (prevPage >= 1)
-                            a.ui.left.labeled.icon.button(href="/users/#{streamuser.id}?page=#{prevPage}")
+                            a.ui.left.labeled.icon.button(href="/users/#{streamUser.id}?page=#{prevPage}")
                                 i.left.arrow.icon
                                 | Previous
                         -if (nextPage >= 1)
-                            a.ui.right.labeled.icon.button(href="/users/#{streamuser.id}?page=#{nextPage}")
+                            a.ui.right.labeled.icon.button(href="/users/#{streamUser.id}?page=#{nextPage}")
                                 i.right.arrow.icon
                                 | Next

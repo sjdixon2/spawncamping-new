@@ -75,8 +75,9 @@ exports.stream = function(req, res) {
                         photos: photos,
                         nextPage: (photos.length >= helpers.pages.PAGE_SIZE) ? page + 1 : 0,
                         prevPage: page - 1,
-                        streamuser: user,
-                        followed: followed
+                        streamUser: user,
+                        followed: followed,
+                        sameUser: db.User.same(user, req.session.login)
                     });
                 });
         });
