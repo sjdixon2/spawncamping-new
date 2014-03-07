@@ -113,3 +113,6 @@ global.db = require(system.pathTo('core/models/'));
 
 //Load routes configurations
 require(system.pathTo('routes/config'));
+
+//Create image upload directories, if they don't exist already
+helpers.system.createImageUploadDirectories();

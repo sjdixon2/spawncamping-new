@@ -1,4 +1,20 @@
 /**
+ * Adds photo upload directories, if they don't already exist
+ * @return {Promise} a promise indicating the completion of folder creation
+ */
+exports.createImageUploadDirectories = function () {
+    //Create root uploads directory
+    return q.nfcall(fs.mkdir, system.pathTo(settings.UPLOADS_PATH))
+        //Create directories inside root directory
+        .then(function () {
+            return q.all(
+                //Create thumbnails directory
+                q.nfcall(fs.mkdir, system.pathTo(settings.UPLOADS_PATH, '/thumbnail'))
+            )
+        });
+}
+
+/**
  * Resets the entire system to its initial state. This
  * includes deleting all items in the database, deleting
  * all photos in the file system, etc.
