@@ -139,17 +139,27 @@ module.exports = function (sequelize, DataTypes) {
                     var fileName = self.id + '.' + helpers.files.getExtension(originalFilename), //The name of the file to be written
                         uploadsPath = settings.UPLOADS_PATH, //The relative directory to where uploads are stored
                         uploadsURL = settings.UPLOADS_URL_PATH,
-                        thumbnailBuffer = self.createThumbnail(buffer);
+                        //thumbnailBuffer = self.createThumbnail(buffer);
 
                     //Set cached paths to photos
                     self.imagePath = uploadsURL + fileName;
                     self.thumbnailPath = uploadsURL + 'thumbnail/' + fileName;
+                    
+                     // Resize image and rewrite to /thumbnails
+                    //      resize uses 400 for width and
+                    //      large number for height to keep
+                    //      aspect ratio
+                   gm(uploadsPath+'/'+filename)
+                        .resize(400, 100000000000)
+                        .write(uploadsPath+'/thumbnails/'+filename, function (err) {
+                            if (err) { console.log(err); }
+                        });
 
                     //Write uploaded file to desired location(s) on disk
                     return q.all([
                         self.save(),
                         q.nfcall(fs.writeFile, system.pathTo(uploadsPath, fileName), buffer), //Write original file to uploads location
-                        q.nfcall(fs.writeFile, system.pathTo(uploadsPath, 'thumbnail/', fileName), thumbnailBuffer) //Write thumbnail image
+                        //q.nfcall(fs.writeFile, system.pathTo(uploadsPath, 'thumbnail/', fileName), thumbnailBuffer) //Write thumbnail image
                     ]);
                 });
             },
