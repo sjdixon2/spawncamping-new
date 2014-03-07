@@ -23,7 +23,9 @@
     "forever": "*",
     "methods": "*",
     "express-flash": "*",
-    "bcryptjs": "*"
+    "bcryptjs": "*",
+    "gm": "*",
+    "image-size": "*"
   },
   "devDependencies": {
     "supervisor": "*",

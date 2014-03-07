@@ -137,40 +137,55 @@ module.exports = function (sequelize, DataTypes) {
 
                 return q.nfcall(fs.readFile, path).then(function (buffer) {
                     var fileName = self.id + '.' + helpers.files.getExtension(originalFilename), //The name of the file to be written
-                        uploadsPath = settings.UPLOADS_PATH, //The relative directory to where uploads are stored
                         uploadsURL = settings.UPLOADS_URL_PATH;
-                        //thumbnailBuffer = self.createThumbnail(buffer);
 
                     //Set cached paths to photos
                     self.imagePath = uploadsURL + fileName;
                     self.thumbnailPath = uploadsURL + 'thumbnail/' + fileName;
-                    
-                     // Resize image and rewrite to /thumbnails
-                    //      resize uses 400 for width and
-                    //      large number for height to keep
-                    //      aspect ratio
-                   gm(uploadsPath+'/'+filename)
-                        .resize(400, 100000000000)
-                        .write(uploadsPath+'/thumbnails/'+filename, function (err) {
-                            if (err) { console.log(err); }
-                        });
 
-                    //Write uploaded file to desired location(s) on disk
-                    return q.all([
-                        self.save(),
-                        q.nfcall(fs.writeFile, system.pathTo(uploadsPath, fileName), buffer) //Write original file to uploads location
-                        //q.nfcall(fs.writeFile, system.pathTo(uploadsPath, 'thumbnail/', fileName), thumbnailBuffer) //Write thumbnail image
-                    ]);
+                    //Get dimensions of image
+                    //TODO get dimensions from buffer, not file (faster)
+                    return q.nfcall(sizeOf, path).then(function (dimensions) {
+                        //Write uploaded file to desired location(s) on disk
+                        return q.all([
+                            self.save(),
+                            self.$writeImageBuffer(fileName, buffer), //Write original file to uploads location
+                            self.$writeThumbnailBuffer(fileName, buffer, dimensions) //Write thumbnail image
+                        ]);
+                    });
                 });
             },
             /**
-             * Creates a thumbnail buffer from the given image buffer
-             * @param buffer the buffer of the image to convert
-             * @returns {buffer} a buffer of the thumbnail image
+             * Writes the given image buffer to the location
+             * of the original image path with the given file name
+             * @param fileName the name of the file to write
+             * @param buffer the image buffer
+             * @returns {promise}
              */
-            createThumbnail: function (buffer) {
-                //TODO create thumbnail buffer with gm
-                return buffer;
+            $writeImageBuffer: function (fileName, buffer) {
+                return q.nfcall(fs.writeFile, system.pathTo(settings.UPLOADS_PATH, fileName), buffer);
+            },
+            /**
+             * Resizes and writes the given image buffer to the location
+             * of the thumbnail image path with the given file name
+             * @param fileName the name of the file to write
+             * @param buffer the image buffer
+             * @returns {promise}
+             */
+            $writeThumbnailBuffer: function (fileName, buffer, dimensions) {
+                var image = gm(buffer),
+                    defer = q.defer(), //Had to user defer, as gm.write acts weird with promises
+                    thumbnailPath = system.pathTo(settings.UPLOADS_PATH, 'thumbnail/', fileName),
+                    thumbnailWidth = 400,
+                    thumbnailHeight = thumbnailWidth * dimensions.height / dimensions.width,
+                    resizedImage = image.resize(thumbnailWidth, thumbnailHeight, "!");
+
+                resizedImage.write(thumbnailPath, function (err) {
+                    if (err) defer.reject(err);
+                    defer.resolve();
+                });
+
+                return defer.promise;
             },
             /**
              * Returns the time ago from the current time

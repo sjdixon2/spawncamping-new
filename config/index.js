@@ -13,6 +13,8 @@ global.path = require('path');
 global.url = require('url');
 global.bcrypt = require('bcryptjs');
 global.moment = require('moment');
+global.gm = require('gm');
+global.sizeOf = require('image-size');
 
 //Global configuration settings
 global.settings = {
