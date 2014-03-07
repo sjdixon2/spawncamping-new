@@ -138,7 +138,7 @@ module.exports = function (sequelize, DataTypes) {
                 return q.nfcall(fs.readFile, path).then(function (buffer) {
                     var fileName = self.id + '.' + helpers.files.getExtension(originalFilename), //The name of the file to be written
                         uploadsPath = settings.UPLOADS_PATH, //The relative directory to where uploads are stored
-                        uploadsURL = settings.UPLOADS_URL_PATH,
+                        uploadsURL = settings.UPLOADS_URL_PATH;
                         //thumbnailBuffer = self.createThumbnail(buffer);
 
                     //Set cached paths to photos
@@ -158,7 +158,7 @@ module.exports = function (sequelize, DataTypes) {
                     //Write uploaded file to desired location(s) on disk
                     return q.all([
                         self.save(),
-                        q.nfcall(fs.writeFile, system.pathTo(uploadsPath, fileName), buffer), //Write original file to uploads location
+                        q.nfcall(fs.writeFile, system.pathTo(uploadsPath, fileName), buffer) //Write original file to uploads location
                         //q.nfcall(fs.writeFile, system.pathTo(uploadsPath, 'thumbnail/', fileName), thumbnailBuffer) //Write thumbnail image
                     ]);
                 });
