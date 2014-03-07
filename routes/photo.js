@@ -30,7 +30,7 @@ exports.create = function (req, res) {
 }
 
 exports.thumbnail = function(req, res){
-    app.use(express.static(settings.UPLOADS_PATH+'/thumbnails'));
+    app.use(express.static(settings.UPLOADS_PATH+'/thumbnail'));
 }
 
 exports.photo = function(req, res){
