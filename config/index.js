@@ -23,7 +23,7 @@ global.settings = {
     UPLOADS_PATH: 'public/uploads',
     UPLOADS_URL_PATH: '/photos/',
     //TODO change to password given by TA
-    ADMIN_PASSWORD: 'temp_password', //Password given by TA for bulk upload security
+    ADMIN_PASSWORD: 'spawncamping', //Password given by TA for bulk upload security
 
     /*
      To use this connection string, run the following commands in your localhost mysql
