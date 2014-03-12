@@ -11,17 +11,15 @@ exports.index = function (req, res) {
     query += req.session.login.id || -1;
     query += ' order by P.createdAt DESC';
     query += ' limit ' + pageSize + ' offset ' + offset * pageSize;
-    console.log(query);
+
     sequelize.query(query)
         .complete(function (err, photos) {
-            console.log(photos.length);
             if (err) {
                 console.log('error: ' + err);
                 return;
             }
             if (!photos) {
                 // no photos in list
-                console.log('Empty list');
                 return;
             }
             var options = {
