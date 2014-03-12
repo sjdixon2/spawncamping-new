@@ -1,34 +1,34 @@
 var main = require('./'),
     user = require('./user'),
-    session = require("./session"),
+    session = require('./session'),
     photo = require('./photo'),
-    feed = require("./feed"),
-    bulk = require("./bulk");
+    feed = require('./feed'),
+    bulk = require('./bulk');
 
 var check_auth = helpers.routes.check_auth;
-app.get("/", check_auth, main.index);
-app.get("/feed", check_auth, feed.index);
+app.get('/', check_auth, main.index);
+app.get('/feed', check_auth, feed.index);
 
 app.locals.moment = require('moment');
 
 // User Creation Routes
-app.get("/users/new", user.signupForm);
-app.post("/users/create", user.register);
+app.get('/users/new', user.signupForm);
+app.post('/users/create', user.register);
 
 // User Profile Routes
-app.get("/users/:id", check_auth, user.stream);
-app.get("/users/:id/follow", check_auth, user.follow);
-app.get("/users/:id/unfollow", check_auth, user.unfollow);
-app.get("/users/:id/share", check_auth, user.share);
+app.get('/users/:id', check_auth, user.stream);
+app.get('/users/:id/follow', check_auth, user.follow);
+app.get('/users/:id/unfollow', check_auth, user.unfollow);
+app.get('/users/:id/share', check_auth, user.share);
 
 // Session Routes
-app.get("/sessions/new", session.loginForm);
-app.post("/sessions/create", session.attemptLogin);
-app.get("/sessions/destroy", check_auth, session.destroy);
+app.get('/sessions/new', session.loginForm);
+app.post('/sessions/create', session.attemptLogin);
+app.get('/sessions/destroy', check_auth, session.destroy);
 
 // Photo Upload Routes
-app.get("/photos/new", check_auth, photo.new);
-app.post("/photos/create", check_auth, photo.create);
+app.get('/photos/new', check_auth, photo.new);
+app.post('/photos/create', check_auth, photo.create);
 
 //Bulk upload routes
 app.get('/bulk/clear', bulk.clear);
@@ -67,8 +67,8 @@ app.use(function(err, req, res, next){
     if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
         console.log(errorDetail);
     }
-    var errorPage = 'errors/' + statusCode;
-    console.log("error found");
+    errorPage = 'errors/' + statusCode;
+    console.log('error found');
     res.render(errorPage, { title: statusCode + ': ' + statusText, error: errorDetail, url: req.url });
 
 });

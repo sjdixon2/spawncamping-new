@@ -12,7 +12,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         jshint: {
             all: {
-                src: ['gruntfile.js', 'app.js', 'core/**/*.js'],
+                src: ['gruntfile.js', 'app.js', 'core/**/*.js', 'routes/**/*.js'],
                 options: {
                     jshintrc: true
                 }
@@ -34,6 +34,53 @@ module.exports = function (grunt) {
             options: extend(settings.db, {
                 migrationsPath: system.pathTo('/migrations')
             })
+        },
+        concurrent: {
+            tasks: ['nodemon', 'watch'],
+            options: {
+                logConcurrentOutput: true
+            }
+        },
+        nodemon: {
+            dev: {
+                script: 'app.js',
+                options: {
+                    args: [],
+                    ignore: ['public/**'],
+                    ext: 'js',
+                    nodeArgs: ['--debug'],
+                    delayTime: 1,
+                    cwd: __dirname
+                }
+            }
+        },
+
+        watch: {
+            js: {
+                files: ['gruntfile.js', 'app.js', 'core/**/*.js', 'routes/**/*.js', 'public/javascripts/**/*.js'],
+                tasks: ['jshint'],
+                options: {
+                    livereload: true
+                }
+            },
+            views: {
+                files: ['core/views/**/*.jade'],
+                options: {
+                    livereload: true
+                }
+            },
+            images: {
+                files: ['public/images/**'],
+                options: {
+                    livereload: true
+                }
+            },
+            css: {
+                files: ['public/stylesheets/**'],
+                options: {
+                    livereload: true
+                }
+            }
         }
     });
 
@@ -53,8 +100,8 @@ module.exports = function (grunt) {
     grunt.registerTask('migrate', ['sequelize:migrate']);
 
     //Default task(s).
-    grunt.registerTask('default', ['jshint', 'migrate']);
+    grunt.registerTask('default', ['jshint', 'migrate', 'concurrent']);
 
     //Test task.
-    grunt.registerTask('test', ['env:test', 'migrate', 'mochaTest']);
+    grunt.registerTask('test', ['env:test', 'jshint', 'migrate', 'mochaTest']);
 };

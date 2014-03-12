@@ -21,7 +21,7 @@ exports.register = function (req, res) {
         errors = user.validate();
     }catch(err) {// Catches the error in User -> password -> set
         errors = { password: [err.message] };
-        attrs.password = "notblank";
+        attrs.password = 'notblank';
         // Run validations for other fields.
         extend(errors, db.User.build(attrs).validate());
     }
@@ -30,19 +30,19 @@ exports.register = function (req, res) {
         db.User.find({where:{email: user.email}}).success(function(duplicate){
             if(duplicate){
                 req.flash('errors', {duplicate: ['Email is already in use.']});
-                res.redirect("/users/new");
+                res.redirect('/users/new');
             } else {
                 user.save().then(function(){
                     user.addFollowee(user).then(function (){
                         req.session.login = user;
-                        res.redirect("/feed");
+                        res.redirect('/feed');
                     });
                 });
             }
         });
     } else {
         req.flash('errors', errors);
-        res.redirect("/users/new");
+        res.redirect('/users/new');
     }
 };
 
@@ -70,8 +70,8 @@ exports.stream = function(req, res) {
                 limit: helpers.pages.PAGE_SIZE,
                 order: 'createdAt DESC'
             }).then(function(photos){
-                    res.render("stream", {
-                        headTitle: user.fullName + "'s Stream",
+                    res.render('stream', {
+                        headTitle: user.fullName + '\'s Stream',
                         photos: photos,
                         nextPage: (photos.length >= helpers.pages.PAGE_SIZE) ? page + 1 : 0,
                         prevPage: page - 1,
@@ -117,7 +117,7 @@ exports.share = function(req, res) {
     db.Photo.find(photoID).then(function(photo){
         user.sharePhoto(photo).then(function () {
             res.redirect('/users/' + user.id);
-        })
+        });
     });
 };
 

@@ -4,7 +4,7 @@
 exports.new = function (req, res) {
     // html displaying upload form
     res.render('photos/new', {title: 'Upload Photo'});
-}
+};
 
 /**
  * POST handler for photo upload
@@ -27,12 +27,12 @@ exports.create = function (req, res) {
         req.flash('errors', errors);
         res.redirect('/photos/new');
     }
-}
+};
 
 exports.thumbnail = function(req, res){
     app.use(express.static(settings.UPLOADS_PATH+'/thumbnail'));
-}
+};
 
 exports.photo = function(req, res){
     app.use(express.static(settings.UPLOADS_PATH));
-}
+};

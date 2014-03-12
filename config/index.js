@@ -22,7 +22,6 @@ global.settings = {
     NODE_ENV: process.env.NODE_ENV,
     UPLOADS_PATH: 'public/uploads',
     UPLOADS_URL_PATH: '/photos/',
-    //TODO change to password given by TA
     ADMIN_PASSWORD: 'spawncamping', //Password given by TA for bulk upload security
 
     /*

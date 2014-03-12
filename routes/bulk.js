@@ -11,7 +11,7 @@ var authenticateAdmin = function (req, res, cb) {
     else {
         helpers.routes.unauthorized(res);
     }
-}
+};
 
 /**
  * Deletes all items in database, as specified in the project documentation
