@@ -74,7 +74,7 @@ module.exports = function (sequelize, DataTypes) {
                     originalFilename: fileName,
                     type: 'image/' + helpers.files.getExtension(fileName),
                     size: 1 //Allows validation to pass
-                }
+                };
             },
             /**
              * Saves the image, then creates image versions
@@ -178,7 +178,7 @@ module.exports = function (sequelize, DataTypes) {
                     thumbnailPath = system.pathTo(settings.UPLOADS_PATH, 'thumbnail/', fileName),
                     thumbnailWidth = 400,
                     thumbnailHeight = thumbnailWidth * dimensions.height / dimensions.width,
-                    resizedImage = image.resize(thumbnailWidth, thumbnailHeight, "!");
+                    resizedImage = image.resize(thumbnailWidth, thumbnailHeight, '!');
 
                 resizedImage.write(thumbnailPath, function (err) {
                     if (err) defer.reject(err);

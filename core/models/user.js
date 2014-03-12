@@ -5,19 +5,19 @@ module.exports = function(sequelize, DataTypes) {
         fullName: {
             type: DataTypes.STRING,
             validate: {
-                notEmpty: {msg: "Name cannot be blank."}
+                notEmpty: {msg: 'Name cannot be blank.'}
             }
         },
         email: {
             type: DataTypes.STRING,
             validate: {
-                isEmail: {msg: "Email must be a valid address (e.g. user@example.com)."}
+                isEmail: {msg: 'Email must be a valid address (e.g. user@example.com).'}
             }
         },
         password: {
             type: DataTypes.STRING,
             set: function(plaintext) {
-                if(plaintext.length == 0) throw new Error("Password cannot be blank.");
+                if(plaintext.length === 0) throw new Error('Password cannot be blank.');
                 var hash = bcrypt.hashSync(plaintext, SALT_LENGTH);
                 this.setDataValue('password', hash);
             }
@@ -63,7 +63,7 @@ module.exports = function(sequelize, DataTypes) {
              */
             same: function (user1, user2) {
                 //Note: does not check if users are user objects
-                return user1.id == user2.id && user1.id != null;
+                return user1.id == user2.id && user1.id !== null;
             }
         },
         instanceMethods: {

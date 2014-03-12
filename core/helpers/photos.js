@@ -6,7 +6,7 @@ exports.IMAGE_CONTENT_TYPES = [
     'image/jpeg',
     'image/png',
     'image/gif'
-]
+];
 
 /**
  * Indicates whether the given upload file is an image
@@ -15,4 +15,4 @@ exports.IMAGE_CONTENT_TYPES = [
  */
 exports.isImageUpload = function (upload) {
     return upload && exports.IMAGE_CONTENT_TYPES.contains(upload.type);
-}
+};

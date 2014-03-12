@@ -7,4 +7,4 @@
 exports.getExtension = function (filename) {
     var ext = filename.split('.');
     return ext[ext.length - 1];
-}
+};

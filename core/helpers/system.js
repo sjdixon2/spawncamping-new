@@ -10,9 +10,9 @@ exports.createImageUploadDirectories = function () {
             return q.all(
                 //Create thumbnails directory
                 q.nfcall(fs.mkdir, system.pathTo(settings.UPLOADS_PATH, '/thumbnail'))
-            )
+            );
         });
-}
+};
 
 /**
  * Resets the entire system to its initial state. This
@@ -35,4 +35,4 @@ exports.reset = function () {
         sequelize.query('DELETE FROM UserPhotoShares WHERE 1'),
         sequelize.query('DELETE FROM UserFeedItems WHERE 1')
     ]);
-}
+};

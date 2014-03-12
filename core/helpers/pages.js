@@ -12,8 +12,8 @@ exports.extractPageNumber = function(query){
         var offset = parseInt(query.split('=')[1]);
         return offset;
     }
-}
+};
 
 exports.getPageNumber = function(req){
     return exports.extractPageNumber(url.parse(req.url).query);
-}
+};

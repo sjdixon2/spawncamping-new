@@ -9,7 +9,7 @@ Should be used on all routes that require authentication.
 exports.check_auth = function(req, res, next) {
 
     if(!req.session.login) {
-        res.redirect("/sessions/new");
+        res.redirect('/sessions/new');
         return;
     }
     next();
@@ -33,7 +33,7 @@ exports.success = function (res, body) {
  */
 exports.unauthorized = function (res, body) {
     res.send(401, body);
-}
+};
 
 /**
  * Retrieves the current user from the route's session
@@ -42,4 +42,4 @@ exports.unauthorized = function (res, body) {
  */
 exports.getUser = function (req) {
     return db.User.build(req.session.login);
-}
+};
