@@ -28,7 +28,7 @@ module.exports = function (grunt) {
                 reporter: 'spec',
                 timeout: 15000
             },
-            src: ['./test/']
+            src: ['./test/unit/']
         },
         sequelize: {
             options: extend(settings.db, {

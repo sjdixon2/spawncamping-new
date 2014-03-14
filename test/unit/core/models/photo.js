@@ -50,7 +50,7 @@ describe('Photo', function () {
     describe('uploadSave', function () {
         it('creates a thumbnail version of the file', function () {
             return PhotoFactory.basic().then(function (photo) {
-                photo.setPhotoByPath(system.pathTo('test/fixtures/models/photo/image.png'));
+                photo.setPhotoByPath(system.pathTo('test/unit/fixtures/models/photo/image.png'));
 
                 //Perform image upload
                 return photo.uploadSave().then(function () {
@@ -74,7 +74,7 @@ describe('Photo', function () {
 //                    user.addFollower(follower).then(function (follower) {
 //                        //Create test photo
 //                        PhotoFactory.basic({userID: user.id}).then(function (photo) {
-//                            photo.setPhotoByPath(system.pathTo('test/fixtures/models/photo/image.png'));
+//                            photo.setPhotoByPath(system.pathTo('test/unit/fixtures/models/photo/image.png'));
 //
 //                            //Perform image upload
 //                            photo.uploadSave().then(function () {

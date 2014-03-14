@@ -21,7 +21,7 @@ describe('photo routes', function () {
     describe('create', function () {
         it('redirects with errors when file is not image', function (done) {
             session.post('/photos/create')
-                .attach('image', system.pathTo('test/fixtures/routes/photos/not_image.txt'))
+                .attach('image', system.pathTo('test/unit/fixtures/routes/photos/not_image.txt'))
                 .expect(302)
                 .expect('location', '/photos/new', done);
         });
@@ -29,21 +29,21 @@ describe('photo routes', function () {
         it('accepts png images', function (done) {
             session.post('/photos/create')
                 .expect(302)
-                .attach('image', system.pathTo('test/fixtures/routes/photos/valid.png'))
+                .attach('image', system.pathTo('test/unit/fixtures/routes/photos/valid.png'))
                 .expect('location', '/feed', done);
         });
 
         it('accepts gif images', function (done) {
             session.post('/photos/create')
                 .expect(302)
-                .attach('image', system.pathTo('test/fixtures/routes/photos/valid.gif'))
+                .attach('image', system.pathTo('test/unit/fixtures/routes/photos/valid.gif'))
                 .expect('location', '/feed', done);
         });
 
         it('accepts jpeg images', function (done) {
             session.post('/photos/create')
                 .expect(302)
-                .attach('image', system.pathTo('test/fixtures/routes/photos/valid.jpeg'))
+                .attach('image', system.pathTo('test/unit/fixtures/routes/photos/valid.jpeg'))
                 .expect('location', '/feed', done);
         });
 
@@ -53,7 +53,7 @@ describe('photo routes', function () {
 
             session.post('/photos/create')
                 .expect(302)
-                .attach('image', system.pathTo('test/fixtures/routes/photos/valid.jpg'))
+                .attach('image', system.pathTo('test/unit/fixtures/routes/photos/valid.jpg'))
                 .expect('location', '/feed')
                 .end(function (err) {
                     if (err) throw err;
