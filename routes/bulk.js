@@ -58,6 +58,8 @@ exports.users = function (req, res) {
             //Indicate success after everything is done
             promise.then(function () {
                 helpers.routes.success(res);
+            }).fail(function (err) {
+                helpers.routes.failure(res, err);
             });
         });
     });
@@ -89,6 +91,9 @@ exports.streams = function (req, res) {
             //Return success message after all photos are created
             .then(function () {
                 helpers.routes.success(res);
+            })
+            .fail(function (err) {
+                helpers.routes.failure(res, err);
             });
     });
 };

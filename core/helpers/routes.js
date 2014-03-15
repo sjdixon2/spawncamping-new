@@ -26,6 +26,16 @@ exports.success = function (res, body) {
 };
 
 /**
+ * Renders basic success message indicating that the route
+ * failed
+ * @param res route's response
+ * @param [body] error that occurres
+ */
+exports.failure = function (res, err) {
+    res.send(500, err);
+};
+
+/**
  * Render basic message indicating that the user is
  * unauthorized to access this route
  * @param res route's response

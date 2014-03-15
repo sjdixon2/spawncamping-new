@@ -26,3 +26,5 @@ global.server = require('supertest')(app); //Mock server for testing
 global.Session = require('supertest-session')({ //Mock sessions for testing - used with Supertest to simulate login
     app: app
 });
+
+global.needle = require('needle'); //For performing http requests in performance testing

@@ -1,4 +1,4 @@
-var bulkUpload = require('./bulkUpload');
+var bulk = require('./bulk');
 
 /**
  * Runs a performance test comparing the number of followers
@@ -20,7 +20,7 @@ exports.byNumFollowers = function (numUsers, scenario, options) {
     }, options);
 
     //Generate the specified number of users
-    return bulkUpload.generateUsersAndFollowers(numUsers)
+    return bulk.generateUsersAndFollowers(numUsers)
         .then(function (followers) {
             //Get every nth element to test
             var followersToTest = _.filter(followers, function (follower) {
@@ -37,11 +37,12 @@ exports.byNumFollowers = function (numUsers, scenario, options) {
 /**
  * Runs a performance test with several concurrent sessions. Each
  * session runs an instance of the given scenario
+ *
  * @param numSessions The number of sessions to run concurrently
  * @param scenario {function} The function to run for an individual session
  */
 exports.byConcurrentSessions = function (numSessions, scenario) {
-    return bulkUpload.bySeed().then(function (seed) {
+    return bulk.bySeed().then(function (seed) {
         return _.times(numSessions, function () {
             return scenario(); //Call individual scenario
         });

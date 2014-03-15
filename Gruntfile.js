@@ -1,5 +1,6 @@
 //Hack method of loading test environment when tests are run - otherwise dev configurations are loaded
-if(process.argv[2] == 'test') {
+var func = process.argv[2];
+if(func == 'test' || func == 'performance') {
     process.env.NODE_ENV = 'test'; //Force environment to test mode
 }
 
@@ -24,11 +25,20 @@ module.exports = function (grunt) {
             }
         },
         mochaTest: {
-            options: {
-                reporter: 'spec',
-                timeout: 15000
+            unit: {
+                options: {
+                    reporter: 'spec',
+                    timeout: 15000
+                },
+                src: ['./test/unit/']
             },
-            src: ['./test/unit/']
+            performance: {
+                options: {
+                    reporter: 'spec',
+                    timeout: 360000
+                },
+                src: ['./test/performance/']
+            }
         },
         sequelize: {
             options: extend(settings.db, {
@@ -103,5 +113,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['jshint', 'migrate', 'concurrent']);
 
     //Test task.
-    grunt.registerTask('test', ['env:test', 'jshint', 'migrate', 'mochaTest']);
+    grunt.registerTask('test', ['env:test', 'jshint', 'migrate', 'mochaTest:unit']);
+
+    grunt.registerTask('performance', ['env:test', 'migrate', 'mochaTest:performance']);
 };
