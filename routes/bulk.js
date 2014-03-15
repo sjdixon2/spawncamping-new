@@ -34,6 +34,7 @@ exports.users = function (req, res) {
         //Change name of user hash to fullName for user object
         users.each(function (user) {
             user.fullName = user.name; //name = fullName in DB
+            user.email = user.name; //Also set email (aka username) to the same value
         });
 
         //Create all users according to has
@@ -57,6 +58,8 @@ exports.users = function (req, res) {
             //Indicate success after everything is done
             promise.then(function () {
                 helpers.routes.success(res);
+            }).fail(function (err) {
+                helpers.routes.failure(res, err);
             });
         });
     });
@@ -88,6 +91,9 @@ exports.streams = function (req, res) {
             //Return success message after all photos are created
             .then(function () {
                 helpers.routes.success(res);
+            })
+            .fail(function (err) {
+                helpers.routes.failure(res, err);
             });
     });
 };

@@ -5,7 +5,7 @@ global.q = require('q');
 global.extend = require('extend');
 global.requireAll = require('require-all');
 global.express = require('express');
-global._ = require('underscore');
+global._ = require('lodash');
 global.http = require('http');
 global.flash = require('express-flash'); //For sending temporary messages to redirects
 global.fs = require('fs'); //For file system calls
@@ -15,6 +15,7 @@ global.bcrypt = require('bcryptjs');
 global.moment = require('moment');
 global.gm = require('gm');
 global.sizeOf = require('image-size');
+global.Chance = require('chance'); //For generating random names, dates, etc.
 
 //Global configuration settings
 global.settings = {
@@ -52,7 +53,44 @@ global.system = {
         args.unshift(settings.ROOT_DIR);
         return path.join.apply(null, args);
     },
-    ext: requireAll(path.join(settings.ROOT_DIR, '/core/ext/'))
+    /**
+     * @example
+     * getPath('/p/a/t/h', {query: 'myquery'}) => '/p/a/t/h?query=myquery'
+     *
+     * @param path the url path
+     * @param [query] any query parameters to send
+     * @param [options] additional url options (e.g. host, port)
+     * @returns {string}
+     */
+    getUrlPath: function (path, query, options) {
+        return url.format(_.extend({pathname: path, query: query}, options));
+    },
+    ext: requireAll(path.join(settings.ROOT_DIR, '/core/ext/')),
+    //Settings for performance mode
+    performance: {
+        hostname: 'node.cs.ucalgary.ca', //Change this to test performance on localhost
+        ROOT_DIR: '/home/uga/jpnauta/spawncamping/', //Also change this to the path to your repository (for image upload)
+        protocol: 'http',
+        port: 8800,
+        pathTo: function (/**..args**/) {
+            var args = Array.prototype.slice.call(arguments);
+            args.unshift(this.ROOT_DIR);
+            return path.join.apply(null, args)
+                .replace(/\\/g,'/'); //Replace all black slashes (Windows) with forward slashes (so the path can be used on Linux)
+        },
+        /**
+         * @example
+         * If performance server host is host.com:80, then
+         *      getPath('/p/a/t/h', {query: 'myquery'}) => 'host.com:80/p/a/t/h?query=myquery'
+         *
+         * @param path the url path
+         * @param [query] any query parameters to send
+         * @returns {string}
+         */
+        getUrlPath: function (path, query) {
+            return system.getUrlPath(path, query, {hostname: this.hostname, port: this.port, protocol: this.protocol});
+        }
+    }
 };
 
 //Express configuration

@@ -25,7 +25,9 @@
     "express-flash": "*",
     "bcryptjs": "*",
     "gm": "*",
-    "image-size": "*"
+    "image-size": "*",
+    "needle": "~0.6.6",
+    "chance": "~0.5.4"
   },
   "devDependencies": {
     "supervisor": "*",
