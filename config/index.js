@@ -75,7 +75,8 @@ global.system = {
         pathTo: function (/**..args**/) {
             var args = Array.prototype.slice.call(arguments);
             args.unshift(this.ROOT_DIR);
-            return path.join.apply(null, args);
+            return path.join.apply(null, args)
+                .replace(/\\/g,'/'); //Replace all black slashes (Windows) with forward slashes (so the path can be used on Linux)
         },
         /**
          * @example
