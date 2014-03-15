@@ -13,7 +13,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         jshint: {
             all: {
-                src: ['gruntfile.js', 'app.js', 'core/**/*.js', 'routes/**/*.js'],
+                src: ['Gruntfile.js', 'app.js', 'core/**/*.js', 'routes/**/*.js'],
                 options: {
                     jshintrc: true
                 }

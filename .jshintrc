@@ -42,7 +42,8 @@
         "helpers": true,
         "classes": true,
         "http": true,
-        "app": true
+        "app": true,
+        "chance": true
     },
     "predef": [ // Extra globals.
         "define",

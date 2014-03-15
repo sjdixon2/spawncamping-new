@@ -26,7 +26,8 @@
     "bcryptjs": "*",
     "gm": "*",
     "image-size": "*",
-    "needle": "~0.6.6"
+    "needle": "~0.6.6",
+    "chance": "~0.5.4"
   },
   "devDependencies": {
     "supervisor": "*",

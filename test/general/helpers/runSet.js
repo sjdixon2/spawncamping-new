@@ -13,7 +13,7 @@ var bulk = require('./bulk');
  *
  * @returns {promise} Promise with an array of all results generated in scenario
  */
-exports.byNumFollowers = function (numUsers, scenario, options) {
+exports.byNumFollowers = function (numUsers, options, scenario) {
     //Set default options
     options = _.extend({
         step: 1
@@ -23,8 +23,8 @@ exports.byNumFollowers = function (numUsers, scenario, options) {
     return bulk.generateUsersAndFollowers(numUsers)
         .then(function (followers) {
             //Get every nth element to test
-            var followersToTest = _.filter(followers, function (follower) {
-                return follower.id % options.step == 0;
+            var followersToTest = _.where(followers, function (follower) {
+                return (follower.id - 1) % options.step === 0;
             });
 
             //Run test on each follower successively after one another

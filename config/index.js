@@ -5,7 +5,7 @@ global.q = require('q');
 global.extend = require('extend');
 global.requireAll = require('require-all');
 global.express = require('express');
-global._ = require('underscore');
+global._ = require('lodash');
 global.http = require('http');
 global.flash = require('express-flash'); //For sending temporary messages to redirects
 global.fs = require('fs'); //For file system calls
@@ -15,6 +15,7 @@ global.bcrypt = require('bcryptjs');
 global.moment = require('moment');
 global.gm = require('gm');
 global.sizeOf = require('image-size');
+global.Chance = require('chance'); //For generating random names, dates, etc.
 
 //Global configuration settings
 global.settings = {
@@ -67,8 +68,8 @@ global.system = {
     ext: requireAll(path.join(settings.ROOT_DIR, '/core/ext/')),
     //Settings for performance mode
     performance: {
-        hostname: 'node.cs.ucalgary.ca', //Change this to test performance on localhost
-        ROOT_DIR: '/home/uga/jpnauta/spawncamping/', //Also change this to the path to your repository (for image upload)
+        hostname: 'localhost', //Change this to test performance on localhost
+        ROOT_DIR: 'C:/Users/Jeremy/Projects/Node/spawncamping', //Also change this to the path to your repository (for image upload)
         protocol: 'http',
         port: 8800,
         pathTo: function (/**..args**/) {

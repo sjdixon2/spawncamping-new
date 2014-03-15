@@ -1,5 +1,6 @@
 var uploadFixtures = require('../fixtures/bulkUpload/index'),
-    request = require('./request');
+    request = require('./request'),
+    chance = new Chance();
 
 /**
  * Clears the performance server's DB
@@ -34,6 +35,30 @@ exports.createPhotos = function (photos) {
 };
 
 /**
+ * Populates the performance DB with the given users and
+ * photo streams. See project spec for exact details
+ *
+ * @param users the users to create
+ * @param streams the streams to create
+ * @returns {promise} promise containing created users, resolved
+ *          after DB is populated
+ */
+exports.$populate = function (users, streams) {
+    var self = this;
+
+    //Clear existing DB
+    return self.clearAll().then(function () {
+        //Upload test users
+        return self.createUsers(users).then(function () {
+            //Upload create photos
+            return self.createPhotos(streams).then(function () {
+                return users;
+            });
+        });
+    });
+};
+
+/**
  * Clears the database of the performance server, then
  * creates the specified number of followers
  * @param numUsers the number of followers to create.
@@ -51,7 +76,22 @@ exports.createPhotos = function (photos) {
  *          after transaction is complete
  */
 exports.generateUsersAndFollowers = function (numUsers) {
-    return q(); //TODO
+    var imagePath = system.performance.pathTo('test/general/fixtures/bulkUpload/image.png');
+
+    //Generate users to create
+    var users = _.map(numUsers.timesPlusOne(), function (i) {
+        return {name: chance.name(), password: chance.string(), id: i, follows: i.timesPlusOne()};
+    });
+
+    //Generate photos to create
+    var streams = _.map(users, function (user) {
+        return {id: user.id, user_id: user.id, path: imagePath, timestamp: chance.date()};
+    });
+
+    console.log(users, streams);
+
+    //Populate DB with generated users & streams
+    return this.$populate(users, streams);
 };
 
 /**
@@ -63,17 +103,8 @@ exports.generateUsersAndFollowers = function (numUsers) {
  */
 exports.bySeed = function () {
     var users = uploadFixtures.users,
-        streams = uploadFixtures.streams,
-        self = this;
+        streams = uploadFixtures.streams;
 
-    //Clear existing DB
-    return self.clearAll().then(function () {
-        //Upload test users
-        return self.createUsers(users).then(function () {
-            //Upload create photos
-            return self.createPhotos(streams).then(function () {
-                return users;
-            });
-        });
-    });
+    //Populate DB with seed users & streams
+    return this.$populate(users, streams);
 };
