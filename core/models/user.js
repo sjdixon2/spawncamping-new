@@ -8,10 +8,11 @@ module.exports = function(sequelize, DataTypes) {
                 notEmpty: {msg: 'Name cannot be blank.'}
             }
         },
+        //Better named: username
         email: {
             type: DataTypes.STRING,
             validate: {
-                isEmail: {msg: 'Email must be a valid address (e.g. user@example.com).'}
+                notEmpty: {msg: 'Username/email cannot be blank.'}
             }
         },
         password: {
