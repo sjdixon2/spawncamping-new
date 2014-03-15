@@ -2,6 +2,7 @@ export NODE_ENV=production
 
 git fetch
 git reset --hard
+git pull
 
 #Install new modules
 npm install --silent
