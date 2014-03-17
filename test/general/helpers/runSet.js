@@ -43,6 +43,6 @@ exports.byNumFollowers = function (numUsers, options, scenario) {
  */
 exports.byConcurrentSessions = function (numSessions, scenario) {
     return bulk.bySeed().then(function (seed) {
-        return _.times(numSessions, scenario, {username: "test"+numSessions});
+        return _.times(numSessions, scenario);
     });
 };
