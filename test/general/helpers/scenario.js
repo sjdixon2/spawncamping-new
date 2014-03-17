@@ -1,11 +1,15 @@
 /**
  * Created by stephen on 14/03/14.
  */
+var auth = require('./users');
+
 
 // This is the actual test run by concurrent and follower tests.
 
-exports.runScenario = function(req, res){
+exports.runScenario = function(i){
+    console.log("arg1: " + i);
     // login
+    return i;
 
     // go to feed
 
