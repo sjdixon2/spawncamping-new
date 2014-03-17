@@ -8,3 +8,7 @@
 // then we can take the table and copy it into excel.
 
 // GOAL: human-readable performance results table.
+
+exports.print_results = function(results){
+    console.log(results);
+}
