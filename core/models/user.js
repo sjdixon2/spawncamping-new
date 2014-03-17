@@ -27,17 +27,17 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                 //Followers/followee relationship
-                User.hasMany(models.User, {through: 'userHasFollowers', as: 'Followers', foreignKey: 'followeesID'});
-                User.hasMany(models.User, {through: 'userHasFollowers', as: 'Followees', foreignKey: 'followersID'});
+                User.hasMany(models.User, {through: 'UserHasFollowers', as: 'Followers', foreignKey: 'followeesID'});
+                User.hasMany(models.User, {through: 'UserHasFollowers', as: 'Followees', foreignKey: 'followersID'});
 
                 //Photo ownership relationship
                 User.hasMany(models.Photo);
 
                 //User photo share relationship
-                User.hasMany(models.Photo, {through: 'userPhotoShares', as: 'photoShares'});
+                User.hasMany(models.Photo, {through: 'UserPhotoShares', as: 'photoShares'});
 
                 //User feed entry relationship
-                User.hasMany(models.Photo, {through: 'userFeedItems', as: 'feedItems'});
+                User.hasMany(models.Photo, {through: 'UserFeedItems', as: 'feedItems'});
             },
 
             /*
