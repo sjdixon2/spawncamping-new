@@ -124,7 +124,7 @@ describe('bulk routes', function () {
                 {id: 2, name: 'alice', follows: [3], password: 'test2'}
             ];
 
-            var imagePath = system.pathTo('test/fixtures/routes/bulk/image.png'),
+            var imagePath = system.pathTo('test/unit/fixtures/routes/bulk/image.png'),
                 photos = [
                     {id: 1, user_id: 3, path: imagePath, timestamp: 1392403505782},
                     {id: 2, user_id: 2, path: imagePath, timestamp: 1392305505782},
