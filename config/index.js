@@ -99,7 +99,13 @@ app.set('port', process.env.PORT || 8800);
 app.set('views', system.pathTo('core/views/'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
-app.use(express.logger('dev'));
+
+app.use(express.logger({
+    format: ':remote-addr > :date :method :status :url :response-time ms :referrer ',
+    immediate: false
+
+}));
+
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
