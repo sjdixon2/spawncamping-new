@@ -1,7 +1,7 @@
 export NODE_ENV=production
 
-git fetch
 git reset --hard
+git fetch
 git pull
 
 #Install new modules
