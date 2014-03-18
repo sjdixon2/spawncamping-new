@@ -1,24 +1,41 @@
 /**
  * Created by stephen on 14/03/14.
  */
-var auth = require('./users');
 
 
 // This is the actual test run by concurrent and follower tests.
 
-exports.runScenario = function(i){
-    console.log("arg1: " + i);
-    // login
-    return i;
+exports.login = function(user, session){
+    return session.post('/sessions/create')
+        .send({username: user.email, password: 'test'})
+        .expect(302)
+        .expect('location', '/feed');
+};
 
-    // go to feed
+exports.captureMetrics = function(context){
+    context['final'] = new Date();
+    console.log(JSON.stringify(context));
+    return context;
+};
 
-    // compute response time measured as follows:
-    // time to first image
+exports.logout = function(user, session){
+    return session.get("/sessions/destroy")
+        .send()
+        .expect(200)
+        .expect('location', '/sessions/new');
+};
 
-    // log all other images?
-
-    // time to last image
-
-    // logout
-}
+exports.runScenario = function(user){
+    console.log(user);
+    var context = {
+        user: user,
+        initial : new Date()
+    };
+    var session = new Session();
+    return q.fcall(exports.login(user, session))
+        .then(exports.logout(user, session))
+        .then(exports.captureMetrics(context))
+        .then(function(result){
+            return result;
+        });
+};

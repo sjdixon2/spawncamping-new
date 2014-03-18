@@ -88,7 +88,7 @@ exports.generateUsersAndFollowers = function (numUsers) {
         return {id: user.id, user_id: user.id, path: imagePath, timestamp: chance.date({year:2013})};
     });
 
-    console.log(users, streams);
+    //console.log(users, streams);
 
     //Populate DB with generated users & streams
     return this.$populate(users, streams);

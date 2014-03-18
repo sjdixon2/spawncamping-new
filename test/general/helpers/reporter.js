@@ -10,5 +10,6 @@
 // GOAL: human-readable performance results table.
 
 exports.print_results = function(results){
-    console.log(results);
+    console.log("Report: ");
+    console.log(JSON.stringify(results));
 }

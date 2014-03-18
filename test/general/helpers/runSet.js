@@ -1,4 +1,5 @@
 var bulk = require('./bulk');
+var CONTROL_NUM_USERS = 5;
 
 /**
  * Runs a performance test comparing the number of followers
@@ -42,9 +43,13 @@ exports.byNumFollowers = function (numUsers, options, scenario) {
  * @param scenario {function} The function to run for an individual session
  */
 exports.byConcurrentSessions = function (numSessions, scenario) {
-    return bulk.bySeed().then(function (seed) {
-        return _.times(numSessions, function (i) {
-            scenario(seed, i);
+    return bulk.generateUsersAndFollowers(CONTROL_NUM_USERS)
+        .then(function (followers){
+            var userToTest = _.max(followers, function(follower){
+                return follower.id;
+            });
+            return _.times(numSessions, function(i){
+                return scenario(userToTest);
+            });
         });
-    });
 };
