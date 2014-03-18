@@ -103,4 +103,45 @@ describe('User', function () {
             });
         });
     });
+
+    describe('doesFollow', function () {
+        it('indicates when a user is followed', function () {
+            //Create test users
+            return q.all([UserFactory.basic(), UserFactory.basic()]).spread(function (user, followee) {
+                //Make user follow the followee
+                return user.addFollower(followee).then(function (followee) {
+                    //Ensure function works correctly
+                    return user.doesFollow(followee).then(function (followed) {
+                        followed.should.equal(true);
+                    });
+                });
+            });
+        });
+
+        it('indicates when a user is not followed', function () {
+            //Create test users
+            return q.all([UserFactory.basic(), UserFactory.basic()]).spread(function (user, followee) {
+                //Make user follow itself, but not the followee
+                return user.setFollowers([user]).then(function () {
+                    //Ensure function works correctly
+                    return user.doesFollow(followee).then(function (followed) {
+                        followed.should.equal(false);
+                    });
+                });
+            });
+        });
+
+        it('ignores other follower/followee relationships', function () {
+            //Create test users
+            return q.all([UserFactory.basic(), UserFactory.basic(), UserFactory.basic()]).spread(function (user, otherUser, followee) {
+                //Make user follow the followee
+                return user.addFollower(otherUser).then(function () {
+                    //Ensure function works correctly
+                    return user.doesFollow(followee).then(function (followed) {
+                        followed.should.equal(false);
+                    });
+                });
+            });
+        });
+    });
 });
