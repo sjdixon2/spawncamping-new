@@ -5,7 +5,7 @@ exports.index = function (req, res) {
     var offset = page !== 0 ? page - 1 : 0;
     var pageSize = helpers.pages.PAGE_SIZE;
     var testQuery = 'select * from Photoes';
-    var query = 'select P.*, U.fullName from Photoes as P inner join userFeedItems as F on P.id=F.PhotoId ';
+    var query = 'select P.*, U.fullName from Photoes as P inner join UserFeedItems as F on P.id=F.PhotoId ';
     query += 'inner join Users as U on P.userID=U.id ';
     query += 'where F.UserId=';
     query += req.session.login.id || -1;

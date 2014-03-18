@@ -41,10 +41,10 @@ module.exports = function (sequelize, DataTypes) {
                 Photo.belongsTo(models.User);
 
                 //User photo share relationship
-                Photo.hasMany(models.User, {through: 'userPhotoShares', as: 'userShares'});
+                Photo.hasMany(models.User, {through: 'UserPhotoShares', as: 'userShares'});
 
                 //User feed entry relationship
-                Photo.hasMany(models.User, {through: 'userFeedItems', as: 'feedItems'});
+                Photo.hasMany(models.User, {through: 'UserFeedItems', as: 'feedItems'});
             },
             /**
              * Retrieves the last created photo in the database
