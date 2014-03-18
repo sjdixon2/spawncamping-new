@@ -68,8 +68,8 @@ global.system = {
     ext: requireAll(path.join(settings.ROOT_DIR, '/core/ext/')),
     //Settings for performance mode
     performance: {
-        hostname: 'localhost', //Change this to test performance on localhost
-        ROOT_DIR: process.cwd(), //Also change this to the path to your repository (for image upload)
+        hostname: 'node.cs.ucalgary.ca', //Change this to test performance on localhost
+        ROOT_DIR: '/home/uga/jpnauta/spawncamping/', //Also change this to the path to your repository (for image upload)
         protocol: 'http',
         port: 8800,
         pathTo: function (/**..args**/) {
