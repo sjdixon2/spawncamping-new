@@ -56,7 +56,7 @@ module.exports = function (grunt) {
                 script: 'app.js',
                 options: {
                     args: [],
-                    ignore: ['public/**'],
+                    ignore: ['public/**', 'logs/**'],
                     ext: 'js',
                     nodeArgs: ['--debug'],
                     delayTime: 1,

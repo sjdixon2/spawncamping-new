@@ -100,10 +100,16 @@ app.set('views', system.pathTo('core/views/'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
 
-app.use(express.logger({
-    format: ':remote-addr > :date :method :status :url :response-time ms :referrer ',
-    immediate: false
+express.logger.token('session', function(req, res){
+    return req.session.login ? "u:"+req.session.login.id : "anon";
+});
 
+app.use(express.logger({
+    format: ':date [:remote-addr - :session] :response-time ms :method :url ',
+    immediate: false,
+    stream: fs.createWriteStream(system.pathTo('logs/') + "log.txt", {
+        flags: "w"
+    })
 }));
 
 app.use(express.json());
