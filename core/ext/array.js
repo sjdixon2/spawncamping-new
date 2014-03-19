@@ -10,3 +10,7 @@ Array.prototype.contains = function (obj) {
 Array.prototype.each = function (func) {
     return _.each(this, func);
 };
+
+Array.prototype.isEmpty = function () {
+    return this.length === 0;
+};

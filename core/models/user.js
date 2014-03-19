@@ -78,6 +78,18 @@ module.exports = function(sequelize, DataTypes) {
                 return self.addPhotoShare(photo).then(function () {
                     return photo.notifyFollowers(self);
                 });
+            },
+            /**
+             * Indicates whether or not the current user follows
+             * the given user
+             *
+             * @param user The user to check for
+             * @return {promise} promise containing boolean
+             */
+            doesFollow: function (user) {
+                return this.getFollowers({where: ['followersID = ?', user.id]}).then(function (followers) {
+                    return !followers.isEmpty();
+                });
             }
         }
     });
