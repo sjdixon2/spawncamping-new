@@ -19,8 +19,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             set: function(plaintext) {
                 if(plaintext.length === 0) throw new Error('Password cannot be blank.');
-                var hash = bcrypt.hashSync(plaintext, SALT_LENGTH);
-                this.setDataValue('password', hash);
+                this.setDataValue('password', helpers.md5.hash(plaintext));
             }
         }
     }, {
@@ -51,7 +50,7 @@ module.exports = function(sequelize, DataTypes) {
                         email: email
                     }
                 }).then(function(user) {
-                    if(!user || !bcrypt.compareSync(plaintext, user.password)){
+                    if(!user || helpers.md5.hash(plaintext) != user.password){
                         throw new Error('Email and/or Password are incorrect.');
                     }
                     return user;

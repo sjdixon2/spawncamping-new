@@ -23,7 +23,6 @@
     "forever": "*",
     "methods": "*",
     "express-flash": "*",
-    "bcryptjs": "*",
     "gm": "*",
     "image-size": "*",
     "needle": "~0.6.6",

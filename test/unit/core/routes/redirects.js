@@ -27,14 +27,21 @@ describe('D2 Functional Testing', function () {
             test_routes.push({route:'/users/'+validUserID+'/unfollow', redirect: true, validLocation: '/users/' + validUserID});
             done();
         });
-    })
+    });
+
+    after(function () {
+        session.destroy();
+    });
 
     describe('redirects for invalid user', function(){
         it("redirects correctly", function (done) {
             test_routes.forEach(function(r){
                 var req = server.get(r.route);
-                if(r.redirect) req.expect(302).expect('location', '/sessions/new', done);
-                else req.expect(200, done);
+                if(r.redirect) {
+                    req.expect(302).expect('location', '/sessions/new', done);
+                } else {
+                    req.expect(200, done);
+                }
             });
         });
     });
@@ -43,8 +50,11 @@ describe('D2 Functional Testing', function () {
         it("completes correctly", function (done) {
             test_routes.forEach(function(r){
                 var req = session.get(r.route);
-                if(r.validLocation) req.end(302).expect('location', r.validLocation, done);
-                else req.expect(200, done);
+                if(r.validLocation){
+                    req.end(302).expect('location', r.validLocation, done);
+                } else {
+                    req.expect(200, done);
+                }
             });
         });
     });
