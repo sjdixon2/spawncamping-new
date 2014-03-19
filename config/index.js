@@ -93,13 +93,16 @@ global.system = {
 };
 
 //Database Logging
-var queryLog = fs.createWriteStream(system.pathTo('logs/') + "queries.txt", {
-    flags: "w"
+if (!fs.existsSync(system.pathTo('logs/'))) { //Create log folder if it doesn't exist
+    fs.mkdirSync(system.pathTo('logs/'));
+};
+var queryLog = fs.createWriteStream(system.pathTo('logs/queries.txt'), {
+    flags: 'w'
 });
 
 global.settings.db.options.logging = function(toLog){
     var date = new Date();
-    queryLog.write(date.getTime() + "ms : " +  date.toUTCString() + " " + toLog + "\n");
+    queryLog.write(date.getTime() + 'ms : ' +  date.toUTCString() + ' ' + toLog + '\n');
 };
 
 //Express configuration
@@ -112,18 +115,18 @@ app.use(express.favicon());
 
 // Request Logging
 express.logger.token('user', function(req, res){
-    return (req.session && req.session.login) ? req.session.login.id : "anonymous";
+    return (req.session && req.session.login) ? req.session.login.id : 'anonymous';
 });
 
 express.logger.token('session', function(req, res){
-    return req.sessionID || "null";
+    return req.sessionID || 'null';
 });
 
 app.use(express.logger({
     format: ':date [:remote-addr] [:session] [:user] [:response-time ms] [req::req[Content-Length] res::res[Content-Length]] :method :status :url ',
     immediate: false,
-    stream: fs.createWriteStream(system.pathTo('logs/') + "requests.txt", {
-        flags: "w"
+    stream: fs.createWriteStream(system.pathTo('logs/requests.txt'), {
+        flags: 'w'
     })
 }));
 
