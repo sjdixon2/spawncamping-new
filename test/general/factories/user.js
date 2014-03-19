@@ -15,3 +15,13 @@ exports.password = PASSWORD;
 exports.counter = function(){
     return counter;
 }
+
+exports.lastID = function(){
+    db.User.find({
+        where:{
+            email: 'user' + (counter-1) + '@email.com'
+        }
+    }).then(function(user){
+        return user.id;
+    })
+}
