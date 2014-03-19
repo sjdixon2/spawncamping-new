@@ -34,7 +34,7 @@ exports.users = function (req, res) {
         //Change name of user hash to fullName for user object
         users.each(function (user) {
             user.fullName = user.name; //name = fullName in DB
-            user.email = user.name; //Also set email (aka username) to the same value
+            user.email = user.email; //Also set email (aka username) to the same value
         });
 
         //Create all users according to has

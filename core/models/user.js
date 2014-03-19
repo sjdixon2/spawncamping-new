@@ -27,17 +27,17 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                 //Followers/followee relationship
-                User.hasMany(models.User, {through: 'userHasFollowers', as: 'Followers', foreignKey: 'followeesID'});
-                User.hasMany(models.User, {through: 'userHasFollowers', as: 'Followees', foreignKey: 'followersID'});
+                User.hasMany(models.User, {through: 'UserHasFollowers', as: 'Followers', foreignKey: 'followeesID'});
+                User.hasMany(models.User, {through: 'UserHasFollowers', as: 'Followees', foreignKey: 'followersID'});
 
                 //Photo ownership relationship
                 User.hasMany(models.Photo);
 
                 //User photo share relationship
-                User.hasMany(models.Photo, {through: 'userPhotoShares', as: 'photoShares'});
+                User.hasMany(models.Photo, {through: 'UserPhotoShares', as: 'photoShares'});
 
                 //User feed entry relationship
-                User.hasMany(models.Photo, {through: 'userFeedItems', as: 'feedItems'});
+                User.hasMany(models.Photo, {through: 'UserFeedItems', as: 'feedItems'});
             },
 
             /*
@@ -77,6 +77,18 @@ module.exports = function(sequelize, DataTypes) {
                 var self = this;
                 return self.addPhotoShare(photo).then(function () {
                     return photo.notifyFollowers(self);
+                });
+            },
+            /**
+             * Indicates whether or not the current user follows
+             * the given user
+             *
+             * @param user The user to check for
+             * @return {promise} promise containing boolean
+             */
+            doesFollow: function (user) {
+                return this.getFollowers({where: ['followersID = ?', user.id]}).then(function (followers) {
+                    return !followers.isEmpty();
                 });
             }
         }

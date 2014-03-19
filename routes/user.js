@@ -63,8 +63,7 @@ exports.stream = function(req, res) {
         }
     }).then(function (user){
 
-        user.getFollowers(helpers.routes.getUser(req)).then(function(follows){
-            var followed = (follows.length > 0);
+        user.doesFollow(helpers.routes.getUser(req)).then(function(followed){
             user.getPhotoShares({
                 offset: (page - 1) * helpers.pages.PAGE_SIZE,
                 limit: helpers.pages.PAGE_SIZE,

@@ -80,12 +80,12 @@ exports.generateUsersAndFollowers = function (numUsers) {
 
     //Generate users to create
     var users = _.map(numUsers.timesPlusOne(), function (i) {
-        return {name: chance.name(), password: chance.string(), id: i, follows: i.timesPlusOne()};
+        return {name: chance.name(), email: "test"+i, password: "test", id: i, follows: i.timesPlusOne()};
     });
 
     //Generate photos to create
     var streams = _.map(users, function (user) {
-        return {id: user.id, user_id: user.id, path: imagePath, timestamp: chance.date()};
+        return {id: user.id, user_id: user.id, path: imagePath, timestamp: chance.date({year:2013})};
     });
 
     console.log(users, streams);
