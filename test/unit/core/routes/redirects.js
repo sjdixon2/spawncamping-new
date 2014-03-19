@@ -38,11 +38,12 @@ describe('D2 Functional Testing', function () {
             test_routes.forEach(function(r){
                 var req = server.get(r.route);
                 if(r.redirect) {
-                    req.expect(302).expect('location', '/sessions/new', done);
+                    req.expect(302).expect('location', '/sessions/new');
                 } else {
-                    req.expect(200, done);
+                    req.expect(200);
                 }
             });
+            done();
         });
     });
 
@@ -51,11 +52,12 @@ describe('D2 Functional Testing', function () {
             test_routes.forEach(function(r){
                 var req = session.get(r.route);
                 if(r.validLocation){
-                    req.end(302).expect('location', r.validLocation, done);
+                    req.expect(302).expect('location', r.validLocation);
                 } else {
-                    req.expect(200, done);
+                    req.expect(200);
                 }
             });
+            done();
         });
     });
 });
