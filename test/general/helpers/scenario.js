@@ -32,10 +32,10 @@ exports.runScenario = function(user){
         initial : new Date()
     };
     var session = new Session();
-    return q.fcall(exports.login(user, session))
+    var promise = q.fcall(exports.login(user, session))
         .then(exports.logout(user, session))
         .then(exports.captureMetrics(context))
-        .then(function(result){
-            return result;
-        });
+        .done();
+
+    return context;
 };
