@@ -59,7 +59,10 @@ describe('Response Time due to Number of Concurrent Sessions', function () {
                     }
                 }
                 var needlePost = q.defer();
-                needle.post("localhost:8800/sessions/create", data, options, function(err,resp,body){
+//                testHelpers.request.doRequest('post', ["localhost:8800/sessions/create", data, options]).then(function resp, body) {
+//
+//                }
+                needle.post( function(err,resp,body){
                     printArguments(err,resp);
                     if(err){
                         var error = new Error(err);
@@ -91,7 +94,7 @@ describe('Response Time due to Number of Concurrent Sessions', function () {
                         "Accept-Encoding": "gzip, deflate",
                         DNT: 1,
                         referer: 'localhost:8800/sessions/new',
-                        "set-cookie" : loginContext['loginCookie'],
+                        "cookie" : loginContext['loginCookie'],
                         connection : "keep-alive"
                     }
 //                    username: 'test5',
@@ -107,6 +110,7 @@ describe('Response Time due to Number of Concurrent Sessions', function () {
                         throw error;
                     }
                     else {
+                        loginContext['gotFeed'] = new Date();
                         deferred.resolve(loginContext);
                         assert.equal(resp.statusCode, 200);
                         assert.equal(resp.headers.location, "/feed")
