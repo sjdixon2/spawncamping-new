@@ -52,10 +52,9 @@ describe('Response Time due to Number of Concurrent Sessions', function () {
                     username: context['user'].email,
                     password: 'test'
                 };
-//                var options = {
-//                    //follow: true,
-//                    auth: 'digest'
-//                }
+                var options = {
+                    auth: 'digest'
+                }
                 var needlePost = q.defer();
                 needle.post("localhost:8800/sessions/create", data, function(err,resp,body){
                     printArguments(err,resp);
@@ -71,7 +70,9 @@ describe('Response Time due to Number of Concurrent Sessions', function () {
                         assert.equal(resp.headers.location, "/feed");
                         assert(resp.headers['set-cookie'][0]);
                         console.log("got 200");
-                        context['loginCookie'] = resp.headers['set-cookie'][0];
+                        var cookie = resp.headers['set-cookie'][0];
+//                        cookie = cookie.substr(0, cookie.indexOf(';'));
+                        context['loginCookie'] = cookie;
                         needlePost.resolve(context);
                     }
                 });
@@ -81,19 +82,30 @@ describe('Response Time due to Number of Concurrent Sessions', function () {
                 var deferred = q.defer();
                 var options = {
                     headers : {
-                        "set-cookie" : loginContext['loginCookie']
+                        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                        "Accept-Language": "en-gb,en;q=0.5",
+                        "Accept-Encoding": "gzip, deflate",
+                        DNT: 1,
+                        referer: 'localhost:8800/sessions/new',
+                        "set-cookie" : loginContext['loginCookie'],
+                        connection : "keep-alive"
                     }
+//                    username: 'test5',
+//                    password: 'test',
+//                    auth: 'digest'
                 };
                 needle.get("localhost:8800/feed", options, function(err, resp){
                     printArguments(err, resp);
                     if(err){
                         console.log(error);
                         var error = new Error(err);
-                        needlePost.reject(error);
+                        deferred.reject(error);
                         throw error;
                     }
                     else {
-
+                        deferred.resolve(loginContext);
+                        assert.equal(resp.statusCode, 200);
+                        assert.equal(resp.headers.location, "/feed")
                     }
                 })
                 return deferred.promise;
