@@ -22,6 +22,7 @@ global.settings = {
     NODE_ENV: process.env.NODE_ENV,
     UPLOADS_PATH: 'public/uploads',
     UPLOADS_URL_PATH: '/photos/',
+    LOG_PATH: 'logs',
     ADMIN_PASSWORD: 'spawncamping', //Password given by TA for bulk upload security
 
     /*
@@ -93,7 +94,7 @@ global.system = {
 };
 
 //Database Logging
-var queryLog = fs.createWriteStream(system.pathTo('logs/') + "queries.txt", {
+var queryLog = fs.createWriteStream(system.pathTo(settings.LOG_PATH + '/') + "queries.txt", {
     flags: "w"
 });
 
@@ -122,7 +123,7 @@ express.logger.token('session', function(req, res){
 app.use(express.logger({
     format: ':date [:remote-addr] [:session] [:user] [:response-time ms] [req::req[Content-Length] res::res[Content-Length]] :method :status :url ',
     immediate: false,
-    stream: fs.createWriteStream(system.pathTo('logs/') + "requests.txt", {
+    stream: fs.createWriteStream(system.pathTo(settings.LOG_PATH+'/') + "requests.txt", {
         flags: "w"
     })
 }));
