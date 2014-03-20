@@ -53,10 +53,13 @@ describe('Response Time due to Number of Concurrent Sessions', function () {
                     password: 'test'
                 };
                 var options = {
-                    auth: 'digest'
+                    headers:
+                    {
+                        Connection: "keep-alive"
+                    }
                 }
                 var needlePost = q.defer();
-                needle.post("localhost:8800/sessions/create", data, function(err,resp,body){
+                needle.post("localhost:8800/sessions/create", data, options, function(err,resp,body){
                     printArguments(err,resp);
                     if(err){
                         var error = new Error(err);
@@ -82,6 +85,7 @@ describe('Response Time due to Number of Concurrent Sessions', function () {
                 var deferred = q.defer();
                 var options = {
                     headers : {
+                        Host: "localhost:8080",
                         Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                         "Accept-Language": "en-gb,en;q=0.5",
                         "Accept-Encoding": "gzip, deflate",
