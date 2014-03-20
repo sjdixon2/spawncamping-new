@@ -4,7 +4,7 @@ var reporter = testHelpers.reporter;
 
 describe('Response Time due to Number of Concurrent Sessions', function () {
     it('Varies due to scaling number of concurrent sessions', function () {
-        return runSet.byConcurrentSessions(4, scenario.runScenario)
+        return runSet.byConcurrentSessions(1, scenario.runScenario)
             .then(reporter.print_results);
     });
 });
