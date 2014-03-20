@@ -3,7 +3,6 @@
  */
 
 var needle = require('needle');
-var assert = require('assert');
 var request = require('./request');
 // This is the actual test run by concurrent and follower tests.
 
@@ -22,21 +21,23 @@ exports.login = function(context){
 
     };
     var deferred = q.defer();
-    q.fcall(needle.post("http://localhost:8800/sessions/create", data, function(err, resp, body){
+    q.nfcall(needle.post, "localhost:8800/sessions/create", data, function(err, resp, body){
         console.log("something");
         console.log("err:" + err);
         console.log("resp:" + resp);
         console.log("body:" + body);
         if(!err){
             var error = new Error(err);
-            deferred.reject(error);
-            throw new Error(error);
+            throw error;
         }
         else {
             context['loggedIn'] = true;
-            deferred.resolve(context);
         }
-    }));
+        return context;
+    })
+    .then(function(c1){
+        deferred.resolve(c1);
+    })
     return deferred.promise;
 };
 
@@ -46,7 +47,7 @@ exports.captureMetrics = function(context){
     context['captured'] = new Date();
     console.log("result: " + JSON.stringify(context));
     deferred.resolve(context);
-    return deferred.promise;;
+    return deferred.promise;
 };
 
 exports.logout = function(context){
@@ -65,21 +66,24 @@ exports.runScenario = function(user){
     var deferred = q.defer();
     var context = {
         user: user,
-        initial : new Date(),
-        session: new Session()
+        initial : new Date()
     };
 
-    q.nfcall(exports.login, context)
-        .then(function(c1){
-            console.log("Context: " + c1);
-            return exports.logout(c1);
+    q.nfcall(exports.login(context))
+        .then(function(c){
+            console.log("resolving at last");
+            deferred.resolve(c);
         })
-        .then(function(c2){
-            return exports.captureMetrics(c2)
-        })
-        .then(function(c3){
-            deferred.resolve(c3)
-        })
+//        .then(function(c1){
+//            console.log("Context: " + c1);
+//            return exports.logout(c1);
+//        })
+//        .then(function(c2){
+//            return exports.captureMetrics(c2)
+//        })
+//        .then(function(c3){
+//            deferred.resolve(c3)
+//        })
         .fail(function(err){
             console.log("Caught error");
             deferred.reject(new Error(err));
