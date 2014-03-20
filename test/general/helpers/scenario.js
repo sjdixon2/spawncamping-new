@@ -3,93 +3,46 @@
  */
 
 var needle = require('needle');
+var assert = require('assert');
 var request = require('./request');
-// This is the actual test run by concurrent and follower tests.
 
 exports.login = function(context){
-    console.log("login");
-    console.log("deferring");
-    context['loginTime'] = new Date();
-    var data = "username="+context['user'].email;
-//    {
-//        username: context['user'].email,
-//        password: 'test'
-//    };
-    console.log("data: " + data);
+//    var deferred = q.defer();
+//    console.log("login");
+//    var args = [
+//        "localhost:8800/sessions/create",
+//        {
+//            username: context['user'].email,
+//            password: "test"
+//        },
+//        {
+//            Connection: "keep-alive"
+//        }
+//    ]
+//    request.doRequest("post", args).then(function(resp){
+//        console.log("resp");
+//        context['cookie'] = resp.headers['set-cookie'][0];
+//        //assert.equal(resp.statusCode, 302);
+//        //assert.equal(resp.headers.location, "/feed");
+//        deferred.resolve(context)
+//    })
+//
+//    return deferred.promise;
+    return 10;
+}
 
-    var headers = {
-
-    };
-    var deferred = q.defer();
-    q.nfcall(needle.post, "localhost:8800/sessions/create", data, function(err, resp, body){
-        console.log("something");
-        console.log("err:" + err);
-        console.log("resp:" + resp);
-        console.log("body:" + body);
-        if(!err){
-            var error = new Error(err);
-            throw error;
-        }
-        else {
-            context['loggedIn'] = true;
-        }
-        return context;
-    })
-    .then(function(c1){
-        deferred.resolve(c1);
-    })
-    return deferred.promise;
-};
-
-exports.captureMetrics = function(context){
-    console.log("Capture @ " + new Date());
-    var deferred = q.defer();
-    context['captured'] = new Date();
-    console.log("result: " + JSON.stringify(context));
-    deferred.resolve(context);
-    return deferred.promise;
-};
-
-exports.logout = function(context){
-    console.log("Logout @ " + new Date());
-
-    var deferred = q.defer();
-    context['session'].get("/sessions/destroy")
-        .send()
-        .expect(404)
-        .expect('location', '/sessions/new');
-    deferred.resolve(context);
-    return deferred.promise;
-};
 
 exports.runScenario = function(user){
+    console.log(user);
     var deferred = q.defer();
+
     var context = {
         user: user,
         initial : new Date()
     };
 
-    q.nfcall(exports.login(context))
-        .then(function(c){
-            console.log("resolving at last");
-            deferred.resolve(c);
-        })
-//        .then(function(c1){
-//            console.log("Context: " + c1);
-//            return exports.logout(c1);
-//        })
-//        .then(function(c2){
-//            return exports.captureMetrics(c2)
-//        })
-//        .then(function(c3){
-//            deferred.resolve(c3)
-//        })
-        .fail(function(err){
-            console.log("Caught error");
-            deferred.reject(new Error(err));
-            throw new Error(err);
-        });
-
-
+    setTimeout(function(){
+        deferred.resolve(10);
+    }, 1000);
     return deferred.promise;
 };

@@ -48,8 +48,8 @@ exports.byConcurrentSessions = function (numSessions, scenario) {
             var userToTest = _.max(followers, function(follower){
                 return follower.id;
             });
-            return _.times(numSessions, function(i){
+            return q.all(_.times(numSessions, function(i){
                 return scenario(userToTest);
-            });
+            }));
         });
 };
