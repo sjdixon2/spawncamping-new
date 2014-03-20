@@ -43,7 +43,14 @@
         "classes": true,
         "http": true,
         "app": true,
-        "chance": true
+        "chance": true,
+        "ff": true,
+        "gg": true,
+        "hh": true,
+        "ii": true,
+        "md5blk": true,
+        "add32": true,
+        "txt": true
     },
     "predef": [ // Extra globals.
         "define",
