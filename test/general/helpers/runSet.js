@@ -49,7 +49,7 @@ exports.byConcurrentSessions = function (numSessions, scenario) {
                 return follower.id;
             });
             return q.all(_.times(numSessions, function(i){
-                return scenario(userToTest);
+                return scenario(userToTest, i);
             }));
         });
 };
