@@ -26,11 +26,11 @@ q.successive = function (arr, func) {
         promiseSet = [];
 
     //Iterate over each item in the array
-    _.each(arr, function (item) {
+    _.each(arr, function (item, i) {
+        var args = arguments;
         //After the previous promise is complete, call this one
         promiseChain = promiseChain.then(function () {
-            var promise = func(item); //Call the given function
-            promiseSet.push(promise); //Add the promise to the return list
+            promiseSet.push(func.apply(null, args)); //Call the given function
         });
     });
 

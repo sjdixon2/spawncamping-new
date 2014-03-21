@@ -50,7 +50,9 @@
         "ii": true,
         "md5blk": true,
         "add32": true,
-        "txt": true
+        "txt": true,
+        "chance": true,
+        "cheerio": true
     },
     "predef": [ // Extra globals.
         "define",

@@ -1,13 +1,12 @@
 var runSet = testHelpers.runSet;
+var scenario = testHelpers.scenario;
+var reporter = testHelpers.reporter;
 
-describe('followers performance tests', function () {
-    it('Performs a basic followers performance test', function () {
-        return runSet.byNumFollowers(7, {step: 2}, function (follower) {
-            //Replace this entire function with the scenario to perform
-            return follower;
-        })
+
+describe('Response Time By Number of Followers', function () {
+    it('Varies By Number of Followers', function () {
+        return runSet.byNumFollowers(7, {step: 2}, scenario.runScenario)
             .then(function (results) {
-                //Do stuff with the results here
                 console.log(results);
             });
     });

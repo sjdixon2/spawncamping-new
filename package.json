@@ -14,7 +14,6 @@
     "pluralize": "*",
     "mocha": "*",
     "mocha-as-promised": "*",
-    "underscore": "*",
     "q": "*",
     "mysql": "*",
     "extend": "*",
@@ -44,6 +43,10 @@
     "grunt-concurrent": "latest",
     "grunt-mocha-test": "latest",
     "grunt-sequelize": "latest",
-    "grunt-env": "latest"
+    "grunt-env": "latest",
+    "nodemon": "~1.0.17",
+    "assert": "*",
+    "cheerio": "*",
+    "promises": "~0.2.5"
   }
 }

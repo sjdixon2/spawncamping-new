@@ -124,10 +124,10 @@ module.exports = function (sequelize, DataTypes) {
 
                 //Get user to upload for
                 return db.User.find(self.userID).then(function (user) {
-                    return q.all(
+                    return q.all([
                         self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
                         user.sharePhoto(self) //Share photo to user's followers
-                    );
+                    ]);
                 });
             },
             createImageVersions: function (path, originalFilename) {

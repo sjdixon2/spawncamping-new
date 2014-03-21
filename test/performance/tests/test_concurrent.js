@@ -1,12 +1,12 @@
-var runSet = testHelpers.runSet;
-var scenario = testHelpers.scenario;
+var runSet = testHelpers.runSet,
+    scenario = testHelpers.scenario;
 
-describe('concurrency performance tests', function () {
-    it('Performs a basic concurrent performance test', function () {
-        return runSet.byConcurrentSessions(1, scenario.runScenario)
+describe('Response Time due to Number of Concurrent Sessions', function () {
+
+    it('Varies due to scaling number of concurrent sessions', function () {
+        return runSet.byConcurrentSessions(10, scenario.runScenario)
             .then(function (results) {
-                //Do stuff with the results here
-                console.log("results: " + results);
+                console.log(results);
             });
     });
 });

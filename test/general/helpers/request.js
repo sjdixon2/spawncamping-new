@@ -15,7 +15,7 @@ exports.doRequest = function (type, params) {
     return q.nfapply(needle[type], params)
         .then(function (obj) {
             var response = obj[0];
-            if (response.statusCode != 200) throw new Error('Server error: ' + response.statusCode + ' ' + JSON.stringify(response.body));
+            if (response.statusCode != 200 && response.statusCode!=302) throw new Error('Server error: ' + response.statusCode + ' ' + JSON.stringify(response.body));
             return response;
         });
 };
