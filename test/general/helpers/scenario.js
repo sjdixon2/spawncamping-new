@@ -66,23 +66,26 @@ exports.loadImages = function(cookie, body){
     console.log("Loading body:\n\t" + body);
 
     var $ = cheerio.load(body);
-    return q.all($('img').each(function(){
-        var url = $(this).attr('src');
-        console.log("url: " + url);
-        var data = [
-            url,
-            {
-                headers: {
-                    cookie: cookie
+    assert($('img').length);
+    return q.all(
+        $('img').each(function(){
+            var url = $(this).attr('src');
+            console.log("url: " + url);
+            var data = [
+                url,
+                {
+                    headers: {
+                        cookie: cookie
+                    }
                 }
-            }
-        ]
-        return request.doRequest("get", data).then(function (resp) {
-            console.log("img rendered");
-            assert.equal(resp.statusCode, 200);
-            return i;
-        });
-    }));
+            ]
+            return request.doRequest("get", data).then(function (resp) {
+                console.log("img rendered");
+                assert.equal(resp.statusCode, 200);
+                return i;
+            });
+        })
+    );
 
 }
 
