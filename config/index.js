@@ -90,7 +90,23 @@ global.system = {
         getUrlPath: function (path, query) {
             return system.getUrlPath(path, query, {hostname: this.hostname, port: this.port, protocol: this.protocol});
         },
-        RESULTS_DIR: 'results/'
+        RESULTS_DIR: 'results/',
+        tests: {
+            concurrency: {
+                runTest: true,
+                options: {
+                    maxSessions: 10,
+                    step: 2
+                }
+            },
+            followers: {
+                runTest: true,
+                options: {
+                    numUsers: 10,
+                    step: 2
+                }
+            }
+        }
     }
 };
 

@@ -1,11 +1,13 @@
 var runSet = testHelpers.runSet,
     scenario = testHelpers.scenario,
-    reporter = testHelpers.reporter;
+    reporter = testHelpers.reporter,
+    performance = system.performance;
 
 describe('Response Time due to Number of Concurrent Sessions', function () {
-
-    it('Varies due to scaling number of concurrent sessions', function () {
-        return runSet.byConcurrentSessions(10, {step: 2}, scenario.runScenario)
-            .then(reporter.exportConcurrencyResults);
-    });
+    if (performance.tests.concurrency.runTest) {
+        it('Varies due to scaling number of concurrent sessions', function () {
+            return runSet.byConcurrentSessions(performance.tests.concurrency.options, scenario.runScenario)
+                .then(reporter.exportConcurrencyResults);
+        });
+    }
 });
