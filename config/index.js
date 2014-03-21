@@ -11,7 +11,7 @@ global.flash = require('express-flash'); //For sending temporary messages to red
 global.fs = require('fs'); //For file system calls
 global.path = require('path');
 global.url = require('url');
-global.moment = require('moment');
+global.moment = require('moment-strftime');
 global.gm = require('gm');
 global.sizeOf = require('image-size');
 global.Chance = require('chance'); //For generating random names, dates, etc.
@@ -103,8 +103,8 @@ global.system = {
             followers: {
                 runTest: true, //Turn on/off followers tests
                 options: {
-                    numUsers: 250,
-                    step: 20
+                    numUsers: 10,
+                    step: 2
                 }
             }
         }
