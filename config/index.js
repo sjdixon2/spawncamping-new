@@ -134,6 +134,7 @@ app.use(express.logger({
 
 app.use(express.json({limit: '100mb'}));
 app.use(express.urlencoded({limit: '100mb'}));
+app.use(express.multipart());
 app.use(express.methodOverride());
 
 // Session Management
