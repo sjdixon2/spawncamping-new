@@ -9,7 +9,7 @@ exports.exportNumFollowersResults = function(results){
     var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-followers.csv');
 
     //Convert to results to CSV table
-    var csvResults = [['Request Number', 'Reply Time']].concat(_.map(results, function (result) {
+    var csvResults = [['Request Number', 'Completion Time']].concat(_.map(results, function (result) {
         return [result.requestNo, result.time];
     }));
 
@@ -25,7 +25,7 @@ exports.exportConcurrencyResults = function(results){
     var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-concurrency.csv');
 
     //Convert to results to CSV table
-    var csvResults = [['# Concurrent Requests', 'Mean Reply Time']].concat(_.map(results, function (resultSet) {
+    var csvResults = [['# Concurrent Requests', 'Mean Completion Time']].concat(_.map(results, function (resultSet) {
         var meanReply = _.reduce(resultSet, function(mem, obj) {
             return mem + obj.time;
         }, 0) / resultSet.length || 0;
