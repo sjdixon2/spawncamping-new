@@ -89,4 +89,71 @@ describe('Photo', function () {
 //                });
 //        });
     })
+    
+    // processPhotoUpload UNIT TESTS
+    describe('processPhotoUpload', function(){
+
+        // Successfully creates image and thumbnail and write
+        //      correct paths to database
+        it('creates versions of file upload and writes paths to db',function(){
+
+            return PhotoFactory.basic().then(function (photo) {
+
+                // setup valid pre-requisites
+                photo.setImageUpload(this._photoUpload);
+                photo.setPhotoByPath(system.pathTo('test/unit/fixtures/models/photo/image.png'));
+                photo.processPhotoUpload().then(function(){
+
+                    // Verify valid photo id and self reference
+                    photo.id.should.be.a.Number;
+
+                    // Verify that photo paths are correctly added
+                    photo.imagePath.should.equal('/photos/' + photo.id + '.png');
+                    photo.thumbnailPath.should.equal('/photos/thumbnail/' + photo.id + '.png');
+
+                });
+
+            });
+
+        });
+
+        // Pass a photo with invalid id, throws invalid id
+        it('non-valid id',function(){
+
+            return PhotoFactory.basic().then(function (photo) {
+
+                // setup valid pre-requisites
+                photo.setImageUpload(this._photoUpload);
+                photo.setPhotoByPath(system.pathTo('test/unit/fixtures/models/photo/image.png'));
+
+                // Set photo id to invalid value
+                photo.id = null;
+
+                // Call processPhotoUpload
+                //  function should throw invalid id error
+                photo.processPhotoUpload().should.throw(new Error('Invalid call - ID must be set'));
+
+            });
+
+        });
+
+        // Pass invalid photo, throws invalid photo
+        it('invalid image',function(){
+
+            return PhotoFactory.basic().then(function (photo) {
+                photo.setImageUpload(this._photoUpload);
+                photo.setPhotoByPath(system.pathTo('test/unit/fixtures/models/photo/image.png'));
+
+                // Set photo to invalid
+                this.photo = null;
+
+                // Call processPhotoUpload with invalid photo,
+                //      should throw Error
+                photo.processPhotoUpload().should.throw(Error('Invalid call - setImageUpload() must be called'));
+
+            });
+
+        });
+
+    });
 });
