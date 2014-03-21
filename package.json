@@ -14,7 +14,6 @@
     "pluralize": "*",
     "mocha": "*",
     "mocha-as-promised": "*",
-    "underscore": "*",
     "q": "*",
     "mysql": "*",
     "extend": "*",
@@ -27,9 +26,7 @@
     "gm": "*",
     "image-size": "*",
     "needle": "~0.6.6",
-    "chance": "~0.5.4",
-    "assert" : "*",
-    "cheerio" : "*"
+    "chance": "~0.5.4"
   },
   "devDependencies": {
     "supervisor": "*",
@@ -47,6 +44,10 @@
     "grunt-concurrent": "latest",
     "grunt-mocha-test": "latest",
     "grunt-sequelize": "latest",
-    "grunt-env": "latest"
+    "grunt-env": "latest",
+    "nodemon": "~1.0.17",
+    "assert": "*",
+    "cheerio": "*",
+    "promises": "~0.2.5"
   }
 }

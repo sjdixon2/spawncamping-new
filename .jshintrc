@@ -43,7 +43,8 @@
         "classes": true,
         "http": true,
         "app": true,
-        "chance": true
+        "chance": true,
+        "cheerio": true
     },
     "predef": [ // Extra globals.
         "define",

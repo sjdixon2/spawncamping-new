@@ -1,5 +1,4 @@
 var bulk = require('./bulk');
-var CONTROL_NUM_USERS = 5;
 
 /**
  * Runs a performance test comparing the number of followers
@@ -21,18 +20,17 @@ exports.byNumFollowers = function (numUsers, options, scenario) {
     }, options);
 
     //Generate the specified number of users
-    return bulk.generateUsersAndFollowers(numUsers)
-        .then(function (followers) {
-            //Get every nth element to test
-            var followersToTest = _.where(followers, function (follower) {
-                return (follower.id - 1) % options.step === 0;
-            });
-
-            //Run test on each follower successively after one another
-            return q.successive(followersToTest, function (follower) {
-                return scenario(follower); //Call individual scenario
-            });
+    return bulk.generateUsersAndFollowers(numUsers).then(function (followers) {
+        //Get every nth element to test
+        var followersToTest = _.where(followers, function (follower) {
+            return (follower.id - 1) % options.step === 0;
         });
+
+        //Run test on each follower successively after one another
+        return q.successive(followersToTest, function (follower) {
+            return scenario(follower); //Call individual scenario
+        });
+    });
 };
 
 /**
@@ -43,13 +41,12 @@ exports.byNumFollowers = function (numUsers, options, scenario) {
  * @param scenario {function} The function to run for an individual session
  */
 exports.byConcurrentSessions = function (numSessions, scenario) {
-    return bulk.generateUsersAndFollowers(CONTROL_NUM_USERS)
-        .then(function (followers){
-            var userToTest = _.max(followers, function(follower){
-                return follower.id;
-            });
-            return q.all(_.times(numSessions, function(i){
-                return scenario(userToTest, i);
-            }));
+    return bulk.bySeed().then(function (followers) {
+        var userToTest = _.max(followers, function (follower) {
+            return follower.id;
         });
+        return q.all(_.times(numSessions, function (i) {
+            return scenario(userToTest, i);
+        }));
+    });
 };
