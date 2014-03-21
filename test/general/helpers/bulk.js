@@ -1,6 +1,7 @@
 var uploadFixtures = require('../fixtures/bulkUpload/index'),
     request = require('./request'),
-    chance = new Chance();
+    chance = new Chance(),
+    performance = system.performance;
 
 /**
  * Clears the performance server's DB
@@ -48,13 +49,22 @@ exports.$populate = function (users, streams) {
 
     //Clear existing DB
     return self.clearAll().then(function () {
-        //Upload test users
-        return self.createUsers(users).then(function () {
-            //Upload create photos
-            return self.createPhotos(streams).then(function () {
-                return users;
+        var usersCreated = 0;
+        //Chunk users into smaller groups (avoid request timeouts)
+        return q.successive(users.chunk(performance.tests.userCreationChunkSize), function (userSet) {
+            //Upload test users
+            return self.createUsers(userSet)
+                .then(function () {
+                    usersCreated += userSet.length;
+                    console.log(usersCreated + ' of ' + users.length + ' users created...');
+                });
+        })
+            .then(function () {
+                //Upload create photos
+                return self.createPhotos(streams).then(function () {
+                    return users;
+                });
             });
-        });
     });
 };
 

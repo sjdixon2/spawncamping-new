@@ -51,7 +51,9 @@ exports.users = function (req, res) {
             var promise = q.map(userSets, function (user) {
                 //Relate each 'follows' user to this user
                 return q.map(user.follows, function (followsID) {
-                    return user.addFollowee(userSets[followsID]);
+                    return db.User.find(followsID).then(function (followee) {
+                        return user.addFollowee(followee);
+                    });
                 });
             });
 
@@ -64,8 +66,8 @@ exports.users = function (req, res) {
         });
     });
 };
-
 /**
+
  * Bulk uploads the given photos, as specified in the project documentation
  */
 exports.streams = function (req, res) {

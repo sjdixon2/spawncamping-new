@@ -92,18 +92,19 @@ global.system = {
         },
         RESULTS_DIR: 'results/',
         tests: {
+            userCreationChunkSize: 20, //Decrease this if timeouts occur during creation of followers
             concurrency: {
-                runTest: true,
+                runTest: true, //Turn on/off concurrency tests
                 options: {
                     maxSessions: 10,
                     step: 2
                 }
             },
             followers: {
-                runTest: true,
+                runTest: true, //Turn on/off followers tests
                 options: {
-                    numUsers: 10,
-                    step: 2
+                    numUsers: 250,
+                    step: 20
                 }
             }
         }

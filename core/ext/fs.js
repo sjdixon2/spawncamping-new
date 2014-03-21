@@ -22,4 +22,4 @@ fs.makeIfExists = function (path) {
         }
     });
     return defer.promise;
-}
+};
