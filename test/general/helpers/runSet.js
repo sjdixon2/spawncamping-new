@@ -27,8 +27,8 @@ exports.byNumFollowers = function (numUsers, options, scenario) {
         });
 
         //Run test on each follower successively after one another
-        return q.successive(followersToTest, function (follower) {
-            return scenario(follower); //Call individual scenario
+        return q.successive(followersToTest, function (follower, i) {
+            return scenario(follower, i); //Call individual scenario
         });
     });
 };
