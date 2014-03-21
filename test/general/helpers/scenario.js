@@ -5,8 +5,6 @@
 var assert = require('assert');
 var request = require('./request');
 var cheerio = require('cheerio');
-var async = require('async');
-
 
 exports.login = function (user) {
     var data = [
@@ -26,7 +24,6 @@ exports.login = function (user) {
         return cookie;
     });
 }
-
 
 exports.loadFeed = function (cookie) {
     console.log(cookie);
