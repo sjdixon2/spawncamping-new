@@ -12,6 +12,7 @@ exports.index = function (req, res) {
     query += ' order by P.createdAt DESC';
     query += ' limit ' + pageSize + ' offset ' + offset * pageSize;
 
+    console.log("ASDASD " + query);
     sequelize.query(query)
         .complete(function (err, photos) {
             if (err) {
@@ -29,6 +30,7 @@ exports.index = function (req, res) {
                 nextPage: page + 1,
                 isDone: photos.length < pageSize
             };
+            console.log("ASDASD length: " + photos.length);
             res.render('feed', options);
         });
 };

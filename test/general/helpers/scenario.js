@@ -72,6 +72,7 @@ exports.loadImages = function(cookie, body){
                 url,
                 {
                     headers: {
+                        host: 'localhost:8080',
                         cookie: cookie
                     }
                 }
