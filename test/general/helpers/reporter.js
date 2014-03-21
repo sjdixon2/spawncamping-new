@@ -9,8 +9,8 @@ exports.exportNumFollowersResults = function(results){
     var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-followers.csv');
 
     //Convert to results to CSV table
-    var csvResults = [['Request Number', 'Completion Time']].concat(_.map(results, function (result) {
-        return [result.requestNo, result.time];
+    var csvResults = [['Number of Followers', 'Completion Time']].concat(_.map(results, function (result) {
+        return [result.user.follows.length, result.time];
     }));
 
     //Ensure results folder exists

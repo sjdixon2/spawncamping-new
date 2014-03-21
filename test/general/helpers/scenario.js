@@ -85,7 +85,7 @@ exports.runScenario = function (user, i) {
                 //Logout user
                 return exports.logout(cookie).then(function () {
                     //Return scenario results
-                    return {time: endTime - initial, requestNo: i};
+                    return {time: endTime - initial, requestNo: i, user: user};
                 });
             });
         });
