@@ -47,6 +47,7 @@
     "nodemon": "~1.0.17",
     "assert": "*",
     "cheerio": "*",
-    "promises": "~0.2.5"
+    "promises": "~0.2.5",
+    "csv": "~0.3.7"
   }
 }

@@ -42,20 +42,37 @@ exports.byNumFollowers = function (numUsers, options, scenario) {
  * Runs a performance test with several concurrent sessions. Each
  * session runs an instance of the given scenario
  *
- * @param numSessions The number of sessions to run concurrently
+ * @param maxSessions The max number of sessions to run concurrently
+ * @param {object} options
+ *      step: Run performance test on each nth element
  * @param scenario {function} The function to run for an individual session
  */
-exports.byConcurrentSessions = function (numSessions, scenario) {
+exports.byConcurrentSessions = function (maxSessions, options, scenario) {
+    //Set default options
+    options = _.extend({
+        step: 1
+    }, options);
+
     console.log('Beginning performance test. Seeding database...');
 
     return bulk.bySeed().then(function (followers) {
         console.log('Seed complete. Beginning performance test...');
 
-        var userToTest = _.max(followers, function (follower) {
-            return follower.id;
+        //Get the set of number of sessions to run
+        var sessionsToRun = _.where(maxSessions.times(), function (num) {
+            return num % options.step === 0;
         });
-        return q.all(_.times(numSessions, function (i) {
-            return scenario(userToTest, i);
-        }));
+
+        //Run each concurrency test after another
+        return q.successive(sessionsToRun, function (numSessions) {
+            console.log('Running ' + numSessions + ' concurrent sessions');
+
+            var userToTest = _.max(followers, function (follower) {
+                return follower.id;
+            });
+            return q.map(numSessions.times(), function (i) {
+                return scenario(userToTest, i);
+            });
+        });
     });
 };
