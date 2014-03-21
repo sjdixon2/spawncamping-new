@@ -23,7 +23,36 @@ SENG513 Project
 
 # Running the Application
 
-simply run 'app.js'. Everything else takes care of itself.
+Ensure that the following dependencies are installed:
+
+- [Node.js](http://nodejs.org/)
+- [MySQL](http://www.mysql.com/)
+- [grunt](http://gruntjs.com/)
+- [Graphics Magick](http://www.graphicsmagick.org/)
+
+Please also create the appropriate MySQL user as described in *config/index.js*.
+
+After the prerequisites are met, run the development server from command line:
+
+```
+grunt
+```
+
+# Testing the Application
+
+To run tests, use the following command:
+
+```
+grunt test
+```
+
+To run performance tests, make sure there is a local server running. Once that is complete, run the performance tests using:
+
+```
+grunt performance
+```
+
+The configuration of the performance tests can be altered in *config/index.js*.
 
 # Other Configurations
 - there are 3 modes: production, development, and test.  By default, "development" is active.
