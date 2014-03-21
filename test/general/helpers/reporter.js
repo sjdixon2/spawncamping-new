@@ -2,8 +2,15 @@ var performance = system.performance,
     dateFormat = '%m-%d-%y-%I%M%p';
 
 function arrayToCSVFile (arr, path) {
-    var data = csv().from.array(arr);
-    return data.to.stream(fs.createWriteStream(path));
+    var defer = q.defer(),
+        data = csv().from.array(arr);
+    return data.to.stream(fs.createWriteStream(path))
+        .on('close', function () {
+            console.log('results written to ' + path);
+            defer.resolve();
+        });
+
+    return defer.promise;
 }
 
 exports.exportNumFollowersResults = function(results){
@@ -17,8 +24,7 @@ exports.exportNumFollowersResults = function(results){
     //Ensure results folder exists
     return fs.makeIfExists(performance.RESULTS_DIR).then(function () {
         //Write array to file
-        arrayToCSVFile(csvResults, csvPath);
-        console.log('results written to ' + csvPath);
+        return arrayToCSVFile(csvResults, csvPath);
     });
 }
 
@@ -37,7 +43,6 @@ exports.exportConcurrencyResults = function(results){
     //Ensure results folder exists
     return fs.makeIfExists(performance.RESULTS_DIR).then(function () {
         //Write array to file
-        arrayToCSVFile(csvResults, csvPath);
-        console.log('results written to ' + csvPath);
+        return arrayToCSVFile(csvResults, csvPath);
     });
 }
