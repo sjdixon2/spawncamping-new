@@ -28,3 +28,5 @@ global.Session = require('supertest-session')({ //Mock sessions for testing - us
 });
 
 global.needle = require('needle'); //For performing http requests in performance testing
+
+global.csv = require('csv'); //For write performance results to csv file

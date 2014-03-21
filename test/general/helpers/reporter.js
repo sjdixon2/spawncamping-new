@@ -1,15 +1,42 @@
-/**
- * Created by stephen on 14/03/14.
- */
+var performance = system.performance;
 
+function arrayToCSVFile (arr, path) {
+    var data = csv().from.array(arr);
+    return data.to.stream(fs.createWriteStream(path));
+}
 
-// this file should be in charge of creating a table from the output of the performance tests.
+exports.exportNumFollowersResults = function(results){
+    var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-followers.csv');
 
-// then we can take the table and copy it into excel.
+    //Convert to results to CSV table
+    var csvResults = [['Request Number', 'Reply Time']].concat(_.map(results, function (result) {
+        return [result.requestNo, result.time];
+    }));
 
-// GOAL: human-readable performance results table.
+    //Ensure results folder exists
+    return fs.makeIfExists(performance.RESULTS_DIR).then(function () {
+        //Write array to file
+        arrayToCSVFile(csvResults, csvPath);
+        console.log('results written to ' + csvPath);
+    });
+}
 
-exports.print_results = function(results){
-    console.log("Report: ");
-    console.log(JSON.stringify(results));
+exports.exportConcurrencyResults = function(results){
+    var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-concurrency.csv');
+
+    //Convert to results to CSV table
+    var csvResults = [['# Concurrent Requests', 'Mean Reply Time']].concat(_.map(results, function (resultSet) {
+        var meanReply = _.reduce(resultSet, function(mem, obj) {
+            return mem + obj.time;
+        }, 0) / resultSet.length || 0;
+
+        return [resultSet.length, meanReply];
+    }));
+
+    //Ensure results folder exists
+    return fs.makeIfExists(performance.RESULTS_DIR).then(function () {
+        //Write array to file
+        arrayToCSVFile(csvResults, csvPath);
+        console.log('results written to ' + csvPath);
+    });
 }

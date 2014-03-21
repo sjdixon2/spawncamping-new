@@ -52,7 +52,8 @@
         "add32": true,
         "txt": true,
         "chance": true,
-        "cheerio": true
+        "cheerio": true,
+        "csv": true
     },
     "predef": [ // Extra globals.
         "define",
