@@ -89,6 +89,15 @@ module.exports = function(sequelize, DataTypes) {
                 return this.getFollowers({where: ['followersID = ?', user.id]}).then(function (followers) {
                     return !followers.isEmpty();
                 });
+            },
+            setFolloweesByID: function (followeeIDs) {
+                //Build mock versions of followers instead of retrieving them from the DB
+                // - Assumes the user already exists!
+                var followees = _.map(followeeIDs, function (id) {
+                    return db.User.build({id: id});
+                });
+
+                return this.setFollowees(followees);
             }
         }
     });

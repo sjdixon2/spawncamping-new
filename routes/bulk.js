@@ -50,11 +50,7 @@ exports.users = function (req, res) {
             //Next, create relationships
             var promise = q.map(userSets, function (user) {
                 //Relate each 'follows' user to this user
-                return q.map(user.follows, function (followsID) {
-                    return db.User.find(followsID).then(function (followee) {
-                        return user.addFollowee(followee);
-                    });
-                });
+                return user.setFolloweesByID(user.follows);
             });
 
             //Indicate success after everything is done
