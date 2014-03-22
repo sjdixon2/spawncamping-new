@@ -1,5 +1,5 @@
 var performance = system.performance,
-    dateFormat = '%m-%d-%y-%I%M%p';
+    dateFormat = 'MM-D:HH:mm:ss';
 
 function arrayToCSVFile (arr, path) {
     var defer = q.defer(),
@@ -14,7 +14,7 @@ function arrayToCSVFile (arr, path) {
 }
 
 exports.exportNumFollowersResults = function(results){
-    var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-followers-' + moment().strftime(dateFormat) + '.csv');
+    var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-followers-' + moment().format(dateFormat) + '.csv');
 
     //Convert to results to CSV table
     var csvResults = [['Number of Followers', 'Completion Time']].concat(_.map(results, function (result) {
@@ -29,7 +29,7 @@ exports.exportNumFollowersResults = function(results){
 }
 
 exports.exportConcurrencyResults = function(results){
-    var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-concurrency-' + moment().strftime(dateFormat) + '.csv');
+    var csvPath = system.pathTo(performance.RESULTS_DIR, 'performance-concurrency-' + moment().format(dateFormat) + '.csv');
 
     //Convert to results to CSV table
     var csvResults = [['# Concurrent Requests', 'Mean Completion Time']].concat(_.map(results, function (resultSet) {
