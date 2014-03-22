@@ -111,20 +111,6 @@ global.system = {
     }
 };
 
-//Database Logging
-if (!fs.existsSync(system.pathTo(settings.LOG_PATH))) { //Create log folder if it doesn't exist
-    fs.mkdirSync(system.pathTo(settings.LOG_PATH));
-};
-
-var queryLog = fs.createWriteStream(system.pathTo(settings.LOG_PATH+'queries.txt'), {
-    flags: 'w'
-});
-
-global.settings.db.options.logging = function(toLog){
-    var date = new Date();
-    queryLog.write(date.getTime() + 'ms : ' +  date.toUTCString() + ' ' + toLog + '\n');
-};
-
 //Express configuration
 global.app = express();
 app.set('port', process.env.PORT || 8800);
@@ -141,14 +127,6 @@ express.logger.token('user', function(req, res){
 express.logger.token('session', function(req, res){
     return req.sessionID || 'null';
 });
-
-app.use(express.logger({
-    format: ':date [:remote-addr] [:session] [:user] [:response-time ms] [req::req[Content-Length] res::res[Content-Length]] :method :status :url ',
-    immediate: false,
-    stream: fs.createWriteStream(system.pathTo(settings.LOG_PATH+'requests.txt'), {
-        flags: 'w'
-    })
-}));
 
 app.use(express.json({limit: '100mb'}));
 app.use(express.urlencoded({limit: '100mb'}));
