@@ -14,9 +14,9 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "s513_jpnauta",
-    "password": "10054069",
-    "database": "s513_jpnauta",
+    "username": "s513_sjdixon",
+    "password": "10037023",
+    "database": "s513_sjdixon",
     "host": "web2.cpsc.ucalgary.ca",
     "dialect": "mysql"
   }
