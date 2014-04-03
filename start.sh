@@ -11,7 +11,7 @@ npm install --silent
 ./node_modules/.bin/forever stopall || true
 
 #Perform any new migrations
-#./node_modules/.bin/sequelize --migrate -e production
+./node_modules/.bin/sequelize --migrate -e production
 
 #Restart application
-./node_modules/.bin/forever start app.js -e production
+./node_modules/.bin/forever start app.js -e production -o output
