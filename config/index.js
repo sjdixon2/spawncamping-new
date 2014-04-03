@@ -36,11 +36,11 @@ global.settings = {
      */
     db: {
         //NOTE!!!!!! config.json will need to be changed to reflect these changes (to perform migrations)
-        TABLE: 'seng_development',
-        USERNAME: 'user',
-        PASSWORD: 'user',
+        TABLE: 's513_sjdixon',
+        USERNAME: 's513_sjdixon',
+        PASSWORD: '10037023',
         options: {
-            host: 'localhost',
+            host: 'web2.cpsc.ucalgary.ca',
             port: 3306
         }
     }
@@ -71,7 +71,7 @@ global.system = {
         hostname: 'localhost', //Change this to test performance on localhost
         ROOT_DIR: process.cwd(), //Also change this to the path to your repository (for image upload)
         protocol: 'http',
-        port: 8800,
+        port: 8844,
         pathTo: function (/**..args**/) {
             var args = Array.prototype.slice.call(arguments);
             args.unshift(this.ROOT_DIR);
@@ -127,7 +127,7 @@ global.settings.db.options.logging = function(toLog){
 
 //Express configuration
 global.app = express();
-app.set('port', process.env.PORT || 8800);
+app.set('port', process.env.PORT || 8804);
 app.set('views', system.pathTo('core/views/'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
