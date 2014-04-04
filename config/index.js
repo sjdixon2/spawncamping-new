@@ -17,6 +17,9 @@ global.sizeOf = require('image-size');
 global.Chance = require('chance'); //For generating random names, dates, etc.
 
 
+global.cache = require('memory-cache') //new NodeCache();
+global.cache.clear();
+
 //Global configuration settings
 global.settings = {
     ROOT_DIR: process.cwd(),
@@ -181,7 +184,16 @@ app.use(function(req,res,next){
 
 app.use(app.router);
 app.use(express.static(system.pathTo('public/')));
-app.use(settings.UPLOADS_URL_PATH, express.static(system.pathTo(settings.UPLOADS_PATH))); //Direct photo requests to uploads folder
+
+global.UPLOAD_DIRECTORY = system.pathTo('public/uploads');
+app.use(express.compress());
+app.use(settings.UPLOADS_URL_PATH, function(req, res){
+    //console.log('++ ' + req.url);
+    var thumbnailPath = path.join(UPLOAD_DIRECTORY, req.url);
+    //console.log('+++ ' + thumbnailPath);
+    
+    res.status(200).sendfile(thumbnailPath);
+}); //Direct photo requests to uploads folder
 
 // Load mode-specific configurations
 switch (settings.NODE_ENV) {
@@ -202,8 +214,6 @@ global.classes = require(system.pathTo('/core/classes/'));
 global.db = require(system.pathTo('core/models/'));
 
 
-global.cache = require('memory-cache') //new NodeCache();
-global.cache.clear();
 //Load routes configurations
 require(system.pathTo('routes/config'));
 
