@@ -35,6 +35,7 @@ exports.users = function (req, res) {
         users.each(function (user) {
             user.fullName = user.name; //name = fullName in DB
             user.email = user.name; //Also set email (aka username) to the same value
+            user.follows.unshift(user.id);
         });
 
         //Create all users according to has

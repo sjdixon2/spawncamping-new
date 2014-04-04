@@ -17,9 +17,6 @@ global.sizeOf = require('image-size');
 global.Chance = require('chance'); //For generating random names, dates, etc.
 
 
-global.cache = require('memory-cache') //new NodeCache();
-global.cache.clear();
-
 //Global configuration settings
 global.settings = {
     ROOT_DIR: process.cwd(),
@@ -118,7 +115,7 @@ global.system = {
 //Database Logging
 if (!fs.existsSync(system.pathTo(settings.LOG_PATH))) { //Create log folder if it doesn't exist
     fs.mkdirSync(system.pathTo(settings.LOG_PATH));
-};
+}
 
 var queryLog = fs.createWriteStream(system.pathTo(settings.LOG_PATH+'queries.txt'), {
     flags: 'w'
@@ -135,6 +132,24 @@ app.set('port', process.env.PORT || 8804);
 app.set('views', system.pathTo('core/views/'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
+
+app.use(express.json({limit: '100mb'}));
+app.use(express.urlencoded({limit: '100mb'}));
+app.use(express.multipart());
+app.use(express.methodOverride());
+app.use(express.compress());
+
+// Session Management
+app.use(express.cookieParser());
+app.use(express.session({secret: 'spawncampingsupersecuresession'}));
+
+//Configure flash messages
+app.use(flash());
+
+// Configure Caching
+global.quickdraw = require('quickdraw')(app);
+global.cache = require('memory-cache'); //new NodeCache();
+global.cache.clear();
 
 
 // Request Logging
@@ -154,17 +169,6 @@ app.use(express.logger({
     })
 }));
 
-app.use(express.json({limit: '100mb'}));
-app.use(express.urlencoded({limit: '100mb'}));
-app.use(express.multipart());
-app.use(express.methodOverride());
-
-// Session Management
-app.use(express.cookieParser());
-app.use(express.session({secret: 'spawncampingsupersecuresession'}));
-
-//Configure flash messages
-app.use(flash());
 
 //Helper functions for user login in Jade templates
 app.use(function(req,res,next){
@@ -174,7 +178,7 @@ app.use(function(req,res,next){
      */
     res.locals.userLoggedIn = function () {
         return req.session.login;
-    }
+    };
 
     //Direct access to logged in user object
     res.locals.user = req.session.login;
@@ -186,20 +190,30 @@ app.use(app.router);
 app.use(express.static(system.pathTo('public/')));
 
 global.UPLOAD_DIRECTORY = system.pathTo('public/uploads');
-app.use(express.compress());
-app.use(settings.UPLOADS_URL_PATH, function(req, res){
-    var fileName = req.url.match(/\w*[.]\w*$/);
-    console.log('++ filename: ' + fileName);
-    var thumbnail = cache.get(fileName);
-    if(!thumbnail){
-        console.log('++ thumbnail miss: ' + fileName);
-    }
-    else {
-        console.log('++ thumbnail hit: ' + fileName);
-    }
-    var thumbnailPath = path.join(UPLOAD_DIRECTORY, req.url);
-    res.status(200).sendfile(thumbnailPath);
-}); //Direct photo requests to uploads folder
+////app.use(settings.UPLOADS_URL_PATH, express.static(system.pathTo(settings.UPLOADS_PATH)));
+//app.use(settings.UPLOADS_URL_PATH, function(req, res){
+//    var fileName = req.url.match(/\w*[.]\w*$/);
+//    var extension = req.url.match(/[.]\w*$/);
+//    console.log('++ filename: ' + fileName);
+//    var thumbnail = cache.get(fileName);
+//    if(!thumbnail){
+//        console.log('++ thumbnail miss: ' + fileName);
+//        var thumbnailPath = path.join(UPLOAD_DIRECTORY, req.url);
+//        res.status(200).sendfile(thumbnailPath);
+//    }
+//    else {
+//        console.log('++ thumbnail hit: ' + fileName);
+//        console.log('+++ ' + thumbnail);
+//        res.status(200).send(thumbnail);
+//    }
+//});
+
+//Direct photo requests to uploads folder
+app.use(settings.UPLOADS_URL_PATH, quickdraw.static(system.pathTo(settings.UPLOADS_PATH), {
+    'cache-control': 'public',                      // cache on browser and intermediate proxies
+    maxAge: 60 * 60 * 24 * 7,                       // expires after 7 days
+    cacheOutput: true                               // cache output so ouput from memory for the next <maxAge> seconds
+}));
 
 // Load mode-specific configurations
 switch (settings.NODE_ENV) {

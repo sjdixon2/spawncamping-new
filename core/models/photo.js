@@ -189,10 +189,11 @@ module.exports = function (sequelize, DataTypes) {
                     thumbnailWidth = 400,
                     thumbnailHeight = thumbnailWidth * dimensions.height / dimensions.width,
                     resizedImage = image.resize(thumbnailWidth, thumbnailHeight, '!');
-                global.cache.put(fileName, resizedImage);
-                console.log("++ cached: " + fileName);
+
                 resizedImage.write(thumbnailPath, function (err) {
                     if (err) defer.reject(err);
+                    global.cache.put(fileName, resizedImage);
+                    console.log('++ cached ' + fileName);
                     defer.resolve();
                 });
 
