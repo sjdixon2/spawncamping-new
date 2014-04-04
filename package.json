@@ -23,6 +23,7 @@
     "methods": "*",
     "express-flash": "*",
     "gm": "*",
+    "memory-cache": "*",
     "image-size": "*",
     "needle": "~0.6.6",
     "chance": "~0.5.4",
