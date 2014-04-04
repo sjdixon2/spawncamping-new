@@ -19,8 +19,9 @@ exports.create = function (req, res) {
 
     var errors = photo.validate();
     if (!errors) { //If no errors, then save
-        photo.uploadSave();
-        res.redirect('/feed');
+        photo.uploadSave().then(function(){
+            res.redirect('/feed');
+        });
     } else { //Otherwise, show errors in new page
         req.flash('errors', errors);
         res.redirect('/photos/new');
