@@ -15,6 +15,7 @@ global.moment = require('moment');
 global.gm = require('gm');
 global.sizeOf = require('image-size');
 global.Chance = require('chance'); //For generating random names, dates, etc.
+global.formidable = require('formidable');
 
 
 //Global configuration settings

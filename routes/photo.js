@@ -12,6 +12,8 @@ exports.new = function (req, res) {
 exports.create = function (req, res) {
     var attrs = req.body,
         image = req.files.image;
+    var form = new global.formidable.IncomingForm();
+    form.uploadDir = global.system.pathTo('public/tmp');
 
     var photo = db.Photo.build(attrs);
     photo.userID = req.session.login.id; //Attach current user to uploaded photo

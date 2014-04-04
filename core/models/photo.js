@@ -153,7 +153,7 @@ module.exports = function (sequelize, DataTypes) {
                     });
                 }
                 else {
-                    console.log('++hit:' + self.userID);
+                    console.log('PU hit:' + self.userID);
                     return q.all([
                         self.createImageVersions(photo.path), //Create image versions
                         user.sharePhoto(self),//Share photo to user's followers
@@ -162,7 +162,8 @@ module.exports = function (sequelize, DataTypes) {
             },
             createImageVersions: function (path) {
                 //Read contents of temp file
-                //TODO avoid redundant file writing (Express writes temp file, then it's read here, then it's written to a different location)
+                //TODO avoid redundant file writing
+                // (Express writes temp file, then it's read here, then it's written to a different location)
                 var self = this;
 
                 return q.nfcall(fs.readFile, path).then(function (buffer) {
