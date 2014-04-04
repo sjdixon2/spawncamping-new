@@ -121,25 +121,24 @@ module.exports = function (sequelize, DataTypes) {
                 if (!photo) {
                     throw new Error('Invalid call - setImageUpload() must be called');
                 }
-
-                return q.all([
-                    self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
-                    cache.get(self.userID).then(function(user){
-                        if(!user){
-                            return db.User.find(self.userID)
-                                .then(function(user){
-                                    cache.put(user);
-                                    return user;
-                                })
-                                .then(function (user) {
-                                    return user.sharePhoto(self) //Share photo to user's followers
-                                });
-                        } else {
-                            return user.sharePhoto(self);
-                        }
-                    })
-
-                ]);
+                var user = global.cache.get(self.userID);
+                if(!user){
+                    console.log('++miss:' + self.userID);
+                    return db.User.find(self.userID).then(function (user) {
+                        return q.all([
+                            self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
+                            user.sharePhoto(self),//Share photo to user's followers
+                            global.cache.put(self.userID, user)
+                        ]);
+                    });
+                }
+                else {
+                    console.log('++hit:' + self.userID);
+                    return q.all([
+                        self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
+                        user.sharePhoto(self),//Share photo to user's followers
+                    ]);
+                }
             },
             createImageVersions: function (path, originalFilename) {
                 //Read contents of temp file
@@ -190,7 +189,7 @@ module.exports = function (sequelize, DataTypes) {
                     thumbnailWidth = 400,
                     thumbnailHeight = thumbnailWidth * dimensions.height / dimensions.width,
                     resizedImage = image.resize(thumbnailWidth, thumbnailHeight, '!');
-
+                global.cache.put(fileName, resizedImage);
                 resizedImage.write(thumbnailPath, function (err) {
                     if (err) defer.reject(err);
                     defer.resolve();

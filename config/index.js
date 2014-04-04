@@ -15,8 +15,7 @@ global.moment = require('moment');
 global.gm = require('gm');
 global.sizeOf = require('image-size');
 global.Chance = require('chance'); //For generating random names, dates, etc.
-//global.NodeCache =
-global.cache = require('memory-cache') //new NodeCache();
+
 
 //Global configuration settings
 global.settings = {
@@ -202,6 +201,9 @@ global.helpers = requireAll(system.pathTo('/core/helpers/'));
 global.classes = require(system.pathTo('/core/classes/'));
 global.db = require(system.pathTo('core/models/'));
 
+
+global.cache = require('memory-cache') //new NodeCache();
+global.cache.clear();
 //Load routes configurations
 require(system.pathTo('routes/config'));
 
