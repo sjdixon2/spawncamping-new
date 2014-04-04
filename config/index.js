@@ -188,10 +188,16 @@ app.use(express.static(system.pathTo('public/')));
 global.UPLOAD_DIRECTORY = system.pathTo('public/uploads');
 app.use(express.compress());
 app.use(settings.UPLOADS_URL_PATH, function(req, res){
-    //console.log('++ ' + req.url);
+    var fileName = req.url.match(/\w*[.]\w*$/);
+    console.log('++ filename: ' + fileName);
+    var thumbnail = cache.get(fileName);
+    if(!thumbnail){
+        console.log('++ thumbnail miss: ' + fileName);
+    }
+    else {
+        console.log('++ thumbnail hit: ' + fileName);
+    }
     var thumbnailPath = path.join(UPLOAD_DIRECTORY, req.url);
-    //console.log('+++ ' + thumbnailPath);
-    
     res.status(200).sendfile(thumbnailPath);
 }); //Direct photo requests to uploads folder
 
