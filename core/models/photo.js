@@ -1,5 +1,11 @@
 module.exports = function (sequelize, DataTypes) {
     var Photo = sequelize.define('Photo', {
+
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         imagePath: {
             type: DataTypes.STRING,
             validate: {
@@ -80,7 +86,20 @@ module.exports = function (sequelize, DataTypes) {
              * Saves the image, then creates image versions
              */
             uploadSave: function () {
+                var self = this;
                 var imageUpload = this._photoUpload;
+                var originalFilename = imageUpload.originalFilename;
+                var id = this.id;
+                var fileName = id + '.' + helpers.files.getExtension(originalFilename), //The name of the file to be written
+                    uploadsURL = global.settings.UPLOADS_URL_PATH;
+
+                //Set cached paths to photos
+                self.fileName = fileName;
+                self.imagePath = uploadsURL + fileName;
+                self.thumbnailPath = uploadsURL + 'thumbnail/' + fileName;
+
+                console.log('PU uploadSave: this.id=' + id + ' and self.imagePath=' + self.imagePath);
+
                 return this.save().then(function (photo) {
                     photo.setImageUpload(imageUpload);
                     return photo.processPhotoUpload();
@@ -115,6 +134,7 @@ module.exports = function (sequelize, DataTypes) {
                 var id = this.id,
                     self = this, //Reference to this photo
                     photo = this._photoUpload; //Get photo ID, either from this object or given photo
+                console.log('PU processing: this.id=' + id + ' and self.imagePath=' + self.imagePath);
                 if (!id) {
                     throw new Error('Invalid call - ID must be set');
                 }
@@ -126,7 +146,7 @@ module.exports = function (sequelize, DataTypes) {
                     console.log('++miss:' + self.userID);
                     return db.User.find(self.userID).then(function (user) {
                         return q.all([
-                            self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
+                            self.createImageVersions(photo.path), //Create image versions
                             user.sharePhoto(self),//Share photo to user's followers
                             global.cache.put(self.userID, user)
                         ]);
@@ -135,32 +155,25 @@ module.exports = function (sequelize, DataTypes) {
                 else {
                     console.log('++hit:' + self.userID);
                     return q.all([
-                        self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
+                        self.createImageVersions(photo.path), //Create image versions
                         user.sharePhoto(self),//Share photo to user's followers
                     ]);
                 }
             },
-            createImageVersions: function (path, originalFilename) {
+            createImageVersions: function (path) {
                 //Read contents of temp file
                 //TODO avoid redundant file writing (Express writes temp file, then it's read here, then it's written to a different location)
                 var self = this;
 
                 return q.nfcall(fs.readFile, path).then(function (buffer) {
-                    var fileName = self.id + '.' + helpers.files.getExtension(originalFilename), //The name of the file to be written
-                        uploadsURL = settings.UPLOADS_URL_PATH;
-
-                    //Set cached paths to photos
-                    self.imagePath = uploadsURL + fileName;
-                    self.thumbnailPath = uploadsURL + 'thumbnail/' + fileName;
 
                     //Get dimensions of image
                     //TODO get dimensions from buffer, not file (faster)
                     return q.nfcall(sizeOf, path).then(function (dimensions) {
                         //Write uploaded file to desired location(s) on disk
                         return q.all([
-                            self.save(),
-                            self.$writeImageBuffer(fileName, buffer), //Write original file to uploads location
-                            self.$writeThumbnailBuffer(fileName, buffer, dimensions) //Write thumbnail image
+                            self.$writeImageBuffer(self.fileName, buffer), //Write original file to uploads location
+                            self.$writeThumbnailBuffer(self.fileName, buffer, dimensions) //Write thumbnail image
                         ]);
                     });
                 });

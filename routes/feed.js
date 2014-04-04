@@ -26,7 +26,7 @@ exports.index = function (req, res) {
                     // no photos in list
                     return;
                 }
-                console.log('++ caching photos: ' + photos);
+                console.log('FF caching photos: ' + photos);
                 cache.put(cacheKey, photos, 1500);
                 var options = {
                     title: 'Feed',
@@ -39,7 +39,7 @@ exports.index = function (req, res) {
             });
     }
     else {
-        console.log('++ found cached photos: ' + cachedPhotos);
+        console.log('FF found cached photos: ' + cachedPhotos);
         var options = {
             title: 'Feed',
             photos: cachedPhotos,
