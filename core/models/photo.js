@@ -123,12 +123,12 @@ module.exports = function (sequelize, DataTypes) {
                 }
 
                 //Get user to upload for
-                return db.User.find(self.userID).then(function (user) {
-                    return q.all([
-                        self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
-                        user.sharePhoto(self) //Share photo to user's followers
-                    ]);
-                });
+                return q.all([
+                    self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
+                    db.User.find(self.userID).then(function (user) {
+                        return user.sharePhoto(self) //Share photo to user's followers
+                    })
+                ]);
             },
             createImageVersions: function (path, originalFilename) {
                 //Read contents of temp file
