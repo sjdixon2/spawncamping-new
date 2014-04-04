@@ -122,12 +122,23 @@ module.exports = function (sequelize, DataTypes) {
                     throw new Error('Invalid call - setImageUpload() must be called');
                 }
 
-                //Get user to upload for
                 return q.all([
                     self.createImageVersions(photo.path, photo.originalFilename), //Create image versions
-                    db.User.find(self.userID).then(function (user) {
-                        return user.sharePhoto(self) //Share photo to user's followers
+                    cache.get(self.userID).then(function(user){
+                        if(!user){
+                            return db.User.find(self.userID)
+                                .then(function(user){
+                                    cache.put(user);
+                                    return user;
+                                })
+                                .then(function (user) {
+                                    return user.sharePhoto(self) //Share photo to user's followers
+                                });
+                        } else {
+                            return user.sharePhoto(self);
+                        }
                     })
+
                 ]);
             },
             createImageVersions: function (path, originalFilename) {
