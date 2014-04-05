@@ -78,7 +78,7 @@ module.exports = function (sequelize, DataTypes) {
                 return this.save().then(function (photo) {
                     photo.setImageUpload(imageUpload);
                     photo.setOriginalPath(self.originalPath);
-                    photo.processPhotoUpload();
+                    return photo.processPhotoUpload();
                 });
             },
 
@@ -201,9 +201,12 @@ module.exports = function (sequelize, DataTypes) {
 
                 console.log('PX thumbnailPath: ' + thumbnailPath);
                 resizedImage.write(thumbnailPath, function (err) {
-                    if (err) defer.reject(err);
+                    if (err){
+                        console.log('PX error');
+                        defer.reject(err);
+                    }
                     global.cache.put(savePath, resizedImage);
-                    console.log('++ cached ' + savePath);
+                    console.log('PX cached ' + savePath);
                     defer.resolve();
                 });
 
