@@ -22,6 +22,7 @@ global.formidable = require('formidable');
 //Global configuration settings
 
 global.pxlog = console.log;
+global.dblog = console.log;
 
 global.settings = {
     ROOT_DIR: process.cwd(),

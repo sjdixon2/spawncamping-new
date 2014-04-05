@@ -92,6 +92,7 @@ module.exports = function (sequelize, DataTypes) {
                 var self = this;
                 var cacheKey = user.id+'followers';
                 var cachedFollowers = cache.get(cacheKey);
+                global.dblog('DB ' + user.id + ' cached? ' + !!cachedFollowers);
                 if(!cachedFollowers){
                     return user.getFollowers().then(function (followers) {
                         cache.put(cacheKey, followers);
@@ -157,8 +158,7 @@ module.exports = function (sequelize, DataTypes) {
                     //TODO get dimensions from buffer, not file (faster)
                     return q.nfcall(sizeOf, path).then(function (dimensions) {
 
-                        var savePath = global.system.pathTo(global.settings.UPLOADS_PATH)
-                            + '/' + self.id + '.' + self.extension;
+                        var savePath = global.system.pathTo(global.settings.UPLOADS_PATH) + '/' + self.id + '.' + self.extension;
                         global.pxlog('PX path2: ' +  savePath + ' selfID:' + self.id);
 
                         //Write uploaded file to desired location(s) on disk
