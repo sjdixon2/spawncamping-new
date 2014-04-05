@@ -75,7 +75,6 @@ exports.streams = function (req, res) {
         photos.each(function (photo) {
             photo.createdAt = new Date(photo.timestamp); //timestamp = createdAt in DB
             photo.userID = photo.user_id; //user_id = userID in DB
-            photo.path = global.system.pathTo('FlippedImg.png');
         });
 
         //Create all photos
