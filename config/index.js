@@ -20,6 +20,9 @@ global.formidable = require('formidable');
 
 //console.log = function(){}
 //Global configuration settings
+
+global.pxlog = console.log;
+
 global.settings = {
     ROOT_DIR: process.cwd(),
     NODE_ENV: process.env.NODE_ENV,

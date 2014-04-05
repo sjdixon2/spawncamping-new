@@ -127,7 +127,7 @@ module.exports = function (sequelize, DataTypes) {
                 }
                 var user = global.cache.get(self.userID);
                 if(!user){
-                    console.log('PX ++miss:' + self.userID);
+                    global.pxlog('PX ++miss:' + self.userID);
                     return db.User.find(self.userID).then(function (user) {
                         return q.all([
                             self.createImageVersions(photo.path), //Create image versions
@@ -137,7 +137,7 @@ module.exports = function (sequelize, DataTypes) {
                     });
                 }
                 else {
-                    console.log('PX hit user:' + self.userID);
+                    global.pxlog('PX hit user:' + self.userID);
                     return q.all([
                         self.createImageVersions(photo.path), //Create image versions
                         user.sharePhoto(self),//Share photo to user's followers
@@ -150,7 +150,7 @@ module.exports = function (sequelize, DataTypes) {
                 // (Express writes temp file, then it's read here, then it's written to a different location)
                 var self = this,
                     photo = this._photoUpload;
-                console.log('PX path: ' +  path + ' selfID: ' + self.id);
+                global.pxlog('PX path: ' +  path + ' selfID: ' + self.id);
                 return q.nfcall(fs.readFile, path).then(function (buffer) {
 
                     //Get dimensions of image
@@ -159,7 +159,7 @@ module.exports = function (sequelize, DataTypes) {
 
                         var savePath = global.system.pathTo(global.settings.UPLOADS_PATH)
                             + '/' + self.id + '.' + self.extension;
-                        console.log('PX path2: ' +  savePath + ' selfID:' + self.id);
+                        global.pxlog('PX path2: ' +  savePath + ' selfID:' + self.id);
 
                         //Write uploaded file to desired location(s) on disk
                         return q.all([
@@ -180,7 +180,7 @@ module.exports = function (sequelize, DataTypes) {
 
                 var basename = savePath.match(/\w*[.]\w*$/);
                 var uploadPath = global.system.pathTo(global.settings.UPLOADS_PATH) + '/' + basename;
-                console.log('PX bufferwrite: ' + uploadPath);
+                global.pxlog('PX bufferwrite: ' + uploadPath);
                 return q.nfcall(fs.writeFile, uploadPath, basename, buffer);
             },
             /**
@@ -199,14 +199,14 @@ module.exports = function (sequelize, DataTypes) {
                     thumbnailHeight = thumbnailWidth * dimensions.height / dimensions.width,
                     resizedImage = image.resize(thumbnailWidth, thumbnailHeight, '!');
 
-                console.log('PX thumbnailPath: ' + thumbnailPath);
+                global.pxlog('PX thumbnailPath: ' + thumbnailPath);
                 resizedImage.write(thumbnailPath, function (err) {
                     if (err){
-                        console.log('PX error');
+                        global.pxlog('PX error');
                         defer.reject(err);
                     }
                     global.cache.put(savePath, resizedImage);
-                    console.log('PX cached ' + savePath);
+                    global.pxlog('PX cached ' + savePath);
                     defer.resolve();
                 });
 
