@@ -14,4 +14,4 @@ npm install --silent
 #./node_modules/.bin/sequelize --migrate -e production
 
 #Restart application
-./node_modules/.bin/forever start app.js -e production -o output
+./node_modules/.bin/forever start app.js -l everything -e production -o output

@@ -7,6 +7,7 @@ global.requireAll = require('require-all');
 global.express = require('express');
 global._ = require('lodash');
 global.http = require('http');
+global.http.maxSockets = 100;
 global.flash = require('express-flash'); //For sending temporary messages to redirects
 global.fs = require('fs'); //For file system calls
 global.path = require('path');

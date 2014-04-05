@@ -1,3 +1,4 @@
+var cache = global.cache;
 module.exports = function (sequelize, DataTypes) {
     var Photo = sequelize.define('Photo', {
 
@@ -6,28 +7,7 @@ module.exports = function (sequelize, DataTypes) {
             autoIncrement: true,
             primaryKey: true
         },
-        imagePath: {
-            type: DataTypes.STRING,
-            validate: {
-                /**
-                 * Validator for uploaded image. Ensures an uploaded file is given,
-                 * and the file is a valid image type.
-                 */
-                uploadValid: function () {
-                    //Ensure images are valid
-                    var photo = this._photoUpload;
-                    if (photo) { //If no photo was attempted to be uploaded, ignore all this
-                        if (photo.size <= 0) { //If uploaded was attempted, but no file was given
-                            throw new Error('Please specify an image to upload');
-                        }
-                        if (!helpers.photos.isImageUpload(photo)) { //If file is not an photo
-                            throw new Error('File uploaded is not an image!');
-                        }
-                    }
-                }
-            }
-        },
-        thumbnailPath: DataTypes.STRING,
+        extension: DataTypes.STRING,
         description: DataTypes.STRING,
         createdAt: { //Manual version of createdAt (see 'timestamps' below)
             type: DataTypes.DATE,
@@ -89,20 +69,12 @@ module.exports = function (sequelize, DataTypes) {
                 var self = this;
                 var imageUpload = this._photoUpload;
                 var originalFilename = imageUpload.originalFilename;
-                var id = this.id;
-                var fileName = id + '.' + helpers.files.getExtension(originalFilename), //The name of the file to be written
-                    uploadsURL = global.settings.UPLOADS_URL_PATH;
-
                 //Set cached paths to photos
-                self.fileName = fileName;
-                self.imagePath = uploadsURL + fileName;
-                self.thumbnailPath = uploadsURL + 'thumbnail/' + fileName;
-
-                console.log('PU uploadSave: this.id=' + id + ' and self.imagePath=' + self.imagePath);
+                self.extension = helpers.files.getExtension(originalFilename);
 
                 return this.save().then(function (photo) {
                     photo.setImageUpload(imageUpload);
-                    return photo.processPhotoUpload();
+                    photo.processPhotoUpload();
                 });
             },
 
@@ -114,9 +86,17 @@ module.exports = function (sequelize, DataTypes) {
              */
             notifyFollowers: function(user){
                 var self = this;
-                return user.getFollowers().then(function (followers) {
-                    return self.setFeedItems(followers);
-                });
+                var cacheKey = user.id+'followers';
+                var cachedFollowers = cache.get(cacheKey);
+                if(!cachedFollowers){
+                    return user.getFollowers().then(function (followers) {
+                        cache.put(cacheKey, followers);
+                        return self.setFeedItems(followers);
+                    });
+                }
+                else {
+                    return self.setFeedItems(cachedFollowers);
+                }
             },
 
             /**
@@ -154,8 +134,9 @@ module.exports = function (sequelize, DataTypes) {
                 }
                 else {
                     console.log('PU hit:' + self.userID);
+                    var photoPath = global.settings.UPLOADS_PATH + photo.id + photo.extension;
                     return q.all([
-                        self.createImageVersions(photo.path), //Create image versions
+                        self.createImageVersions(photoPath), //Create image versions
                         user.sharePhoto(self),//Share photo to user's followers
                     ]);
                 }
@@ -165,7 +146,7 @@ module.exports = function (sequelize, DataTypes) {
                 //TODO avoid redundant file writing
                 // (Express writes temp file, then it's read here, then it's written to a different location)
                 var self = this;
-
+                console.log('PU path: ' +  path);
                 return q.nfcall(fs.readFile, path).then(function (buffer) {
 
                     //Get dimensions of image
@@ -173,8 +154,8 @@ module.exports = function (sequelize, DataTypes) {
                     return q.nfcall(sizeOf, path).then(function (dimensions) {
                         //Write uploaded file to desired location(s) on disk
                         return q.all([
-                            self.$writeImageBuffer(self.fileName, buffer), //Write original file to uploads location
-                            self.$writeThumbnailBuffer(self.fileName, buffer, dimensions) //Write thumbnail image
+                            self.$writeImageBuffer(path, buffer), //Write original file to uploads location
+                            self.$writeThumbnailBuffer(path, buffer, dimensions) //Write thumbnail image
                         ]);
                     });
                 });
