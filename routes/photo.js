@@ -10,6 +10,42 @@ exports.new = function (req, res) {
  * POST handler for photo upload
  */
 exports.create = function (req, res) {
+//    var form = new formidable.IncomingForm({
+//        uploadDir: global.system.pathTo('public/uploads'),
+//        keepExtensions: true
+//    });
+//
+//    console.log(form.uploadDir);
+//
+//    form.parse(req, function(err, fields, files){
+//        if (err){
+//            req.flash('errors', err);
+//            return res.render('/photo/new');
+//        }
+//        console.log(files.image);
+//    });
+//
+//    var buffer = new Buffer();
+//
+//    form.on('data', function(chunk){
+//        console.log("received chunk + " chunk);
+//        buffer.
+//
+//    })
+//
+//    form.on('progress', function(bytesReceived, bytesExpected) {
+//        console.log(bytesReceived + ' ' + bytesExpected);
+//    });
+//
+//    form.on('error', function(err) {
+//        req.flash('errors', errors);
+//        res.redirect('/photos/new');
+//    });
+//
+//    return form.on('done', function(){
+//        console.log('done');
+//        res.render('/feed');
+//    });
     var attrs = req.body,
         image = req.files.image;
     var form = new global.formidable.IncomingForm();
