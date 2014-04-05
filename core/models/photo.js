@@ -48,6 +48,9 @@ module.exports = function (sequelize, DataTypes) {
             setImageUpload: function (photo) {
                 this._photoUpload = photo; //Used later by validation functions
             },
+            setOriginalPath : function(path){
+                this.originalPath = path;
+            },
             /**
              * Simulates image upload for an image already on the computer system
              * @param imagePath the path to the image to be added
@@ -74,6 +77,7 @@ module.exports = function (sequelize, DataTypes) {
 
                 return this.save().then(function (photo) {
                     photo.setImageUpload(imageUpload);
+                    photo.setOriginalPath(self.originalPath);
                     photo.processPhotoUpload();
                 });
             },
@@ -114,7 +118,7 @@ module.exports = function (sequelize, DataTypes) {
                 var id = this.id,
                     self = this, //Reference to this photo
                     photo = this._photoUpload; //Get photo ID, either from this object or given photo
-                console.log('PU processing: this.id=' + id + ' and self.imagePath=' + self.imagePath);
+                console.log('PU processing: this.id=' + id);
                 if (!id) {
                     throw new Error('Invalid call - ID must be set');
                 }
@@ -123,7 +127,7 @@ module.exports = function (sequelize, DataTypes) {
                 }
                 var user = global.cache.get(self.userID);
                 if(!user){
-                    console.log('++miss:' + self.userID);
+                    console.log('PX ++miss:' + self.userID);
                     return db.User.find(self.userID).then(function (user) {
                         return q.all([
                             self.createImageVersions(photo.path), //Create image versions
@@ -133,10 +137,9 @@ module.exports = function (sequelize, DataTypes) {
                     });
                 }
                 else {
-                    console.log('PU hit:' + self.userID);
-                    var photoPath = global.settings.UPLOADS_PATH + photo.id + photo.extension;
+                    console.log('PX hit user:' + self.userID);
                     return q.all([
-                        self.createImageVersions(photoPath), //Create image versions
+                        self.createImageVersions(photo.path), //Create image versions
                         user.sharePhoto(self),//Share photo to user's followers
                     ]);
                 }
@@ -145,17 +148,23 @@ module.exports = function (sequelize, DataTypes) {
                 //Read contents of temp file
                 //TODO avoid redundant file writing
                 // (Express writes temp file, then it's read here, then it's written to a different location)
-                var self = this;
-                console.log('PU path: ' +  path);
+                var self = this,
+                    photo = this._photoUpload;
+                console.log('PX path: ' +  path + ' selfID: ' + self.id);
                 return q.nfcall(fs.readFile, path).then(function (buffer) {
 
                     //Get dimensions of image
                     //TODO get dimensions from buffer, not file (faster)
                     return q.nfcall(sizeOf, path).then(function (dimensions) {
+
+                        var savePath = global.system.pathTo(global.settings.UPLOADS_PATH)
+                            + '/' + self.id + '.' + self.extension;
+                        console.log('PX path2: ' +  savePath + ' selfID:' + self.id);
+
                         //Write uploaded file to desired location(s) on disk
                         return q.all([
-                            self.$writeImageBuffer(path, buffer), //Write original file to uploads location
-                            self.$writeThumbnailBuffer(path, buffer, dimensions) //Write thumbnail image
+                            self.$writeImageBuffer(savePath, buffer), //Write original file to uploads location
+                            self.$writeThumbnailBuffer(savePath, buffer, dimensions) //Write thumbnail image
                         ]);
                     });
                 });
@@ -163,32 +172,38 @@ module.exports = function (sequelize, DataTypes) {
             /**
              * Writes the given image buffer to the location
              * of the original image path with the given file name
-             * @param fileName the name of the file to write
+             * @param savePath the name of the file to write
              * @param buffer the image buffer
              * @returns {promise}
              */
-            $writeImageBuffer: function (fileName, buffer) {
-                return q.nfcall(fs.writeFile, system.pathTo(settings.UPLOADS_PATH, fileName), buffer);
+            $writeImageBuffer: function (savePath, buffer) {
+
+                var basename = savePath.match(/\w*[.]\w*$/);
+                var uploadPath = global.system.pathTo(global.settings.UPLOADS_PATH) + '/' + basename;
+                console.log('PX bufferwrite: ' + uploadPath);
+                return q.nfcall(fs.writeFile, uploadPath, basename, buffer);
             },
             /**
              * Resizes and writes the given image buffer to the location
              * of the thumbnail image path with the given file name
-             * @param fileName the name of the file to write
+             * @param savePath the name of the file to write
              * @param buffer the image buffer
              * @returns {promise}
              */
-            $writeThumbnailBuffer: function (fileName, buffer, dimensions) {
+            $writeThumbnailBuffer: function (savePath, buffer, dimensions) {
+                var basename = savePath.match(/\w*[.]\w*$/);
                 var image = gm(buffer),
                     defer = q.defer(), //Had to user defer, as gm.write acts weird with promises
-                    thumbnailPath = system.pathTo(settings.UPLOADS_PATH, 'thumbnail/', fileName),
+                    thumbnailPath = system.pathTo(settings.UPLOADS_PATH) + '/thumbnail/' + basename,
                     thumbnailWidth = 400,
                     thumbnailHeight = thumbnailWidth * dimensions.height / dimensions.width,
                     resizedImage = image.resize(thumbnailWidth, thumbnailHeight, '!');
 
+                console.log('PX thumbnailPath: ' + thumbnailPath);
                 resizedImage.write(thumbnailPath, function (err) {
                     if (err) defer.reject(err);
-                    global.cache.put(fileName, resizedImage);
-                    console.log('++ cached ' + fileName);
+                    global.cache.put(savePath, resizedImage);
+                    console.log('++ cached ' + savePath);
                     defer.resolve();
                 });
 
