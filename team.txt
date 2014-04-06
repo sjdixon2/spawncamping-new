@@ -4,12 +4,6 @@ spawncamping
 # Contact Information
 Stephen Dixon 587-433-9487 sjdixon2@gmail.com
 
-Jeremy Nauta 403-919-1408 jeremypnauta@gmail.com
-
-Derek Partible 403-479-5003 dpartible92@gmail.com
-
-Henry Rosvick 403-861-2712 hhrosvick@gmail.com
-
 
 SENG513 Project
 ## Notes on Running Project:
@@ -27,4 +21,12 @@ simply run 'app.js'. Everything else takes care of itself.
 
 # Other Configurations
 - there are 3 modes: production, development, and test.  By default, "development" is active.
-You can change this by changing the environmental NODE_ENV to 'test', 'development', or 'production'._
+You can change this by changing the environmental NODE_ENV to 'test', 'development', or 'production'.
+
+Some Migration Notes:
+Updated: April 4, 2014
+
+- I don't think this project works if you just apply the migrations manually
+- you have to, at the minimum, add the 'extension' column to Photoes
+- you may also want to get rid of 'imagePath' and 'thumbnailPath' while you're at it.
+- the most recent migration attempts this but I saw mixed results depending on where it was deployed

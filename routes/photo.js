@@ -9,7 +9,8 @@ exports.new = function (req, res) {
 /**
  * POST handler for photo upload
  */
-exports.create = function (req, res) {
+
+
 //    var form = new formidable.IncomingForm({
 //        uploadDir: global.system.pathTo('public/uploads'),
 //        keepExtensions: true
@@ -46,6 +47,9 @@ exports.create = function (req, res) {
 //        console.log('done');
 //        res.render('/feed');
 //    });
+
+exports.create = function (req, res) {
+
     var attrs = req.body,
         image = req.files.image;
 //    var form = new global.formidable.IncomingForm();
@@ -58,8 +62,8 @@ exports.create = function (req, res) {
 
     var errors = photo.validate();
     if (!errors) { //If no errors, then save
-        photo.uploadSave().then(function(){
-            res.redirect('/feed');
+        return photo.uploadSave().then(function(){
+            return res.redirect('/feed');
         });
     } else { //Otherwise, show errors in new page
         req.flash('errors', errors);

@@ -16,17 +16,18 @@ exports.index = function (req, res) {
     var cacheKey = '' + req.session.login.id + page;
     var cachedPhotos = cache.get(cacheKey);
     if (!cachedPhotos){
+        global.dblog('DB Found no cached photos');
         sequelize.query(query)
             .complete(function (err, photos) {
                 if (err) {
-                    console.log('error: ' + err);
+                    global.dblog('error: ' + err);
                     return;
                 }
                 if (!photos) {
-                    // no photos in list
+                    global.dblog('DB no photos');
                     return;
                 }
-                console.log('FF caching photos: ' + photos);
+                global.dblog('DB caching photos: ' + photos);
                 cache.put(cacheKey, photos, 1500);
                 var options = {
                     title: 'Feed',
@@ -39,7 +40,7 @@ exports.index = function (req, res) {
             });
     }
     else {
-        console.log('FF found cached photos: ' + cachedPhotos);
+        global.dblog('DB found cached photos: ' + cachedPhotos);
         var options = {
             title: 'Feed',
             photos: cachedPhotos,

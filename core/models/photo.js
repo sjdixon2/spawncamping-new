@@ -181,7 +181,17 @@ module.exports = function (sequelize, DataTypes) {
                 var basename = savePath.match(/\w*[.]\w*$/);
                 var uploadPath = global.system.pathTo(global.settings.UPLOADS_PATH) + '/' + basename;
                 global.pxlog('PX bufferwrite: ' + uploadPath);
-                return q.nfcall(fs.writeFile, uploadPath, basename, buffer);
+                //var defer = q.defer();
+                return global.fs.writeFile(uploadPath, buffer, function(err){
+                    if (err){
+                        //defer.reject();
+                        console.log('PX error in bufferwrite!');
+                    }
+
+                    console.log('PX finished bufferwrite');
+                    //defer.resolve();
+                })
+                //return defer.promise;
             },
             /**
              * Resizes and writes the given image buffer to the location
@@ -199,14 +209,15 @@ module.exports = function (sequelize, DataTypes) {
                     thumbnailHeight = thumbnailWidth * dimensions.height / dimensions.width,
                     resizedImage = image.resize(thumbnailWidth, thumbnailHeight, '!');
 
+                var cacheKey = basename;
                 global.pxlog('PX thumbnailPath: ' + thumbnailPath);
                 resizedImage.write(thumbnailPath, function (err) {
                     if (err){
                         global.pxlog('PX error');
                         defer.reject(err);
                     }
-                    global.cache.put(savePath, resizedImage);
-                    global.pxlog('PX cached ' + savePath);
+                    global.cache.put(cacheKey, resizedImage);
+                    global.pxlog('PX cached ' + cacheKey + ' : ' + resizedImage);
                     defer.resolve();
                 });
 

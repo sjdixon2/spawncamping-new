@@ -1,6 +1,7 @@
 var TABLE_NAME = 'Photoes'; //The 'e' is intentional; sequelize pluralizes 'photo' to 'photoes'
 module.exports = {
   up: function(migration, DataTypes, done) {
+      migration.dropTable(TABLE_NAME);
       migration.createTable(
           TABLE_NAME,
           {
@@ -16,8 +17,8 @@ module.exports = {
                   type: DataTypes.DATE
               },
 	      extension: DataTypes.STRING,
-              description: DataTypes.STRING,
-              userID: DataTypes.INTEGER
+          description: DataTypes.STRING,
+          userID: DataTypes.INTEGER
           }
       );
 
