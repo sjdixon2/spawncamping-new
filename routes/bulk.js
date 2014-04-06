@@ -84,6 +84,7 @@ exports.streams = function (req, res) {
 
             //Hack method of simulating image upload
             photo.setPhotoByPath(photoHash.path);
+            photo.setOriginalPath(photo.path);
 
             //Save & create image versions
             return photo.uploadSave();

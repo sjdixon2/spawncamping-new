@@ -73,7 +73,8 @@ module.exports = function (sequelize, DataTypes) {
                 var imageUpload = this._photoUpload;
                 var originalFilename = imageUpload.originalFilename;
                 //Set cached paths to photos
-                self.extension = helpers.files.getExtension(originalFilename);
+                self.extension = 'png';
+                //global.pxlog('SB Extension: ' + self.extension);
 
                 return this.save().then(function (photo) {
                     photo.setImageUpload(imageUpload);
