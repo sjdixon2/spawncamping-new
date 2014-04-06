@@ -14,7 +14,8 @@ block content
                         .p.both-5.photo
                             .ui.form.segment
                                 .overlayed
-                                    img(src='/photos/' + photo.id + '.' + photo.extension)
+                                    //img(src='/photos/thumbnail/10.png')
+                                    img(src='/photos/thumbnail/' + photo.id + '.' + photo.extension)
                                     .overlay.t.opacity.fade.hide.unless.hovered
                                         .float.right
                                             a.ui.mini.green.button(href="/users/#{photo.userID}/share")

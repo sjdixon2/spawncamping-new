@@ -160,12 +160,12 @@ module.exports = function (sequelize, DataTypes) {
 
                         var savePath = global.system.pathTo(global.settings.UPLOADS_PATH) + '/' + self.id + '.' + self.extension;
                         global.pxlog('PX path2: ' +  savePath + ' selfID:' + self.id);
+                        self.$writeImageBuffer(savePath, buffer); //Write original file to uploads location
 
                         //Write uploaded file to desired location(s) on disk
-                        return q.all([
-                            self.$writeImageBuffer(savePath, buffer), //Write original file to uploads location
-                            self.$writeThumbnailBuffer(savePath, buffer, dimensions) //Write thumbnail image
-                        ]);
+                        //return q.all(
+                        return self.$writeThumbnailBuffer(savePath, buffer, dimensions); //Write thumbnail image
+                        //);
                     });
                 });
             },
@@ -182,7 +182,7 @@ module.exports = function (sequelize, DataTypes) {
                 var uploadPath = global.system.pathTo(global.settings.UPLOADS_PATH) + '/' + basename;
                 global.pxlog('PX bufferwrite: ' + uploadPath);
                 //var defer = q.defer();
-                return global.fs.writeFile(uploadPath, buffer, function(err){
+                global.fs.writeFile(uploadPath, buffer, function(err){
                     if (err){
                         //defer.reject();
                         console.log('PX error in bufferwrite!');
@@ -190,7 +190,7 @@ module.exports = function (sequelize, DataTypes) {
 
                     console.log('PX finished bufferwrite');
                     //defer.resolve();
-                })
+                });
                 //return defer.promise;
             },
             /**
